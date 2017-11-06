@@ -234,3 +234,12 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+*~
+.vagrant
+
+*.pyc
+*.sqite3
+
+Gemfile.lock
+log/*
+.bundle
