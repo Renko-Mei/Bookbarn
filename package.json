@@ -30,5 +30,9 @@
     "url-loader": "0.5.9",
     "webpack": "2.5.1",
     "webpack-hot-middleware": "2.18.2"
+  },
+  "dependencies": {
+    "chart.js": "^2.7.1",
+    "react-chartjs-2": "^2.6.4"
   }
 }
