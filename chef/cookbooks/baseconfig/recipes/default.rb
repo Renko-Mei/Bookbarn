@@ -29,8 +29,20 @@ execute 'ntp_restart' do
   command 'service ntp restart'
 end
 
+execute 'get_npm' do 
+  command 'sudo apt-get install npm -y'
+end 
+
+execute 'update_npm' do 
+  command 'sudo npm install -g npm'
+end 
+
+execute 'get_nodejs' do 
+  command 'sudo apt-get install nodejs-legacy'
+end 
+
 execute 'get dotnet' do 
-  command 'apt-get install dotnet-sdk-2.0.0 -y'
+  command 'sudo apt-get install dotnet-sdk-2.0.0 -y'
 end 
 
 execute 'get deps' do
