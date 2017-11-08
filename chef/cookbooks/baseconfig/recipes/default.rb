@@ -70,3 +70,10 @@ end
 #   command 'nohup dotnet run > /dev/null 2>&1 &'
 #   cwd '/home/ubuntu/project'
 # end
+
+cookbook_file 'nginx-default' do
+  path '/etc/nginx/sites-available/default'
+end
+execute 'nginx_reload' do
+  command 'nginx -s reload'
+end
