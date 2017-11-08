@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+
 namespace final_project
 {
     public class Startup
@@ -41,6 +42,11 @@ namespace final_project
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseWebSockets();
+
+            //app.MapWebSocketManager("/ws", serviceProvider.GetService<Handler>());
+            //app.MapWebSocketManager("/test", serviceProvider.GetService<Handler>());
 
             app.UseStaticFiles();
 
