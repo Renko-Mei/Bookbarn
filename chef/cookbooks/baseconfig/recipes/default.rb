@@ -38,7 +38,7 @@ execute 'ntp_restart' do
 end
 
 execute 'create db' do
-  command 'echo "CREATE DATABASE mydb; CREATE USER ubuntu; GRANT ALL PRIVILEGES ON DATABASE mydb TO ubuntu;" | sudo -u postgres psql'
+  command 'echo "CREATE USER proj PASSWORD \'test\'; ALTER USER proj CREATEDB;" | sudo -u postgres psql'
 end
 
 execute 'get dotnet' do
@@ -59,11 +59,10 @@ execute 'get node deps' do
   cwd '/home/ubuntu/project'
 end
 
-# TODO skip db stuff for now, just get hello world running
-# execute 'run migrations' do
-#   command 'dotnet ef database update'
-#   cwd '/home/ubuntu/project'
-# end
+execute 'run migrations' do
+  command 'dotnet ef database update'
+  cwd '/home/ubuntu/project'
+end
 
 # TODO uncomment this -- autoruns dotnet
 # execute 'start dotnet' do
