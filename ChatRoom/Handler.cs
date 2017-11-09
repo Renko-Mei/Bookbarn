@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 
 //handles connection and disconnection events and manages sending and receiving messages from the socket
-namespace final_project
+namespace final_project.ChatRoom
 {
     public abstract class Handler
     {

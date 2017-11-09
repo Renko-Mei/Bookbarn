@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 
 
 
-namespace final_project
+namespace final_project.ChatRoom
 {
     public class Middleware
     {
