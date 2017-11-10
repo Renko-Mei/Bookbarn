@@ -1,4 +1,4 @@
-@{
+@*@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,4 +6,12 @@
 
 @section scripts {
     <script src="~/dist/main.js" asp-append-version="true"></script>
+}*@
+
+@{
+    ViewData["Title"] = "Home Page";
 }
+
+<p>Welcome, @ViewData["Email"]</p>
+
+<a href="@Url.Action("Register", "Users")">Register</a>
