@@ -11,9 +11,10 @@ using System;
 namespace finalproject.Migrations
 {
     [DbContext(typeof(final_projectContext))]
-    partial class final_projectContextModelSnapshot : ModelSnapshot
+    [Migration("20171110052317_IdentityUser")]
+    partial class IdentityUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
