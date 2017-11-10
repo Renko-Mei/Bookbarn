@@ -1,0 +1,5 @@
+﻿Dylan:
+	Redirection succeeded after login but the url does not get changed
+	Working with PostgreSQL
+	Finalize User Model
+	
