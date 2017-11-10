@@ -1,0 +1,49 @@
+@model final_project.Models.SearchViewModel
+@{
+    ViewData["Title"] = "Search";
+}
+
+
+<div>
+	<h1>Search</h1>
+
+	<p>Search for books.</p>
+
+	<form asp-controller="Search" asp-action="Index" method="get">
+		<input type="text" name="id" />
+		<input type="submit" value="Search" />
+	</form>
+
+</div>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Title)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Author)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.Title)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item)
+				</td>
+				<td>
+					<a asp-action="Details" asp-route-id="@item">Details</a> |
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+    

@@ -8,59 +8,70 @@ interface SearchState {
 
 export class Search extends React.Component<RouteComponentProps<{}>, SearchState> {
 
-   /* constructor() {
+    constructor() {
         super();
-        this.state = { forecasts: [], loading: true };
+        this.state = { results: [], loading: true };
 
-        fetch('api/SampleData/WeatherForecasts')
-            .then(response => response.json() as Promise<WeatherForecast[]>)
+        fetch('api/SampleData/SearchResult')
+            .then(response => response.json() as Promise<SearchResult[]>)
             .then(data => {
-                this.setState({ forecasts: data, loading: false });
+                this.setState({ results: data, loading: false });
             });
-    }*/
+    }
 
     public render() {
+        let contents = this.state.loading
+            ? <p><em>Loading...</em></p>
+            : Search.renderResultsTable(this.state.results);
+
         return <div>
             <h1>Search</h1>
 
             <p>Search for books.</p>
 
-            <form action="/api/Search/SearchResult">
+            <form action="Search">
                 <input type="text" name="searchtext" />
                 <input type="submit" value="Search" />
             </form>
+            {contents}
         </div>;
     }
 
-    /*private static renderResultsTable(forecasts: WeatherForecast[]) {
+    private static renderResultsTable(results: SearchResult[]) {
         return <table className='table'>
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
+                    <th>Title</th>
+                    <th>Author</th>
                 </tr>
             </thead>
             <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.dateFormatted}>
-                        <td>{forecast.dateFormatted}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
+                {results.map(result =>
+                    <tr key={result.title}>
+                        <td>{result.title}</td>
+                        <td>{result.author}</td>
                     </tr>
                 )}
             </tbody>
         </table>;
+    }
+
+   /* public getSearchData() {
+        fetch('api/SampleData/SearchResult')
+            .then(response => response.json() as Promise<SearchResult[]>)
+            .then(data => {
+                this.setState({ results: data, loading: false });
+            });
     }*/
+
+    //getSearchData: function(e) {
+
+    //}
 
 }
 
 
 interface SearchResult {
-    dateFormatted: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
+    title: string;
+    author: string;
 }
