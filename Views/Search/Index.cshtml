@@ -25,24 +25,35 @@
 			<th>
 				@Html.DisplayNameFor(model => model.Author)
 			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Quality)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Price)
+			</th>
 			<th></th>
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (var item in Model.Title)
-		{
+
 			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item)
+				<td>					
+					@Html.DisplayFor(model => model.Title)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item)
+					@Html.DisplayFor(model => model.Author)
 				</td>
 				<td>
-					<a asp-action="Details" asp-route-id="@item">Details</a> |
+					@Html.DisplayFor(model => model.Quality)
+				</td>
+				<td>
+					@Html.DisplayFor(model => model.Price)
+				</td>
+				<td>
+					<a asp-action="Details" asp-route-id="1">Details</a> |
 				</td>
 			</tr>
-		}
+
 	</tbody>
 </table>
 

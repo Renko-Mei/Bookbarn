@@ -10,7 +10,10 @@ namespace final_project.Models
     }
 
     public DbSet<final_project.Models.User> User { get; set; }
-  }
+    //public DbSet<final_project.Models.Book> Book { get; set; }
+    public DbSet<final_project.Models.SaleItem> SaleItem { get; set; }
+
+    }
 }
 
 // dotnet aspnet-codegenerator controller -name UsersController -m User -dc final_projectContext --relativeFolderPath Controllers --useDefaultLayout --referenceScriptLibraries

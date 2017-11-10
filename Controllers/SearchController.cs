@@ -18,11 +18,13 @@ namespace final_project.Controllers
             var searchVM = new SearchViewModel();
             List<string> titles = new List<string>();
             List<string> authors = new List<string>();
+            List<string> price = new List<string>();
+            List<string> quality = new List<string>();
 
             string searchString = id;
             if (!String.IsNullOrEmpty(searchString))
             {
-                string searchQuery = "SELECT * FROM public.\"Book\" WHERE \"Title\" LIKE \'%" + searchString + "%\'";
+                string searchQuery = "select b.\"Title\", b.\"Author\", si.\"Quality\", si.\"Price\" from public.\"SaleItem\" si inner join public.\"Book\" b on si.\"BookID\" = b.\"BookID\" WHERE b.\"Title\" LIKE \'%" + searchString + "%\'";
                 List<string[]> queryResult = new List<string[]>();
 
                 using (NpgsqlConnection conn = new NpgsqlConnection("Host=localhost;Port=5432; Database=bookdb; Username=postgres; Password=password"))
@@ -33,16 +35,20 @@ namespace final_project.Controllers
 
                     while (dr.Read())
                     {
-                        string[] container = { dr[2].ToString(), dr[3].ToString() };
-                        queryResult.Add(container);
-                        titles.Add(dr[2].ToString());
-                        authors.Add(dr[3].ToString());
+                        //string[] container = { dr[2].ToString(), dr[3].ToString() };
+                       // queryResult.Add(container);
+                        titles.Add(dr[0].ToString());
+                        authors.Add(dr[1].ToString());
+                        quality.Add(dr[2].ToString());
+                        price.Add(dr[3].ToString());
                     }
 
                 }
             }
             searchVM.Title = titles;
             searchVM.Author = authors;
+            searchVM.Quality = quality;
+            searchVM.Price = price;
             return View(searchVM);
         }
 
