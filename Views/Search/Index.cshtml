@@ -10,6 +10,11 @@
 	<p>Search for books.</p>
 
 	<form asp-controller="Search" asp-action="Index" method="get">
+		<select asp-for="searchType" asp-items="Model.SearchTypes">
+			<option value="title">Title</option>
+			<option value="author">Author</option>
+		</select>
+
 		<input type="text" name="id" />
 		<input type="submit" value="Search" />
 	</form>
@@ -20,40 +25,41 @@
 	<thead>
 		<tr>
 			<th>
-				@Html.DisplayNameFor(model => model.Title)
+				@Html.DisplayNameFor(model => model.SearchResults[0].Title)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Author)
+				@Html.DisplayNameFor(model => model.SearchResults[0].Author)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Quality)
+				@Html.DisplayNameFor(model => model.SearchResults[0].Quality)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Price)
+				@Html.DisplayNameFor(model => model.SearchResults[0].Price)
 			</th>
 			<th></th>
 		</tr>
 	</thead>
 	<tbody>
-
+		@foreach (var resultItem in Model.SearchResults)
+		{
 			<tr>
 				<td>					
-					@Html.DisplayFor(model => model.Title)
+					@Html.DisplayFor(model => resultItem.Title)
 				</td>
 				<td>
-					@Html.DisplayFor(model => model.Author)
+					@Html.DisplayFor(model => resultItem.Author)
 				</td>
 				<td>
-					@Html.DisplayFor(model => model.Quality)
+					@Html.DisplayFor(model => resultItem.Quality)
 				</td>
 				<td>
-					@Html.DisplayFor(model => model.Price)
+					@Html.DisplayFor(model => resultItem.Price)
 				</td>
 				<td>
-					<a asp-action="Details" asp-route-id="1">Details</a> |
+					<a asp-action="Details" asp-route-id="@resultItem.SaleItemID">Details</a> |
 				</td>
 			</tr>
-
+		}
 	</tbody>
 </table>
 
