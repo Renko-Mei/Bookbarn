@@ -26,8 +26,8 @@ namespace final_project
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddDbContext<final_projectContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
-            services.AddDbContext<AuthenticationContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+            services.AddDbContext<final_projectContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AuthenticationContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             //options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<User, IdentityRole>()
