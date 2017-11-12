@@ -32,11 +32,22 @@ export class NavMenu extends React.Component<{}, {}> {
                                 <span className='glyphicon glyphicon-th-list'></span> Fetch data
                             </NavLink>
                         </li>
+<<<<<<< Updated upstream
                         <li>
                             <NavLink to={'/settings'} activeClassName='active'>
                                 <span className='glyphicon glyphicon-th-list'></span> Settings
                             </NavLink>
                         </li>
+=======
+
+                        <li>
+                            <NavLink to={ '/bookchart' } activeClassName='active'>
+                                <span className='glyphicon glyphicon-th-list'></span> See Book Chart
+                            </NavLink>
+                        </li>
+
+
+>>>>>>> Stashed changes
                     </ul>
                 </div>
             </div>
