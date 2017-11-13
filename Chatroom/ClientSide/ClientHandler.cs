@@ -18,6 +18,7 @@ namespace final_project.ChatRoom.ClientSide
         {
             var SenderName = context.Request.Query["Name"]; //name是sender
             var connection = Connections.FirstOrDefault(m => ((ClientConnector)m).UserName == SenderName);//检测这个user是不是已经存在于Connections这个list里，如果没有，就加list 
+            //var AvailableConnects = Connections.SelectMany(Available=>((ClientConnector)Available).UserName);
 
             if (connection == null)
             {
