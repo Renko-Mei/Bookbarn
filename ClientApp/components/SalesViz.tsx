@@ -14,17 +14,6 @@ export class SalesViz extends React.Component<RouteComponentProps<{}>, {}>{
     getChartData(){
     //make ajx call here
         this.setState({
-                chartData:{
-                labels:['Computer Science', 'Kinesiology', 'Business', 'Physics', 'Gender Study'],
-                datasets:[
-                    {
-                        label:'Discipline',
-                        data:[
-                            10,20,20,30,40
-                        ]
-                    }
-                ]
-                },
                 bookData:{
                 labels:['January', 'February', 'March', 'April'],
                 datasets:[{
@@ -41,13 +30,12 @@ export class SalesViz extends React.Component<RouteComponentProps<{}>, {}>{
                 }]
                 }
                 })        
-    }
+        }
 
     
     public render(){
         return <div><h2>Sales Viz</h2>
-                <BookSaleChart chartData={this.state.chartData}/>
-                
+                <BookSaleChart/>
         </div>
     }
 }
