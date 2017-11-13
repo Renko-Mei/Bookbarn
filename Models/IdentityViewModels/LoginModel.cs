@@ -9,8 +9,8 @@ namespace final_project.Models.IdentityViewModels
     public class LoginModel
     {
         [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Username")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

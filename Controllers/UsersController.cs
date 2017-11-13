@@ -21,7 +21,6 @@ namespace final_project.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly ILogger logger;
 
-
         public UsersController(UserManager<User> userManager,
            SignInManager<User> signInManager,
            RoleManager<IdentityRole> roleManager,
@@ -66,8 +65,8 @@ namespace final_project.Controllers
                 }
                 else
                 {
-                    logger.LogError($"User {user.Email} register failed");
-                    logger.LogError(string.Join(Environment.NewLine, result.Errors.Select(o => o.ToString()).ToArray()));
+                    logger.LogError($"User {user.UserName} register failed {Environment.NewLine}" +
+                        $"    {string.Join(Environment.NewLine, result.Errors.Select(o => o.ToString()).ToArray())}");
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
                 }
@@ -96,7 +95,7 @@ namespace final_project.Controllers
             if (ModelState.IsValid)
             {
                 var result = await signInManager.PasswordSignInAsync(
-                    model.Email,
+                    model.UserName,
                     model.Password,
                     model.RememberMe,
                     lockoutOnFailure: false
@@ -108,6 +107,8 @@ namespace final_project.Controllers
                 }
                 else
                 {
+                    logger.LogError($"User {model.UserName} login attempt failed {Environment.NewLine}" +
+                        $"    {string.Join(Environment.NewLine, result.ToString())}");
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
                 }
