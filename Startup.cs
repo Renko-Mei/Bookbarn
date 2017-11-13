@@ -26,14 +26,17 @@ namespace final_project
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            // Configure database model
             services.AddDbContext<final_projectContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<AuthenticationContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-            //options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
+            // Configure Authentication
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationContext>()
                 .AddDefaultTokenProviders();
 
+            // Configure identity constraints
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings
@@ -45,19 +48,21 @@ namespace final_project
                 options.Password.RequiredUniqueChars = 6;
 
                 // Lockout settings
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
 
                 // User settings
                 options.User.RequireUniqueEmail = true;
             });
 
+            // Configure cookie
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
+                options.Cookie.Name = Configuration["Globals:AppName"];
                 options.Cookie.HttpOnly = true;
-                options.Cookie.Expiration = TimeSpan.FromDays(150);
+                options.Cookie.Expiration = TimeSpan.FromDays(90);
                 options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
                 options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
                 options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
