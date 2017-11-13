@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
+import { Link } from 'react-router-dom';
+//import { NavLink } from 'react-router-dom';
 
 export class Settings extends React.Component<RouteComponentProps<{}>, {}> {
   //state = {loading: true};
 
-    componentDidMount() {
+      componentDidMount() {
         // fetch("https://swapi.co/api/planets/5")
         //   .then(res => res.json())
         //   .then(
@@ -27,7 +29,7 @@ export class Settings extends React.Component<RouteComponentProps<{}>, {}> {
       renderSettings(){
           return <div> 
             <h2>User Settings</h2>
-            
+            <Link to='/user/salesViz'>See Sales Visualization </Link>
             </div>;
       }
 

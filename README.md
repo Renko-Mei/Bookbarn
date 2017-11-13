@@ -33,3 +33,7 @@ when change ASP model
 2. run ef dotnet migration add newchangeName
 3. run ef database update 
 4. run ef dotnet run --project name.csproj
+
+Since we are working with typescript here, any javascript libraries need to be installed like this:
+
+    npm install -S @types/libraryName
