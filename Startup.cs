@@ -10,6 +10,14 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+
+//for UseFileServer. May delete later
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+
+//using WebSocketASPNetCore.WebSocketManager;
+
 namespace final_project
 {
     public class Startup
@@ -30,7 +38,7 @@ namespace final_project
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -46,7 +54,25 @@ namespace final_project
                 app.UseExceptionHandler("/Home/Error");
             }
 
+
             app.UseStaticFiles();
+
+            //Mark - use static page
+            app.UseWebSockets();
+
+            //app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ChartHandler>());
+
+            app.UseFileServer(new FileServerOptions(){
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Chatroom")),
+                RequestPath = new PathString("/ChatRoom"),
+                EnableDirectoryBrowsing = true
+            });
+
+
+
+
+
+
 
             app.UseMvc(routes =>
             {
