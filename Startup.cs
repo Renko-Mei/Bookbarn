@@ -16,8 +16,8 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 
 //for ChatRoom
-using ChatRoom.ClientSide;
-using ChatRoom.ServerSide;
+using final_project.ChatRoom.ClientSide;
+using final_project.ChatRoom.ServerSide;
 
 //using WebSocketASPNetCore.WebSocketManager;
 
@@ -37,12 +37,12 @@ namespace final_project
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddWebSocketManager();
             services.AddMvc();
             
             services.AddDbContext<final_projectContext>(options =>
               options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddWebSocketManager();
+           
           
             
         }
@@ -65,22 +65,26 @@ namespace final_project
             }
 
 
+
+            app.UseWebSockets();
+            app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ClientHandler>());
             app.UseStaticFiles();
 
             //Mark - use static page
             //我调用websockets
-            app.UseWebSockets();
+            
+
     //然后，通过分配"/LiveChat"路径来branch pipeline,如果调用的路径和"/LiveChat"一样就运行branch (middleware)
     //在extensions里面，通过使用IApplicationBuilder来公开需要使用的middleware的位置, 
-            app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ClientHandler>());
+            
 
             //app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ChartHandler>());
 
-             app.UseFileServer(new FileServerOptions(){
-                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"ClientChat")),
-                 RequestPath = new PathString("/ClientChat"),
-                 EnableDirectoryBrowsing = true
-             });
+            //  app.UseFileServer(new FileServerOptions(){
+            //      FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"ClientChat")),
+            //      RequestPath = new PathString("/ClientChat"),
+            //      EnableDirectoryBrowsing = true
+            //  });
 
 
 

@@ -11,19 +11,18 @@ using Microsoft.Extensions.DependencyInjection; //IserviceCollection
 
 
 
-namespace ChatRoom.ServerSide
+namespace final_project.ChatRoom.ServerSide
 {
 	public static class ServerExtensions
     {
-        public static IApplicationBuilder MapWebSocketManager(this IApplicationBuilder app, PathString path, ServerHandler handler)
-        {
-            return app.Map(path, (_app) => _app.UseMiddleware<ServerMiddleware>(handler));
-        }
-
+       
         public static IServiceCollection AddWebSocketManager(this IServiceCollection services)
         {
-            var handlerBaseType = typeof(ServerHandler);
+            //services.AddTransient<ServerMiddleware>();
+            //services.AddTransient<ServerMiddleware>();
 
+            var handlerBaseType = typeof(ServerHandler);
+            
             foreach (var type in Assembly.GetEntryAssembly().ExportedTypes)
             {
                 if (type.GetTypeInfo().BaseType == handlerBaseType)
@@ -34,5 +33,14 @@ namespace ChatRoom.ServerSide
 
             return services;
         }
+       
+       
+        public static void MapWebSocketManager(this IApplicationBuilder app, PathString path, ServerHandler handler)
+        {
+            //app.UseMiddleware<ServerMiddleware>(handler);
+             app.Map(path, (_app) => _app.UseMiddleware<ServerMiddleware>(handler));
+        }
+
+       
     }
 }

@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace ChatRoom.ServerSide
+namespace final_project.ChatRoom.ServerSide
 {
     public abstract class ServerConnection
     {
