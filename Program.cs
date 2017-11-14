@@ -19,7 +19,11 @@ namespace final_project
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
                 .UseStartup<Startup>()
+                .UseApplicationInsights()
                 .UseUrls("http://0.0.0.0:5000/") 
                 .Build();
     }
