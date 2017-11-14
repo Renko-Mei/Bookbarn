@@ -10,7 +10,7 @@ namespace final_project.ChatRoom.ServerSide
 	public class ServerMiddleware
     {
         private readonly RequestDelegate _next;//A function that can process an HTTP request. Returns: A task that represents the completion of request processing.
-        private ServerHandler _webSocketHandler { get; set; }//
+        public ServerHandler _webSocketHandler { get; set; }//
 
         public ServerMiddleware(RequestDelegate next, ServerHandler webSocketHandler) //
         {

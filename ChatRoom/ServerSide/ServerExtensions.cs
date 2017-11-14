@@ -35,12 +35,10 @@ namespace final_project.ChatRoom.ServerSide
         }
        
        
-        public static void MapWebSocketManager(this IApplicationBuilder app, PathString path, ServerHandler handler)
+        public static IApplicationBuilder MapWebSocketManager(this IApplicationBuilder app, PathString path, ServerHandler handler)
         {
             //app.UseMiddleware<ServerMiddleware>(handler);
-             app.Map(path, (_app) => _app.UseMiddleware<ServerMiddleware>(handler));
+            return app.Map(path, (_app) => _app.UseMiddleware<ServerMiddleware>(handler));
         }
-
-       
     }
 }

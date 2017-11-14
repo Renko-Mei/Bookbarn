@@ -67,6 +67,7 @@ namespace final_project
 
 
             app.UseWebSockets();
+            //app.UseMiddleware<ServerMiddleware>();
             app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ClientHandler>());
             app.UseStaticFiles();
 
