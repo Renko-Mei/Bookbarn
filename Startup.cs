@@ -9,13 +9,19 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace final_project
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
+            // var builder = new ConfigurationBuilder()
+            //     .SetBasePath(env.ContentRootPath)
+            //     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            //     .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+            //     .AddEnvironmentVariables();
             Configuration = configuration;
         }
 
@@ -30,7 +36,7 @@ namespace final_project
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -47,6 +53,8 @@ namespace final_project
             }
 
             app.UseStaticFiles();
+            app.UseWebSockets();
+            app.UseMiddleware<ChatWebSocketMiddleware>();
 
             app.UseMvc(routes =>
             {
