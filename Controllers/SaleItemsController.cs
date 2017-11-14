@@ -9,22 +9,22 @@ using final_project.Models;
 
 namespace final_project.Controllers
 {
-    public class BooksController : Controller
+    public class SaleItemsController : Controller
     {
         private readonly InitialModelsContext _context;
 
-        public BooksController(InitialModelsContext context)
+        public SaleItemsController(InitialModelsContext context)
         {
             _context = context;
         }
 
-        // GET: Books
+        // GET: SaleItems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Book.ToListAsync());
+            return View(await _context.SaleItem.ToListAsync());
         }
 
-        // GET: Books/Details/5
+        // GET: SaleItems/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,39 +32,39 @@ namespace final_project.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Book
-                .SingleOrDefaultAsync(m => m.BookId  == id);
-            if (book == null)
+            var saleItem = await _context.SaleItem
+                .SingleOrDefaultAsync(m => m.SaleItemId == id);
+            if (saleItem == null)
             {
                 return NotFound();
             }
 
-            return View(book);
+            return View(saleItem);
         }
 
-        // GET: Books/Create
+        // GET: SaleItems/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Books/Create
+        // POST: SaleItems/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,Isbn,Title,AuthorFirstName,AuthorLastName")] Book book)
+        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,IsSold")] SaleItem saleItem)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(book);
+                _context.Add(saleItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(book);
+            return View(saleItem);
         }
 
-        // GET: Books/Edit/5
+        // GET: SaleItems/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,22 +72,22 @@ namespace final_project.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Book.SingleOrDefaultAsync(m => m.BookId  == id);
-            if (book == null)
+            var saleItem = await _context.SaleItem.SingleOrDefaultAsync(m => m.SaleItemId == id);
+            if (saleItem == null)
             {
                 return NotFound();
             }
-            return View(book);
+            return View(saleItem);
         }
 
-        // POST: Books/Edit/5
+        // POST: SaleItems/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookId,Isbn,Title,AuthorFirstName,AuthorLastName")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("SaleItemId,Price,Quality,IsSold")] SaleItem saleItem)
         {
-            if (id != book.BookId)
+            if (id != saleItem.SaleItemId)
             {
                 return NotFound();
             }
@@ -96,12 +96,12 @@ namespace final_project.Controllers
             {
                 try
                 {
-                    _context.Update(book);
+                    _context.Update(saleItem);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BookExists(book.BookId))
+                    if (!SaleItemExists(saleItem.SaleItemId))
                     {
                         return NotFound();
                     }
@@ -112,10 +112,10 @@ namespace final_project.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(book);
+            return View(saleItem);
         }
 
-        // GET: Books/Delete/5
+        // GET: SaleItems/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,30 +123,30 @@ namespace final_project.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Book
-                .SingleOrDefaultAsync(m => m.BookId  == id);
-            if (book == null)
+            var saleItem = await _context.SaleItem
+                .SingleOrDefaultAsync(m => m.SaleItemId == id);
+            if (saleItem == null)
             {
                 return NotFound();
             }
 
-            return View(book);
+            return View(saleItem);
         }
 
-        // POST: Books/Delete/5
+        // POST: SaleItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var book = await _context.Book.SingleOrDefaultAsync(m => m.BookId  == id);
-            _context.Book.Remove(book);
+            var saleItem = await _context.SaleItem.SingleOrDefaultAsync(m => m.SaleItemId == id);
+            _context.SaleItem.Remove(saleItem);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BookExists(int id)
+        private bool SaleItemExists(int id)
         {
-            return _context.Book.Any(e => e.BookId  == id);
+            return _context.SaleItem.Any(e => e.SaleItemId == id);
         }
     }
 }

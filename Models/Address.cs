@@ -4,7 +4,7 @@ namespace final_project.Models
 {
   public class Address
   {
-    public int ID { get; set; }
+    public int AddressId { get; set; }
     public string Unit { get; set; }
     public string StreetNumber { get; set; }
     public string StreetName { get; set; }

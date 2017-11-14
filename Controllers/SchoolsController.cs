@@ -33,7 +33,7 @@ namespace final_project.Controllers
             }
 
             var school = await _context.School
-                .SingleOrDefaultAsync(m => m.ID == id);
+                .SingleOrDefaultAsync(m => m.SchoolId == id);
             if (school == null)
             {
                 return NotFound();
@@ -49,11 +49,11 @@ namespace final_project.Controllers
         }
 
         // POST: Schools/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name")] School school)
+        public async Task<IActionResult> Create([Bind("SchoolId,Name")] School school)
         {
             if (ModelState.IsValid)
             {
@@ -72,7 +72,7 @@ namespace final_project.Controllers
                 return NotFound();
             }
 
-            var school = await _context.School.SingleOrDefaultAsync(m => m.ID == id);
+            var school = await _context.School.SingleOrDefaultAsync(m => m.SchoolId == id);
             if (school == null)
             {
                 return NotFound();
@@ -81,13 +81,13 @@ namespace final_project.Controllers
         }
 
         // POST: Schools/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name")] School school)
+        public async Task<IActionResult> Edit(int id, [Bind("SchoolId,Name")] School school)
         {
-            if (id != school.ID)
+            if (id != school.SchoolId)
             {
                 return NotFound();
             }
@@ -101,7 +101,7 @@ namespace final_project.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SchoolExists(school.ID))
+                    if (!SchoolExists(school.SchoolId))
                     {
                         return NotFound();
                     }
@@ -124,7 +124,7 @@ namespace final_project.Controllers
             }
 
             var school = await _context.School
-                .SingleOrDefaultAsync(m => m.ID == id);
+                .SingleOrDefaultAsync(m => m.SchoolId == id);
             if (school == null)
             {
                 return NotFound();
@@ -138,7 +138,7 @@ namespace final_project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var school = await _context.School.SingleOrDefaultAsync(m => m.ID == id);
+            var school = await _context.School.SingleOrDefaultAsync(m => m.SchoolId == id);
             _context.School.Remove(school);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -146,7 +146,7 @@ namespace final_project.Controllers
 
         private bool SchoolExists(int id)
         {
-            return _context.School.Any(e => e.ID == id);
+            return _context.School.Any(e => e.SchoolId == id);
         }
     }
 }

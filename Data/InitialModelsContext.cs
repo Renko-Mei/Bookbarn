@@ -8,7 +8,7 @@ using final_project.Models;
     public class InitialModelsContext : DbContext
     {
         public InitialModelsContext (DbContextOptions<InitialModelsContext> options)
-            : base(options)
+          : base(options)
         {
         }
 
@@ -17,4 +17,14 @@ using final_project.Models;
         public DbSet<final_project.Models.Address> Address { get; set; }
 
         public DbSet<final_project.Models.School> School { get; set; }
+
+        public DbSet<final_project.Models.SaleItem> SaleItem { get; set; }
+
+        // protected override void OnModelCreating(ModelBuilder modelBuilder)
+        // {
+        //     modelBuilder.Entity<SaleItem>()
+        //         .HasOne(b => b.Book)
+        //         .WithMany(s => s.SaleItems)
+        //         .HasForeignKey(s => s.BookId);
+        // }
     }

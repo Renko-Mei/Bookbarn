@@ -4,7 +4,7 @@ namespace final_project.Models
 {
   public class School
   {
-    public int ID { get; set; }
+    public int SchoolId { get; set; }
     public string Name { get; set; }
   }
 }

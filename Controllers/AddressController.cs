@@ -33,7 +33,7 @@ namespace final_project.Controllers
             }
 
             var address = await _context.Address
-                .SingleOrDefaultAsync(m => m.ID == id);
+                .SingleOrDefaultAsync(m => m.AddressId == id);
             if (address == null)
             {
                 return NotFound();
@@ -49,11 +49,11 @@ namespace final_project.Controllers
         }
 
         // POST: Address/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Unit,StreetNumber,StreetName,PostalCode")] Address address)
+        public async Task<IActionResult> Create([Bind("AddressId,Unit,StreetNumber,StreetName,PostalCode")] Address address)
         {
             if (ModelState.IsValid)
             {
@@ -72,7 +72,7 @@ namespace final_project.Controllers
                 return NotFound();
             }
 
-            var address = await _context.Address.SingleOrDefaultAsync(m => m.ID == id);
+            var address = await _context.Address.SingleOrDefaultAsync(m => m.AddressId == id);
             if (address == null)
             {
                 return NotFound();
@@ -81,13 +81,13 @@ namespace final_project.Controllers
         }
 
         // POST: Address/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Unit,StreetNumber,StreetName,PostalCode")] Address address)
+        public async Task<IActionResult> Edit(int id, [Bind("AddressId,Unit,StreetNumber,StreetName,PostalCode")] Address address)
         {
-            if (id != address.ID)
+            if (id != address.AddressId)
             {
                 return NotFound();
             }
@@ -101,7 +101,7 @@ namespace final_project.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AddressExists(address.ID))
+                    if (!AddressExists(address.AddressId))
                     {
                         return NotFound();
                     }
@@ -124,7 +124,7 @@ namespace final_project.Controllers
             }
 
             var address = await _context.Address
-                .SingleOrDefaultAsync(m => m.ID == id);
+                .SingleOrDefaultAsync(m => m.AddressId == id);
             if (address == null)
             {
                 return NotFound();
@@ -138,7 +138,7 @@ namespace final_project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var address = await _context.Address.SingleOrDefaultAsync(m => m.ID == id);
+            var address = await _context.Address.SingleOrDefaultAsync(m => m.AddressId == id);
             _context.Address.Remove(address);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -146,7 +146,7 @@ namespace final_project.Controllers
 
         private bool AddressExists(int id)
         {
-            return _context.Address.Any(e => e.ID == id);
+            return _context.Address.Any(e => e.AddressId == id);
         }
     }
 }
