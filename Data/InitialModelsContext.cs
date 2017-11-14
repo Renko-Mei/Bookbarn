@@ -20,6 +20,8 @@ using final_project.Models;
 
         public DbSet<final_project.Models.SaleItem> SaleItem { get; set; }
 
+        public DbSet<final_project.Models.Order> Order { get; set; }
+
         // protected override void OnModelCreating(ModelBuilder modelBuilder)
         // {
         //     modelBuilder.Entity<SaleItem>()
