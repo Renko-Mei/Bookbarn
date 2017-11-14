@@ -29,10 +29,16 @@
         <dd>
             @Html.DisplayFor(model => model.IsSold)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BookId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BookId)
+        </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="ID" />
+        <input type="hidden" asp-for="SaleItemId" />
         <input type="submit" value="Delete" class="btn btn-default" /> |
         <a asp-action="Index">Back to List</a>
     </form>

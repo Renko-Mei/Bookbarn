@@ -33,7 +33,7 @@ namespace final_project.Controllers
             }
 
             var book = await _context.Book
-                .SingleOrDefaultAsync(m => m.BookId  == id);
+                .SingleOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {
                 return NotFound();
@@ -49,7 +49,7 @@ namespace final_project.Controllers
         }
 
         // POST: Books/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -72,7 +72,7 @@ namespace final_project.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Book.SingleOrDefaultAsync(m => m.BookId  == id);
+            var book = await _context.Book.SingleOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {
                 return NotFound();
@@ -81,7 +81,7 @@ namespace final_project.Controllers
         }
 
         // POST: Books/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -124,7 +124,7 @@ namespace final_project.Controllers
             }
 
             var book = await _context.Book
-                .SingleOrDefaultAsync(m => m.BookId  == id);
+                .SingleOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {
                 return NotFound();
@@ -138,7 +138,7 @@ namespace final_project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var book = await _context.Book.SingleOrDefaultAsync(m => m.BookId  == id);
+            var book = await _context.Book.SingleOrDefaultAsync(m => m.BookId == id);
             _context.Book.Remove(book);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -146,7 +146,7 @@ namespace final_project.Controllers
 
         private bool BookExists(int id)
         {
-            return _context.Book.Any(e => e.BookId  == id);
+            return _context.Book.Any(e => e.BookId == id);
         }
     }
 }
