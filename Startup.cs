@@ -29,7 +29,10 @@ namespace final_project
               options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<InitialModelsContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("InitialModelsContext")));
+              options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+            // services.AddDbContext<InitialModelsContext>(options =>
+            //         options.UseSqlServer(Configuration.GetConnectionString("InitialModelsContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
