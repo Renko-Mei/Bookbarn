@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace final_project
+namespace chatroom
 {
     public class ChatWebSocketMiddleware
     {
