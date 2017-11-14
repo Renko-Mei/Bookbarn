@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 
 
 
-namespace final_project.ChatRoom.ServerSide
+namespace ChatRoom.ServerSide
 {
     public abstract class ServerHandler
     {

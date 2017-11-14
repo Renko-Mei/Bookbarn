@@ -64,11 +64,11 @@ execute 'run migrations' do
   cwd '/home/ubuntu/project'
 end
 
-# TODO uncomment this -- autoruns dotnet
-# execute 'start dotnet' do
-#   command 'nohup dotnet run > /dev/null 2>&1 &'
-#   cwd '/home/ubuntu/project'
-# end
+#TODO uncomment this -- autoruns dotnet
+execute 'start dotnet' do
+  command 'nohup dotnet run > /dev/null 2>&1 &'
+  cwd '/home/ubuntu/project'
+end
 
 cookbook_file 'nginx-default' do
   path '/etc/nginx/sites-available/default'

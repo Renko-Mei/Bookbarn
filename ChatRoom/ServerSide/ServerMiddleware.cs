@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
 
-namespace final_project.ChatRoom.ServerSide
+namespace ChatRoom.ServerSide
 {
 	public class ServerMiddleware
     {

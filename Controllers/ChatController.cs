@@ -21,9 +21,5 @@ namespace final_project.Controllers
         {
             return View("Index", username);
         }
-        // public IActionResult Index()
-        // {
-        //     return View();
-        // }
     }
 }

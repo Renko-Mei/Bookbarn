@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using final_project.ChatRoom.ServerSide;
+using ChatRoom.ServerSide;
 
 
 
-namespace final_project.ChatRoom.ClientSide
+namespace ChatRoom.ClientSide
 {
     public class ClientConnector : ServerConnection
     {

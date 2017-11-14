@@ -16,8 +16,8 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 
 //for ChatRoom
-using final_project.ChatRoom.ClientSide;
-using final_project.ChatRoom.ServerSide;
+using ChatRoom.ClientSide;
+using ChatRoom.ServerSide;
 
 //using WebSocketASPNetCore.WebSocketManager;
 
@@ -37,10 +37,14 @@ namespace final_project
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddMvc();
+            
             services.AddDbContext<final_projectContext>(options =>
               options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddWebSocketManager();
+          
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,11 +76,11 @@ namespace final_project
 
             //app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ChartHandler>());
 
-            // app.UseFileServer(new FileServerOptions(){
-            //     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Chatroom")),
-            //     RequestPath = new PathString("/ChatRoom"),
-            //     EnableDirectoryBrowsing = true
-            // });
+             app.UseFileServer(new FileServerOptions(){
+                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"ClientChat")),
+                 RequestPath = new PathString("/ClientChat"),
+                 EnableDirectoryBrowsing = true
+             });
 
 
 
