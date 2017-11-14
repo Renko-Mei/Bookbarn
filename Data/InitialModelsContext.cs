@@ -15,4 +15,6 @@ using final_project.Models;
         public DbSet<final_project.Models.Book> Book { get; set; }
 
         public DbSet<final_project.Models.Address> Address { get; set; }
+
+        public DbSet<final_project.Models.School> School { get; set; }
     }
