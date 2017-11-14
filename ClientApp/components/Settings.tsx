@@ -29,7 +29,7 @@ export class Settings extends React.Component<RouteComponentProps<{}>, {}> {
       renderSettings(){
           return <div> 
             <h2>User Settings</h2>
-            <Link to='/user/salesViz'>See Sales Visualization </Link>
+            <Link to='/user/SalesHistory'>See Sales Visualization </Link>
             </div>;
       }
 
