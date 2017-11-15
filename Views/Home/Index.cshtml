@@ -1,4 +1,4 @@
-@*@{
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,13 +6,15 @@
 
 @section scripts {
     <script src="~/dist/main.js" asp-append-version="true"></script>
-}*@
+}
 
-@{
+@*Comment out above section and remove comment of below section to test user registration and login*@
+
+@*@{
     ViewData["Title"] = "Home Page";
 }
 
 <p>Welcome, @ViewData["Email"]</p>
 
 <a href="@Url.Action("Register", "Users")">Register</a><br />
-<a href="@Url.Action("Login", "Users")">Login</a>
+<a href="@Url.Action("Login", "Users")">Login</a>*@
