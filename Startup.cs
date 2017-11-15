@@ -39,6 +39,8 @@ namespace final_project
         {
             services.AddWebSocketManager();
             services.AddMvc();
+            services.AddTransient<ClientHandler>();
+
             
             services.AddDbContext<final_projectContext>(options =>
               options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
@@ -68,7 +70,7 @@ namespace final_project
 
             app.UseWebSockets();
             //app.UseMiddleware<ServerMiddleware>();
-            app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ClientHandler>());
+           
             app.UseStaticFiles();
 
             //Mark - use static page
@@ -92,7 +94,6 @@ namespace final_project
 
 
 
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -103,6 +104,7 @@ namespace final_project
                 //     name: "spa-fallback",
                 //     defaults: new { controller = "Home", action = "Index" });
             });
+             app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ClientHandler>());
         }
     }
 }
