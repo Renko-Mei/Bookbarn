@@ -75,9 +75,14 @@ end
 #   cwd '/home/ubuntu/project'
 # end
 
+execute 'start nginx' do
+  command 'service nginx start'
+end
+
 cookbook_file 'nginx-default' do
   path '/etc/nginx/sites-available/default'
 end
+
 execute 'nginx_reload' do
   command 'nginx -s reload'
 end
