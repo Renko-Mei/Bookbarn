@@ -59,6 +59,26 @@ execute 'get node deps' do
   cwd '/home/ubuntu/project'
 end
 
+execute 'User model migration' do
+  command 'dotnet ef migrations add UserModel -c AuthenticationContext'
+  cwd '/home/ubuntu/project'
+end
+
+execute 'Other model migration' do
+  command 'dotnet ef migrations add OtherModels -c final_projectContext'
+  cwd '/home/ubuntu/project'
+end
+
+execute 'Update db for user model' do
+  command 'dotnet ef database update -c AuthenticationContext'
+  cwd '/home/ubuntu/project'
+end
+
+execute 'Update db for other models' do
+  command 'dotnet ef database update -c final_projectContext'
+  cwd '/home/ubuntu/project'
+end
+
 execute 'run migrations' do
   command 'dotnet ef database update'
   cwd '/home/ubuntu/project'
