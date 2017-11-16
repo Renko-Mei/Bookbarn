@@ -12,9 +12,9 @@ execute 'move dotnet package to apt-sources' do
   command "sh -c 'echo \"deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main\" > /etc/apt/sources.list.d/dotnetdev.list'"
 end
 
-execute 'add npm set up' do
-  command 'curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -'
-end
+#execute 'add npm set up' do
+#  command 'curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -'
+#end
 
 cookbook_file "apt-sources.list" do
   path "/etc/apt/sources.list"
@@ -41,28 +41,48 @@ execute 'create db' do
   command 'echo "CREATE USER proj PASSWORD \'test\'; ALTER USER proj CREATEDB;" | sudo -u postgres psql'
 end
 
-execute 'get dotnet' do
-  command 'apt-get install dotnet-sdk-2.0.0 -y'
-end
+#execute 'get dotnet' do
+#  command 'apt-get install dotnet-sdk-2.0.0 -y'
+#end
 
-execute 'get dotnet deps' do
+#execute 'get dotnet deps' do
+#  command 'dotnet restore'
+#  cwd '/home/ubuntu/project'
+#end
+
+#execute 'get node' do
+#  command 'apt-get install -y nodejs'
+#end
+execute 'get_npm' do 
+  command 'sudo apt-get install npm -y'
+end 
+
+execute 'update_npm' do 
+  command 'sudo npm install -g npm'
+end 
+
+execute 'get_nodejs' do 
+  command 'sudo apt-get install nodejs-legacy'
+end 
+
+execute 'get dotnet' do 
+  command 'sudo apt-get install dotnet-sdk-2.0.0 -y'
+end 
+
+execute 'get deps' do
   command 'dotnet restore'
   cwd '/home/ubuntu/project'
-end
+end 
 
-execute 'get node' do
-  command 'apt-get install -y nodejs'
-end
+#execute 'get node deps' do
+#  command 'npm install'
+#  cwd '/home/ubuntu/project'
+#end
 
-execute 'get node deps' do
-  command 'npm install'
-  cwd '/home/ubuntu/project'
-end
-
-execute 'run migrations' do
-  command 'dotnet ef database update'
-  cwd '/home/ubuntu/project'
-end
+#execute 'run migrations' do
+#  command 'dotnet ef database update'
+#  cwd '/home/ubuntu/project'
+#end
 
 # TODO uncomment this -- autoruns dotnet
 # execute 'start dotnet' do

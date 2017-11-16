@@ -14,3 +14,4 @@ namespace final_project.Models
 }
 
 //dotnet aspnet-codegenerator controller -name SaleItemsController -m SaleItem -dc InitialModelsContext --relativeFolderPath Controllers --useDefaultLayout --referenceScriptLibraries
+

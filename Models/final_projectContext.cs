@@ -8,7 +8,6 @@ namespace final_project.Models
       : base(options)
     {
     }
-
     public DbSet<final_project.Models.User> User { get; set; }
   }
 }
