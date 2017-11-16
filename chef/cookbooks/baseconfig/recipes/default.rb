@@ -60,6 +60,11 @@ execute 'get node deps' do
 end
 
 execute 'run migrations' do
+  command 'dotnet ef migrations add InitialMigration'
+  cwd '/home/ubuntu/project'
+end
+
+execute 'update database' do
   command 'dotnet ef database update'
   cwd '/home/ubuntu/project'
 end
