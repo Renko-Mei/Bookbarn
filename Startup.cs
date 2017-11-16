@@ -27,8 +27,6 @@ namespace final_project
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddDbContext<final_projectContext>(options =>
-              options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<InitialModelsContext>(options =>
               options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));

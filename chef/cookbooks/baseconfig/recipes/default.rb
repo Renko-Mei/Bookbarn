@@ -60,7 +60,7 @@ execute 'get node deps' do
 end
 
 execute 'run migrations' do
-  command 'dotnet ef migrations add InitialMigration'
+  command 'dotnet ef migrations add DefaultModelsMigration'
   cwd '/home/ubuntu/project'
 end
 

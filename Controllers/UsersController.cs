@@ -12,9 +12,9 @@ namespace final_project.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly final_projectContext _context;
+        private readonly InitialModelsContext _context;
 
-        public UsersController(final_projectContext context)
+        public UsersController(InitialModelsContext context)
         {
             _context = context;
         }

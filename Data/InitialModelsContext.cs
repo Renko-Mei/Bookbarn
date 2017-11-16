@@ -5,22 +5,26 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using final_project.Models;
 
+namespace final_project.Data
+{
     public class InitialModelsContext : DbContext
     {
-        public InitialModelsContext (DbContextOptions<InitialModelsContext> options)
+        public InitialModelsContext(DbContextOptions<InitialModelsContext> options)
           : base(options)
         {
         }
 
-        public DbSet<final_project.Models.Book> Book { get; set; }
+        public DbSet<Book> Book { get; set; }
 
-        public DbSet<final_project.Models.Address> Address { get; set; }
+        public DbSet<Address> Address { get; set; }
 
-        public DbSet<final_project.Models.School> School { get; set; }
+        public DbSet<School> School { get; set; }
 
-        public DbSet<final_project.Models.SaleItem> SaleItem { get; set; }
+        public DbSet<SaleItem> SaleItem { get; set; }
 
-        public DbSet<final_project.Models.Order> Order { get; set; }
+        public DbSet<Order> Order { get; set; }
+
+        public DbSet<User> User { get; set; }
 
         // protected override void OnModelCreating(ModelBuilder modelBuilder)
         // {
@@ -30,3 +34,4 @@ using final_project.Models;
         //         .HasForeignKey(s => s.BookId);
         // }
     }
+}
