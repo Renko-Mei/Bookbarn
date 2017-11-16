@@ -42,7 +42,7 @@ execute 'create db' do
 end
 
 execute 'get dotnet' do
-  command 'apt-get install dotnet-sdk-2.0.0 -y'
+  command 'sudo apt-get install dotnet-sdk-2.0.0 -y'
 end
 
 execute 'get dotnet deps' do
@@ -64,8 +64,8 @@ execute 'run migration - final_projectContext' do
   cwd '/home/ubuntu/project'
 end
 
-execute 'run migration - InitalModelsContext' do
-  command 'dotnet ef database update --context InitalModelsContext'
+execute 'run migration - InitialModelsContext' do
+  command 'dotnet ef database update --context InitialModelsContext'
   cwd '/home/ubuntu/project'
 end
 
