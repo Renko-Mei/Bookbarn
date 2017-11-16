@@ -59,8 +59,13 @@ execute 'get node deps' do
   cwd '/home/ubuntu/project'
 end
 
-execute 'run migrations' do
-  command 'dotnet ef database update'
+execute 'run migration - final_projectContext' do
+  command 'dotnet ef database update --context final_projectContext'
+  cwd '/home/ubuntu/project'
+end
+
+execute 'run migration - InitalModelsContext' do
+  command 'dotnet ef database update --context InitalModelsContext'
   cwd '/home/ubuntu/project'
 end
 
