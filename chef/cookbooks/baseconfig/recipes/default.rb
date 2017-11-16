@@ -42,7 +42,7 @@ execute 'create db' do
 end
 
 execute 'get dotnet' do
-  command 'apt-get install dotnet-sdk-2.0.0 -y'
+  command 'sudo apt-get install dotnet-sdk-2.0.0 -y'
 end
 
 execute 'get dotnet deps' do
