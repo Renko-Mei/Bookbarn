@@ -33,12 +33,12 @@ namespace final_project.Controllers
                 }
                 else if (searchType.Equals("author"))
                 {
-                    filter = "b.\"Author\"";
+                    filter = "b.\"AuthorFirstName\"";
                 }
-                string searchQuery = "select b.\"Title\", b.\"Author\", si.\"Quality\", si.\"Price\", si.\"SaleItemID\" from public.\"SaleItem\" si inner join public.\"Book\" b on si.\"BookID\" = b.\"BookID\" WHERE " + filter + " LIKE \'%" + searchString + "%\'";
+                string searchQuery = "select b.\"Title\", b.\"AuthorFirstName\", si.\"Quality\", si.\"Price\", si.\"SaleItemId\" from public.\"SaleItem\" si inner join public.\"Book\" b on si.\"BookId\" = b.\"BookId\" WHERE " + filter + " LIKE \'%" + searchString + "%\'";
                 List<string[]> queryResult = new List<string[]>();
 
-                using (NpgsqlConnection conn = new NpgsqlConnection("Host=localhost;Port=5432; Database=bookdb; Username=postgres; Password=password"))
+                using (NpgsqlConnection conn = new NpgsqlConnection("Host=localhost; Database=FinalProject; Username=proj; Password=test"))
                 {
                     conn.Open();
                     NpgsqlCommand query = new NpgsqlCommand(searchQuery, conn);
