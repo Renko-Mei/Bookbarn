@@ -6,148 +6,140 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using final_project.Models;
-using final_project.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using final_project.Models.IdentityViewModels;
+using Microsoft.AspNetCore.Authentication;
 
 namespace final_project.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly InitialModelsContext _context;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly ILogger logger;
 
-        public UsersController(InitialModelsContext context)
+        public UsersController(UserManager<User> userManager,
+           SignInManager<User> signInManager,
+           RoleManager<IdentityRole> roleManager,
+           ILogger<UsersController> logger)
         {
-            _context = context;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.roleManager = roleManager;
+            this.logger = logger;
         }
 
-        // GET: Users
-        public async Task<IActionResult> Index()
+        #region Register
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register(string returnUrl = null)
         {
-            return View(await _context.User.ToListAsync());
-        }
-
-        // GET: Users/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.User
-                .SingleOrDefaultAsync(m => m.ID == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        // GET: Users/Create
-        public IActionResult Create()
-        {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
-        // POST: Users/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email")] User user)
+        public async Task<IActionResult> Register(RegisterModel model, string returnUrl = null)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
-
-        // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.User.SingleOrDefaultAsync(m => m.ID == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
-        }
-
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,Email")] User user)
-        {
-            if (id != user.ID)
-            {
-                return NotFound();
-            }
+            ViewData["ReturnUrl"] = returnUrl;
 
             if (ModelState.IsValid)
             {
-                try
+                User user = new User()
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
+                    Email = model.Email,
+                    UserName = model.UserName,
+                };
 
-        // GET: Users/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+                IdentityResult result = await userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    await signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToLocal(returnUrl);
+                }
+                else
+                {
+                    logger.LogError($"User {user.UserName} register failed {Environment.NewLine}" +
+                        $"    {string.Join(Environment.NewLine, result.Errors.Select(o => o.ToString()).ToArray())}");
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return View(model);
+                }
+            }
+            return View(model);
+        }
+        #endregion
+
+        #region Login
+
+        public async Task<IActionResult> Login(string returnUrl = null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            var user = await _context.User
-                .SingleOrDefaultAsync(m => m.ID == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
         }
 
-        // POST: Users/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Login(LoginModel model, string returnUrl = null)
         {
-            var user = await _context.User.SingleOrDefaultAsync(m => m.ID == id);
-            _context.User.Remove(user);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var result = await signInManager.PasswordSignInAsync(
+                    model.UserName,
+                    model.Password,
+                    model.RememberMe,
+                    lockoutOnFailure: false
+                );
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    logger.LogError($"User {model.UserName} login attempt failed {Environment.NewLine}" +
+                        $"    {string.Join(Environment.NewLine, result.ToString())}");
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return View(model);
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
-        private bool UserExists(int id)
+        #endregion
+
+        #region Logoff
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
         {
-            return _context.User.Any(e => e.ID == id);
+            await signInManager.SignOutAsync();
+            return RedirectToAction(nameof(HomeController.Index), "Home");
+        }
+        #endregion
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
         }
     }
 }
