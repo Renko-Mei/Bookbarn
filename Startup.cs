@@ -30,8 +30,12 @@ namespace final_project
             services.AddMvc();
 
             // Configure database model
-            services.AddDbContext<final_projectContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<AuthenticationContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services
+                .AddDbContext<InitialModelsContext>(options => options
+                    .UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services
+                .AddDbContext<AuthenticationContext>(options => options
+                    .UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             // Configure Authentication
             services.AddIdentity<User, IdentityRole>()

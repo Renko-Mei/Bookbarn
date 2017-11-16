@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using final_project.Models;
 
-namespace final_project.Models
+namespace final_project.Data
 {
     public class AuthenticationContext : IdentityDbContext<User>
     {

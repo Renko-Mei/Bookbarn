@@ -65,7 +65,7 @@ execute 'User model migration' do
 end
 
 execute 'Other model migration' do
-  command 'dotnet ef migrations add OtherModels -c final_projectContext'
+  command 'dotnet ef migrations add DefaultModels -c InitialModelsContext'
   cwd '/home/ubuntu/project'
 end
 
@@ -75,17 +75,7 @@ execute 'Update db for user model' do
 end
 
 execute 'Update db for other models' do
-  command 'dotnet ef database update -c final_projectContext'
-  cwd '/home/ubuntu/project'
-end
-
-execute 'run migrations' do
-  command 'dotnet ef migrations add DefaultModelsMigration'
-  cwd '/home/ubuntu/project'
-end
-
-execute 'update database' do
-  command 'dotnet ef database update'
+  command 'dotnet ef database update -c InitialModelsContext'
   cwd '/home/ubuntu/project'
 end
 

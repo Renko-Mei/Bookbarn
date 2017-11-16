@@ -120,7 +120,7 @@ namespace final_project.Controllers
 
         #endregion
 
-        #region Logoff
+        #region Logout
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
