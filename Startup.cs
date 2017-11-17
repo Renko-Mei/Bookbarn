@@ -130,6 +130,8 @@ namespace final_project
            
             app.UseStaticFiles();
 
+            app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ClientHandler>());
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -140,7 +142,8 @@ namespace final_project
                 //     name: "spa-fallback",
                 //     defaults: new { controller = "Home", action = "Index" });
             });
-             app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ClientHandler>());
+            
+            
         }
     }
 }

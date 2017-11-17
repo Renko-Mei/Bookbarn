@@ -52,9 +52,9 @@
                 
             };
             
-
+            var list = document.getElementById("messages");
             document.getElementById("Send").onclick = function () {
-                var list = document.getElementById("messages");
+                
                  socket.send(JSON.stringify({
                     //Sender: userName;
                     Receiver: document.getElementById("to").value,
@@ -67,6 +67,7 @@
                     Message: document.getElementById("content").value
                 }));
                 document.getElementById("content").value = "";
+            }
        
 
                 socket.onmessage = function (event) {
@@ -78,7 +79,6 @@
                     list.appendChild(item);
                 };
 
-            }
         }
         else{
             document.getElementById('test').innerHTML = "Bye" //this is a test

@@ -18,9 +18,7 @@ namespace final_project.ChatRoom.ServerSide
        
         public static IServiceCollection AddWebSocketManager(this IServiceCollection services)
         {
-            //services.AddTransient<ServerMiddleware>();
-            //services.AddTransient<ServerMiddleware>();
-
+            
             var handlerBaseType = typeof(ServerHandler);
             
             foreach (var type in Assembly.GetEntryAssembly().ExportedTypes)
