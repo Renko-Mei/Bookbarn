@@ -56,18 +56,6 @@ export class Search extends React.Component<RouteComponentProps<{}>, SearchState
         </table>;
     }
 
-   /* public getSearchData() {
-        fetch('api/SampleData/SearchResult')
-            .then(response => response.json() as Promise<SearchResult[]>)
-            .then(data => {
-                this.setState({ results: data, loading: false });
-            });
-    }*/
-
-    //getSearchData: function(e) {
-
-    //}
-
 }
 
 

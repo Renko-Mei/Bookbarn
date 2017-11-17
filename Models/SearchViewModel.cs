@@ -7,11 +7,8 @@ namespace final_project.Models
 {
   public class SearchViewModel
   {
-    public List<SearchResult> SearchResults { get; set; }
+    public List<SearchResultViewModel> SearchResults { get; set; }
     public SelectList SearchTypes { get; set; }
     public string searchType { get; set; }
-    //public List<string> Author { get; set; }
-    //public List<string> Quality { get; set; }
-    //public List<string> Price { get; set; }
     }
 }
