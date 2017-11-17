@@ -23,8 +23,8 @@ To restart the server with your code changes:
 
 Check localhost:5000 :)
 
+----------------------------------
 Functions
-
 
 ###Private_Chat:
 The private_Chat function is used for customers to directly negotiate with sellers. This function has not embedded and is still under developing. However, the basic functions are working now. You can go to localhost:5000/chat to play with it.
