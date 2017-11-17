@@ -22,3 +22,18 @@ To restart the server with your code changes:
 3. `dotnet run`
 
 Check localhost:5000 :)
+
+
+
+Workflow
+
+when change ASP model
+
+1. first change the data type in controller 
+2. run ef dotnet migration add newchangeName
+3. run ef database update 
+4. run ef dotnet run --project name.csproj
+
+Since we are working with typescript here, any javascript libraries need to be installed like this:
+
+    npm install -S @types/libraryName
