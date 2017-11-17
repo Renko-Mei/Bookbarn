@@ -6,7 +6,7 @@
 
 # IDE cache folder
 .DS_Store
-.vscode
+.vscode/
 
 # User-specific files
 *.suo
