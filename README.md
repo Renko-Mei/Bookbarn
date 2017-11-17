@@ -23,6 +23,15 @@ To restart the server with your code changes:
 
 Check localhost:5000 :)
 
+Functions
+#Private_Chat
+The private_Chat function is used for customers to directly negotiate with sellers. This function has not embedded and is still under developing. However, the basic functions are working now. You can go to localhost:5000/chat to play with it.
+1. you can open multiple pages (`localhost:5000/chat`) in your browser and enter different user name.
+2. send message to specific user that you want to talk to.
+3. Only you(sender) and the receiver will receive message while other users will receive nothing.
+
+
+
 
 
 Workflow
