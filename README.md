@@ -5,10 +5,6 @@ Checkout http://localhost:5000/Users for CRUD
 
 You can now use scaffolding for ASP.NET models!
 
-# Dotnet Run
-- You can disable autorun by commenting out the section in the Chef `default.rb`
-
-
 
 # Functions:
 ### Private_Chat 
@@ -18,6 +14,10 @@ The private_Chat function is created for customers to directly negotiate with se
 3. Only you(sender) and the receiver will receive message while other users will receive nothing.
 
 
+
+
+# Dotnet Run
+- You can disable autorun by commenting out the section in the Chef `default.rb`
 
 
 ### if autorun enabled:
