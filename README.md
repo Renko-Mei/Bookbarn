@@ -18,7 +18,13 @@ See http://localhost:5000/search for search bar and dropdown bar. Table gets pop
 In http://localhost:5000/user/salesViz , the user can access the sales history of all the items they have sold in a nice visual chart
 
 ### User Authentication & login
+http://localhost:5000/users/Register to register an account.
+    Restrictions
+        Username: no space
+        Password: minimum 8 characters, contains 1 uppercase letter and 1 digit, 6 different characters minimum
 
+http://localhost:5000/users/Login to login
+http://localhost:5000/users/Logout to logout
 
 ### Data model created
 We have created our data model & set up the entities and relationships.
