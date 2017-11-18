@@ -80,10 +80,10 @@ execute 'Update db for other models' do
 end
 
 # TODO uncomment this -- autoruns dotnet
-# execute 'start dotnet' do
-#   command 'nohup dotnet run > /dev/null 2>&1 &'
-#   cwd '/home/ubuntu/project'
-# end
+execute 'start dotnet' do
+  command 'nohup dotnet run > /dev/null 2>&1 &'
+  cwd '/home/ubuntu/project'
+end
 
 execute 'start nginx' do
   command 'service nginx start'
