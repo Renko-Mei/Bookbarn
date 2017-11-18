@@ -4,6 +4,7 @@ import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
+import { Search } from './components/Search';
 import { Settings } from './components/Settings';
 import { SalesHistory } from './components/SalesHistory';
 
@@ -17,4 +18,5 @@ export const routes = <Layout>
     <Route path='/user/settings' component= { Settings } />
     <Route path='/user/SalesHistory' component= { SalesHistory } />
     {/* <Route path='/user/SalesHistory' component={SalesHistory} /> */}
+    <Route path='/search' component={ Search } />
 </Layout>;
