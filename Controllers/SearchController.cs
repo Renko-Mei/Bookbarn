@@ -9,6 +9,8 @@ using Npgsql;
 using System.Collections;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using final_project.Models;
+using final_project.Data;
+using final_project.Models.SearchViewModels;
 
 namespace final_project.Controllers
 {

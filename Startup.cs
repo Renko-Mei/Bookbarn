@@ -24,8 +24,6 @@ using final_project.ChatRoom.ServerSide;
 
 //using WebSocketASPNetCore.WebSocketManager;
 
-
-
 namespace final_project
 {
     public class Startup

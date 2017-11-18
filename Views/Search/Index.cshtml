@@ -1,4 +1,5 @@
-@model final_project.Models.SearchViewModel
+@model final_project.Models.SearchViewModels.SearchViewModel
+
 @{
     ViewData["Title"] = "Search";
 }
@@ -10,7 +11,7 @@
 	<p>Search for books.</p>
 
 	<form asp-controller="Search" asp-action="Index" method="get">
-		<select asp-for="searchType" asp-items="Model.SearchTypes">
+		<select asp-for="SearchType" asp-items="Model.SearchTypes">
 			<option value="title">Title</option>
 			<option value="author">Author</option>
 		</select>
