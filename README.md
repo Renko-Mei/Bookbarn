@@ -7,6 +7,7 @@ You can now use scaffolding for ASP.NET models!
 
 
 # Functions:
+
 ### Private_Chat 
 The private_Chat function is created for customers to directly negotiate with sellers. To make the function work, we use websocket and a middleware is also created. This function has not embedded and is still under developing. However, the basic functions are working now. You can go to `localhost:5000/chat` to play with it.
 1. you can open multiple pages (`localhost:5000/chat`) in your browser and enter different user name.
@@ -16,6 +17,8 @@ The private_Chat function is created for customers to directly negotiate with se
 ### Search
 See http://localhost:5000/search for search bar and dropdown bar. Table gets populated if there are entries in the database.
 
+### See Sales History
+In http://localhost:5000/user/salesViz , the user can access the sales history of all the items they have sold in a nice visual chart
 
 
 # Dotnet Run
