@@ -13,6 +13,8 @@ The private_Chat function is created for customers to directly negotiate with se
 2. send message to specific user that you want to talk to.
 3. Only you(sender) and the receiver will receive message while other users will receive nothing.
 
+### Search
+See http://localhost:5000/search for search bar and dropdown bar. Table gets populated if there are entries in the database.
 
 
 
@@ -35,8 +37,6 @@ To restart the server with your code changes:
 Check localhost:5000 :)
 
 
-### Search
-See http://localhost:5000/search for search bar and dropdown bar. Table gets populated if there are entries in the database.
 
 
 
