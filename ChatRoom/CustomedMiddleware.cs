@@ -5,7 +5,7 @@
 
 
 
-// namespace final_project.ChatRoom
+// namespace Bookbarn.ChatRoom
 // {
 // 	public class CustomedMiddleware
 // 	{

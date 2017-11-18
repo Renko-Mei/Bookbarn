@@ -7,10 +7,10 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-// using final_project.ChatRoom.ServerSide;
-// using final_project.ChatRoom.ClientSide;
+// using Bookbarn.ChatRoom.ServerSide;
+// using Bookbarn.ChatRoom.ClientSide;
 
-namespace final_project
+namespace Bookbarn
 {
     public class Program
     {

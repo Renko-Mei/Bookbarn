@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Web;
 
-namespace final_project.Models.SearchViewModels
+namespace Bookbarn.Models.SearchViewModels
 {
     public class SearchViewModel
     {

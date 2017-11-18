@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace final_project.Models.IdentityViewModels
+namespace Bookbarn.Models.IdentityViewModels
 {
     public class LoginModel
     {

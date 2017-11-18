@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 
 
-namespace final_project.Models
+namespace Bookbarn.Models
 {
     public class User : IdentityUser
     {

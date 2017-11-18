@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using System.Collections;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using final_project.Models;
-using final_project.Data;
-using final_project.Models.SearchViewModels;
+using Bookbarn.Models;
+using Bookbarn.Data;
+using Bookbarn.Models.SearchViewModels;
 
-namespace final_project.Controllers
+namespace Bookbarn.Controllers
 {
     public class SearchController : Controller
     {

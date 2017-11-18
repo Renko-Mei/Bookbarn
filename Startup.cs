@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using final_project.Models;
+using Bookbarn.Models;
 using Microsoft.AspNetCore.HttpOverrides; 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
-using final_project.Data;
+using Bookbarn.Data;
 
 //for UseFileServer. May delete later
 using Microsoft.Extensions.FileProviders;
@@ -19,12 +19,12 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 
 //for ChatRoom
-using final_project.ChatRoom.ClientSide;
-using final_project.ChatRoom.ServerSide;
+using Bookbarn.ChatRoom.ClientSide;
+using Bookbarn.ChatRoom.ServerSide;
 
 //using WebSocketASPNetCore.WebSocketManager;
 
-namespace final_project
+namespace Bookbarn
 {
     public class Startup
     {

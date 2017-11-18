@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using final_project.ChatRoom.ServerSide;
+using Bookbarn.ChatRoom.ServerSide;
 
 
 
 
-namespace final_project.ChatRoom.ClientSide
+namespace Bookbarn.ChatRoom.ClientSide
 {
     public class ClientHandler : ServerHandler
     { //WebSocketHandler作为基础，影响BufferSize, OnConnected, Connections

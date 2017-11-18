@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using final_project.Models;
+using Bookbarn.Models;
 
-namespace final_project.Data
+namespace Bookbarn.Data
 {
     public class AuthenticationContext : IdentityDbContext<User>
     {

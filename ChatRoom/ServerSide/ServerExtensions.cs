@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection; //IserviceCollection
 
 
 
-namespace final_project.ChatRoom.ServerSide
+namespace Bookbarn.ChatRoom.ServerSide
 {
 	public static class ServerExtensions
     {

@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using final_project.Models;
+using Bookbarn.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
-using final_project.Models.IdentityViewModels;
+using Bookbarn.Models.IdentityViewModels;
 using Microsoft.AspNetCore.Authentication;
 
-namespace final_project.Controllers
+namespace Bookbarn.Controllers
 {
     public class UsersController : Controller
     {

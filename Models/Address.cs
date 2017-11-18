@@ -1,6 +1,6 @@
 using System;
 
-namespace final_project.Models
+namespace Bookbarn.Models
 {
   public class Address
   {
