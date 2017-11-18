@@ -1,9 +1,9 @@
-#BookBarn
+# Introduction
 BookBarn is a web service to connect buyers and sellers of used books. We have currently implemented the functionality listed below.
 
 Future iterations include book item listing pages, admin dashboard, email notifications and search for books.
 
-# Functions:
+# Functions
 
 ### Private_Chat
 The private_Chat function is created for customers to directly negotiate with sellers. To make the function work, we use websocket and a middleware is also created. This function has not embedded and is still under developing. However, the basic functions are working now. You can go to `localhost:5000/chat` to play with it.
@@ -29,30 +29,44 @@ http://localhost:5000/users/Logout to logout
 ### Data model created
 We have created our data model & set up the entities and relationships.
 
+# How to run
+### To interact with the web application
+ - Build and run the web application, the instruction is stated in the below section.
+ - Open `http://localhost:5000` in your local browser.
 
-# Dotnet Run
-- You can disable autorun by commenting out the section in the Chef `default.rb`
+### Run locally
+ - Open up a command line window.
+ - Route to `./src` folder.
+ - Run `dotnet run --project BookBarn.csproj`.
 
-### if autorun enabled:
-Please see http://localhost:5000. It may take up to 5 mins to start the dotnet server after the `vagrant up` or `vagrant provision` command completes!! Until that time you will see something like "connection was reset" as an error message.
+### Run in Vagrant with auto run enabled (default)
+ - Open up a command line window.
+ - Route to `./src` folder.
+ - Run `Vagrant up` and wait until the VM is ready to serve.
+   It may take up to 5 mins to start the dotnet server after the `vagrant up` or `vagrant provision` command completes!!
 
-To restart the server with your code changes:
+### Run in Vagrant with auto run disabled
+ - You can disable autorun by commenting out the section in the Chef `default.rb`
+ - Open up a command line window
+ - Route to `./src` folder
+ - Run `Vagrant up` and wait until the VM is ready to serve.
+ - After Vagrant successfully provisioned the VM, run `vagrant ssh` to bring up the Linux shell of the VM.
+ - Run `cd project` followed by `dotnet run --project BookBarn.csproj`.
+
+### To restart the server with your code changes:
 1. `vagrant halt`
 2. `vagrant up`
 
-### if autorun not enabled
-1. `vagrant ssh`
-2. `cd project/`
-3. `dotnet run`
-
-Check localhost:5000 :)
-
-
-
-
-
-
-
+# Technology Stack
+ - ASP.NET Core 2.0 MVC
+ - React.js
+ - Typescript for React.js
+ - jQuery
+ - Bootstrap
+ - Chart.js
+ - Webpack
+ - Babel
+ - Vagrant
 
 # Workflow
 
