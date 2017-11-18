@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
 
-namespace Bookbarn.ChatRoom.ServerSide
+namespace BookBarn.ChatRoom.ServerSide
 {
 	public class ServerMiddleware
     {

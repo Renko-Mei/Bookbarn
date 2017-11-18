@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Bookbarn.Models;
+using BookBarn.Models;
 
-namespace Bookbarn.Data
+namespace BookBarn.Data
 {
     public class InitialModelsContext : DbContext
     {

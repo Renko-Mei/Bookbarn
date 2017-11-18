@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 
 
 
-namespace Bookbarn.ChatRoom.ServerSide
+namespace BookBarn.ChatRoom.ServerSide
 {
     public abstract class ServerHandler
     {

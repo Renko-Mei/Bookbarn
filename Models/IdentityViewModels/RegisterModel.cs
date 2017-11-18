@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Bookbarn.Models.IdentityViewModels
+namespace BookBarn.Models.IdentityViewModels
 {
     public class RegisterModel
     {

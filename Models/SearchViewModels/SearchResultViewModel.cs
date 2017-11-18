@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Bookbarn.Models.SearchViewModels
+namespace BookBarn.Models.SearchViewModels
 {
     public class SearchResultViewModel
     {

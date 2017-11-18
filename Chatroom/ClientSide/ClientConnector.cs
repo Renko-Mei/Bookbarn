@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Bookbarn.ChatRoom.ServerSide;
+using BookBarn.ChatRoom.ServerSide;
 
 
 
-namespace Bookbarn.ChatRoom.ClientSide
+namespace BookBarn.ChatRoom.ClientSide
 {
     public class ClientConnector : ServerConnection
     {

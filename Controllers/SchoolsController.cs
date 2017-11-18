@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Bookbarn.Models;
-using Bookbarn.Data;
+using BookBarn.Models;
+using BookBarn.Data;
 
-namespace Bookbarn.Controllers
+namespace BookBarn.Controllers
 {
     public class SchoolsController : Controller
     {

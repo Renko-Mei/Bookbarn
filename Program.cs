@@ -7,10 +7,10 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-// using Bookbarn.ChatRoom.ServerSide;
-// using Bookbarn.ChatRoom.ClientSide;
+// using BookBarn.ChatRoom.ServerSide;
+// using BookBarn.ChatRoom.ClientSide;
 
-namespace Bookbarn
+namespace BookBarn
 {
     public class Program
     {

@@ -1,5 +1,5 @@
 #BookBarn
-Bookbarn is a web service to connect buyers and sellers of used books. We have currently implemented the functionality listed below.
+BookBarn is a web service to connect buyers and sellers of used books. We have currently implemented the functionality listed below.
 
 Future iterations include book item listing pages, admin dashboard, email notifications and search for books.
 

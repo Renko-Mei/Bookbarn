@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace Bookbarn.Controllers
+namespace BookBarn.Controllers
 {
     public class ChatController : Controller
     {

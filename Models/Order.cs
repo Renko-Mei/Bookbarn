@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Bookbarn.Models
+namespace BookBarn.Models
 {
   public class Order
   {

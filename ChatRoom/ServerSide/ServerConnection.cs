@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace Bookbarn.ChatRoom.ServerSide
+namespace BookBarn.ChatRoom.ServerSide
 {
     public abstract class ServerConnection
     {
