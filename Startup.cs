@@ -13,6 +13,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using final_project.Data;
 
+//for UseFileServer. May delete later
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+
+//for ChatRoom
+using final_project.ChatRoom.ClientSide;
+using final_project.ChatRoom.ServerSide;
+
+//using WebSocketASPNetCore.WebSocketManager;
+
+
+
 namespace final_project
 {
     public class Startup
@@ -27,6 +40,8 @@ namespace final_project
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddWebSocketManager();
+            services.AddTransient<ClientHandler>(); 
             services.AddMvc();
 
             // Configure database model
@@ -74,10 +89,12 @@ namespace final_project
                 options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
                 options.SlidingExpiration = true;
             });
+                
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -93,6 +110,7 @@ namespace final_project
                 app.UseExceptionHandler("/Home/Error");
             }
 
+
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
               ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -100,9 +118,19 @@ namespace final_project
 
             app.UseAuthentication();
 
+            //Mark - use static page
+            //我调用websockets
+            //然后，通过分配"/LiveChat"路径来branch pipeline,如果调用的路径和"/LiveChat"一样就运行branch (middleware)
+            //在extensions里面，通过使用IApplicationBuilder来公开需要使用的middleware的位置, 
+            app.UseWebSockets();
+
             app.UseStaticFiles();
 
             app.UseAuthentication();
+           
+            app.UseStaticFiles();
+
+            app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ClientHandler>());
 
             app.UseMvc(routes =>
             {
@@ -110,10 +138,12 @@ namespace final_project
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
 
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
+                // routes.MapSpaFallbackRoute(
+                //     name: "spa-fallback",
+                //     defaults: new { controller = "Home", action = "Index" });
             });
+            
+            
         }
     }
 }
