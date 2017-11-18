@@ -35,7 +35,8 @@ To restart the server with your code changes:
 Check localhost:5000 :)
 
 
-
+### Search
+See http://localhost:5000/search for search bar and dropdown bar. Table gets populated if there are entries in the database.
 
 
 
