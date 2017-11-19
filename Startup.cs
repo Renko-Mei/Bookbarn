@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Http;
 //for ChatRoom
 using BookBarn.ChatRoom.ClientSide;
 using BookBarn.ChatRoom.ServerSide;
+using UserManagement.Utilities;
 
 //using WebSocketASPNetCore.WebSocketManager;
 
@@ -53,7 +54,8 @@ namespace BookBarn
             // Configure Authentication
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddErrorDescriber<CustomIdentityErrorDescriber>();
 
             // Configure identity constraints
             services.Configure<IdentityOptions>(options =>
