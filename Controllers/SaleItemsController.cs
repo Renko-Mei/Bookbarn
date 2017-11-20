@@ -22,7 +22,7 @@ namespace BookBarn.Controllers
         // GET: SaleItems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SaleItem.ToListAsync());
+            return Json(await _context.SaleItem.ToListAsync());
         }
 
         // GET: SaleItems/Details/5
@@ -50,7 +50,7 @@ namespace BookBarn.Controllers
         }
 
         // POST: SaleItems/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -82,7 +82,7 @@ namespace BookBarn.Controllers
         }
 
         // POST: SaleItems/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
