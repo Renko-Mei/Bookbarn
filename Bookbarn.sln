@@ -1,0 +1,17 @@
+
+Microsoft Visual Studio Solution File, Format Version 15.00
+# Visual Studio 2017
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookbarn", "Bookbarn.csproj", "{478A45D3-2770-4B31-9CC5-5C4842A0C0FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{478A45D3-2770-4B31-9CC5-5C4842A0C0FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{478A45D3-2770-4B31-9CC5-5C4842A0C0FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{478A45D3-2770-4B31-9CC5-5C4842A0C0FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{478A45D3-2770-4B31-9CC5-5C4842A0C0FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
