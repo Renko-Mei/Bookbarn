@@ -12,17 +12,19 @@ namespace BookBarn.Controllers
     public class EmailController : Controller
     {
 
-        //private readonly InitialModelsContext _context;
+        private readonly InitialModelsContext _context;
 
-        //public EmailController(InitialModelsContext context)
-        //{
-        //    _context = context;
-        //}
+        public EmailController(InitialModelsContext context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         public IActionResult Index()
         {
-            return View("Email_Input");
+            string username = Environment.UserName;
+
+            return View("Email_Input", username);
         }
         [HttpPost]
         //[ValidateAntiForgeryToken]
