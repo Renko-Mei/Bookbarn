@@ -1,4 +1,5 @@
-@model string
+
+@ViewData["userEmail"]
 
 <h1>Request for Assistance</h1> 
 
@@ -10,7 +11,7 @@
     <label>Details about the problem:</label> 
     <textarea name="customerRequest" cols="45" rows="4"></textarea> 
     <p><input type="submit" value="Enter" /></p> 
-	<p> @Model </p>
+	<p> @ViewData["userEmail"] </p>
 
 </form>
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MailKit.Net.Smtp;
 using MimeKit;
 using BookBarn.Data;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace BookBarn.Controllers
@@ -13,17 +14,30 @@ namespace BookBarn.Controllers
     public class EmailController : Controller
     {
 
-        private readonly InitialModelsContext _context;
+        private readonly AuthenticationContext _context;
+        //private readonly Data.InitialModelsContext _icontext;
 
-        public EmailController(InitialModelsContext context)
+        public EmailController(AuthenticationContext context)
         {
             _context = context;
         }
+        public string X()
+        {
+            //string userEmail = _context.Users.SingleOrDefaultAsync(cw => cw.UserName == User.Identity.Name).Result.Email;
+            string userEmail = _context.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Email;
+                                     
+            return userEmail;
+        }
+
+
+
 
         [HttpGet]
         public IActionResult Index()
         {
-            //var Contact = _context.;
+            
+
+            ViewData["userEmail"] = X();
 
             return View("Email_Input");
         }
@@ -33,7 +47,7 @@ namespace BookBarn.Controllers
         {
 
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("bookbarn", "info@bookbarncanada.com"));
+            message.From.Add(new MailboxAddress("BookBarn", "info@bookbarncanada.com"));
             message.To.Add(new MailboxAddress("mark", customerEmail));
             message.Subject = "test mail in asp.net core";
             message.Body = new TextPart("plain")
