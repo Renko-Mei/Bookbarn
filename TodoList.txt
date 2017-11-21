@@ -2,3 +2,9 @@
 	Redirection succeeded after login but the url does not get changed
 	Finalize User Model
 	Display user role (sorted)
+
+Search page
+	Search engine
+	SaleItems detail page
+
+	ISBN as unique key
