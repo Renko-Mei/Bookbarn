@@ -17,12 +17,12 @@ namespace BookBarn.ChatRoom.ServerSide
 
         public ServerConnection(ServerHandler handler)//-->A2
         {
-            HandlerCollect = handler;//用上面的 public WebSocketHandler Handler { get; }来把客户端的handler存到Handler上
+            HandlerCollect = handler;
         }
 
         public virtual async Task SendMessageAsync(string message)
         {
-            if (WebSocketCollect.State != WebSocketState.Open) return;//这里的websocket是我们上面的那个{get; set;}
+            if (WebSocketCollect.State != WebSocketState.Open) return;
             var arr = Encoding.UTF8.GetBytes(message);
 
             var buffer = new ArraySegment<byte>(//
@@ -30,7 +30,7 @@ namespace BookBarn.ChatRoom.ServerSide
                     offset: 0,//Gets the position of the first element in the range delimited by the array segment, relative to the start of the original array
                     count: arr.Length);//Gets the number of elements in the range delimited by the array segment
 
-            await WebSocketCollect.SendAsync(//Sends data over the WebSocket connection asynchronously. 这里的websocket是我们上面的那个{get; set;}
+            await WebSocketCollect.SendAsync(//Sends data over the WebSocket connection asynchronously.
                 buffer: buffer,//The buffer to be sent over the connection.
                 messageType: WebSocketMessageType.Text,//Indicates whether the application is sending a binary or text message.
                 endOfMessage: true,//Indicates whether the data in “buffer” is the last part of a message.

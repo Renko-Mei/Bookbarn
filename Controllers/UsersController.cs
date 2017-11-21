@@ -14,17 +14,17 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace BookBarn.Controllers
 {
-    public class UsersController : Controller
+    public class UserController : Controller
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly ILogger logger;
 
-        public UsersController(UserManager<User> userManager,
+        public UserController(UserManager<User> userManager,
            SignInManager<User> signInManager,
            RoleManager<IdentityRole> roleManager,
-           ILogger<UsersController> logger)
+           ILogger<UserController> logger)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
