@@ -16,9 +16,9 @@ namespace BookBarn.ChatRoom.ServerSide
     {
         protected abstract int BufferSize { get; }
 
-        private List<ServerConnection> _connections = new List<ServerConnection>();//-->A3 //这个list以后也可以改成dictionary
+        private List<ServerConnection> _connections = new List<ServerConnection>();//-->A3 // change this list to dictionary will be better
 
-        public List<ServerConnection> Connections { get => _connections; }//A4 这个和上面那个以及handler里的websocketconnection可以放在一个文件里
+        public List<ServerConnection> Connections { get => _connections; }//A4 
 
         public async Task ListenConnection(ServerConnection connection)
         {
@@ -26,7 +26,7 @@ namespace BookBarn.ChatRoom.ServerSide
 
             while (connection.WebSocketCollect.State == WebSocketState.Open)
             {
-                var result = await connection.WebSocketCollect.ReceiveAsync( //Receives data from the WebSocket connection asynchronously.这里的websocket是connection.cs里的
+                var result = await connection.WebSocketCollect.ReceiveAsync( //Receives data from the WebSocket connection asynchronously.
                     buffer: new ArraySegment<byte>(buffer),
                     cancellationToken: CancellationToken.None);
 
@@ -43,7 +43,7 @@ namespace BookBarn.ChatRoom.ServerSide
             }
         }
 
-        public virtual async Task OnDisconnected(ServerConnection connection)//这个要来干嘛？
+        public virtual async Task OnDisconnected(ServerConnection connection)
         {
             if (connection != null)
             {
