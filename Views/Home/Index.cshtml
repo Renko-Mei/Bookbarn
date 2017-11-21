@@ -1,19 +1,60 @@
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome";
 }
 
-<div id="react-app">Loading...</div>
-@section scripts {
-    <script src="~/dist/main.js" asp-append-version="true"></script>
+@section AddToHead{
+    <link href="@Url.Content("~/css/MainPage.css")" rel="stylesheet" type="text/css" />
 }
 
-@*Comment out above section and remove comment of below section to test user registration and login*@
+<div class="pimg1">
+    <div class="ptext">
+        <span class="border">
+            BookBarn
+        </span>
+    </div>
+</div>
 
-@*@{
-    ViewData["Title"] = "Home Page";
-}
+<section class="section section-light">
+    <h2>Section One</h2>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, laudantium, quibusdam? Nobis, delectus, commodi, fugit amet tempora facere dolores nisi facilis consequatur, odio hic minima nostrum. Perferendis eos earum praesentium, blanditiis sapiente labore aliquam ipsa architecto vitae. Minima soluta temporibus voluptates inventore commodi cumque esse suscipit optio aliquam et, dolorem a cupiditate nihil fuga laboriosam fugiat placeat dignissimos! Unde eveniet placeat quisquam blanditiis voluptatem doloremque fugiat dolor repellendus ratione in. Distinctio provident dolorem modi cumque illo enim quidem tempora deserunt nostrum voluptate labore repellat quisquam quasi cum suscipit dolore ab consequuntur, ad porro earum temporibus. Laborum ad temporibus ex, omnis!
+    </p>
+</section>
 
-<p>Welcome, @ViewData["Email"]</p>
+<div class="pimg2">
+    <div class="ptext">
+        <span class="border trans">
+            Image Two Text
+        </span>
+    </div>
+</div>
 
-<a href="@Url.Action("Register", "Users")">Register</a><br />
-<a href="@Url.Action("Login", "Users")">Login</a>*@
+<section class="section section-dark">
+    <h2>Section Two</h2>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, laudantium, quibusdam? Nobis, delectus, commodi, fugit amet tempora facere dolores nisi facilis consequatur, odio hic minima nostrum. Perferendis eos earum praesentium, blanditiis sapiente labore aliquam ipsa architecto vitae. Minima soluta temporibus voluptates inventore commodi cumque esse suscipit optio aliquam et, dolorem a cupiditate nihil fuga laboriosam fugiat placeat dignissimos! Unde eveniet placeat quisquam blanditiis voluptatem doloremque fugiat dolor repellendus ratione in.
+    </p>
+</section>
+
+<div class="pimg3">
+    <div class="ptext">
+        <span class="border trans">
+            Image Three Text
+        </span>
+    </div>
+</div>
+
+<section class="section section-dark">
+    <h2>Section Three</h2>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, laudantium, quibusdam? Nobis, delectus, commodi, fugit amet tempora facere dolores nisi facilis consequatur, odio hic minima nostrum. Perferendis eos earum praesentium, blanditiis sapiente labore aliquam ipsa architecto vitae. Minima soluta temporibus voluptates inventore commodi cumque esse suscipit optio aliquam et, dolorem a cupiditate nihil fuga laboriosam fugiat placeat dignissimos! Unde eveniet placeat quisquam blanditiis voluptatem doloremque fugiat dolor repellendus ratione in.
+    </p>
+</section>
+
+<div class="pimg1">
+    <div class="ptext">
+        <span class="border">
+            BookBarn
+        </span>
+    </div>
+</div>
