@@ -7,6 +7,7 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using BookBarn.Data;
 
+
 namespace BookBarn.Controllers
 {
     public class EmailController : Controller
@@ -22,9 +23,9 @@ namespace BookBarn.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            string username = Environment.UserName;
+            //var Contact = _context.;
 
-            return View("Email_Input", username);
+            return View("Email_Input");
         }
         [HttpPost]
         //[ValidateAntiForgeryToken]
