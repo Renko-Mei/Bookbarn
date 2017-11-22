@@ -8,7 +8,6 @@ namespace BookBarn.Models
         public float Price { get; set; }
         public string Quality { get; set; }
         public bool IsSold { get; set; }
-
         public int BookId { get; set; }
     }
 }
