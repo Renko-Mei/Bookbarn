@@ -26,7 +26,6 @@ namespace BookBarn
 
                 try
                 {
-                    // Requires using MvcMovie.Models;
                     SeedAdministrator.Seed(services).Wait();
                 }
                 catch (Exception ex)
