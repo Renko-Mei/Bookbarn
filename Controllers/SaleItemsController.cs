@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookBarn.Models;
 using BookBarn.Data;
+using BookBarn.Models.SearchViewModels;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookBarn.Controllers
 {
@@ -156,6 +159,56 @@ namespace BookBarn.Controllers
         private bool SaleItemExists(int id)
         {
             return _context.SaleItem.Any(e => e.SaleItemId == id);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> Search(string searchType, string searchString)
+        {
+            SearchViewModel searchVm;
+
+            var resultSet = from si in _context.SaleItem
+                            join b in _context.Book on si.BookId equals b.BookId
+                            select new SearchResultViewModel
+                            {
+                                Title = b.Title,
+                                Author = b.AuthorFirstName + " " + b.AuthorLastName,
+                                Quality = si.Quality,
+                                Price = si.Price,
+                                ISBN = b.Isbn
+                            };
+
+            if (!string.IsNullOrWhiteSpace(searchString) && !string.IsNullOrEmpty(searchType))
+            {
+                if (searchType.Equals("title"))
+                {
+                    resultSet = resultSet.Where(sr => sr.Title.ToLowerInvariant().Contains(searchString.ToLower()));
+                }
+                else if (searchType.Equals("author"))
+                {
+                    resultSet = resultSet.Where(sr => sr.Author.ToLowerInvariant().Contains(searchString.ToLower()));
+                }
+                else if (searchType.Equals("isbn"))
+                {
+                    resultSet = resultSet.Where(sr => sr.ISBN.Contains(searchString));
+                }
+                else
+                {
+                    throw new NotImplementedException("The current search type is not defined");
+                }
+            }
+
+            searchVm = new SearchViewModel()
+            {
+                SearchResults = await resultSet.ToListAsync()
+            };
+
+            return View(searchVm);
+        }
+
+        public IActionResult Error()
+        {
+            ViewData["RequestId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            return View();
         }
     }
 }
