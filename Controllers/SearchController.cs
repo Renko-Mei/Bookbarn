@@ -33,7 +33,8 @@ namespace BookBarn.Controllers
                                 Title = b.Title,
                                 Author = b.AuthorFirstName + " " + b.AuthorLastName,
                                 Quality = si.Quality,
-                                Price = si.Price
+                                Price = si.Price,
+                                ISBN = b.Isbn
                             };
 
             if (!String.IsNullOrEmpty(searchType))
@@ -45,6 +46,10 @@ namespace BookBarn.Controllers
                 else if (searchType.Equals("author"))
                 {
                     resultSet = resultSet.Where(sr => sr.Author.Contains(id));
+                }
+                else if (searchType.Equals("isbn"))
+                {
+                    resultSet = resultSet.Where(sr => sr.ISBN.Contains(id));
                 }
             }
 
