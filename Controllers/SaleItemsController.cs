@@ -22,7 +22,7 @@ namespace BookBarn.Controllers
         // GET: SaleItems
         public async Task<IActionResult> Index()
         {
-            return Json(await _context.SaleItem.ToListAsync());
+            return View(await _context.SaleItem.ToListAsync());
         }
 
         // GET: SaleItems/Details/5
