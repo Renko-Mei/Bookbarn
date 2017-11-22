@@ -9,14 +9,19 @@ namespace BookBarn.Utilities
 {
     public class UserEmailValidator : IUserValidator<User>
     {
+        string[] blockedDomains =
+        {
+            "@example.com"
+        };
+
         public Task<IdentityResult> ValidateAsync(UserManager<User> manager, User user)
         {
-            if (user.Email.ToLowerInvariant().EndsWith("@example.com"))
+            if (blockedDomains.Any(x => user.Email.ToLowerInvariant().EndsWith(x)))
             {
                 return Task.FromResult(IdentityResult.Failed(new IdentityError
                 {
                     Code = "EmailDomainError",
-                    Description = "example.com email addresses are NOT allowed."
+                    Description = $"This email domain is NOT allowed."
                 }));
             }
             else

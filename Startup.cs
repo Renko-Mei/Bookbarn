@@ -78,11 +78,10 @@ namespace BookBarn
                 options.User.RequireUniqueEmail = true;
             });
 
-            // Register a custom password validator
-            // Have to add after AddIdentity Service. Otherwise the built-in password validation won't work
+            // Register custom username / password combination validator
             services.AddTransient<IPasswordValidator<User>, PwInNameValidator>();
 
-            // Register a custom user validator
+            // Register a custom user email validator
             services.AddTransient<IUserValidator<User>, UserEmailValidator>();
 
             // Configure cookie
