@@ -41,11 +41,11 @@ namespace BookBarn.Controllers
             {
                 if (searchType.Equals("title"))
                 {
-                    resultSet = resultSet.Where(sr => sr.Title.Contains(id));
+                    resultSet = resultSet.Where(sr => sr.Title.ToLower().Contains(id.ToLower()));
                 }
                 else if (searchType.Equals("author"))
                 {
-                    resultSet = resultSet.Where(sr => sr.Author.Contains(id));
+                    resultSet = resultSet.Where(sr => sr.Author.ToLower().Contains(id.ToLower()));
                 }
                 else if (searchType.Equals("isbn"))
                 {
