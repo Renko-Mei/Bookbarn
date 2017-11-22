@@ -46,17 +46,25 @@ namespace BookBarn.Controllers
         // GET: SaleItems/Create
         public IActionResult Create()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+              return View();
+            }
+            else
+            {
+              // do this for now, need to change to not authorized TODO - ushma
+              return NotFound();
+            }
         }
 
         // POST: SaleItems/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,IsSold,BookId")] SaleItem saleItem)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
                 _context.Add(saleItem);
                 await _context.SaveChangesAsync();
@@ -82,7 +90,7 @@ namespace BookBarn.Controllers
         }
 
         // POST: SaleItems/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
