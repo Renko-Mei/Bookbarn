@@ -46,7 +46,15 @@ namespace BookBarn.Controllers
         // GET: SaleItems/Create
         public IActionResult Create()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+              return View();
+            }
+            else
+            {
+              // do this for now, need to change to not authorized TODO - ushma
+              return NotFound();
+            }
         }
 
         // POST: SaleItems/Create
@@ -56,7 +64,7 @@ namespace BookBarn.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,IsSold,BookId")] SaleItem saleItem)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
                 _context.Add(saleItem);
                 await _context.SaveChangesAsync();
