@@ -19,8 +19,17 @@
 
 		<input type="text" name="id" />
 		<input type="submit" value="Search" />
-	</form>
 
+		<div>
+			Sort by:
+			<select asp-for="SortType" asp-items="Model.SortTypes">
+				<option value="title">Title: A-Z</option>
+				<option value="authorFirst">Author - First Name: A-Z</option>
+				<option value="authorLast">Author - Last Name: A-Z</option>
+				<option value="price">Price: Lowest first</option>
+			</select>
+		</div>
+	</form>
 </div>
 
 <table class="table">
@@ -58,7 +67,7 @@
 					@Html.DisplayFor(model => resultItem.Price)
 				</td>
 				<td>
-					<a asp-action="Details" asp-route-id="@resultItem.SaleItemID">Details</a> |
+					<a asp-controller="SaleItem" asp-action="Details" asp-route-id="@resultItem.SaleItemID">Details</a>
 				</td>
 			</tr>
 		}

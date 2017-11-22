@@ -10,5 +10,7 @@ namespace BookBarn.Models.SearchViewModels
         public List<SearchResultViewModel> SearchResults { get; set; }
         public SelectList SearchTypes { get; set; }
         public string SearchType { get; set; }
+        public SelectList SortTypes { get; set; }
+        public string SortType { get; set; }
     }
 }

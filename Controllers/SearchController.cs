@@ -24,21 +24,24 @@ namespace BookBarn.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string searchType, string id)
+        public async Task<IActionResult> Index(string searchType, string id, string sortType)
         {
             var resultSet = from si in _context.SaleItem
                             join b in _context.Book on si.BookId equals b.BookId
                             select new SearchResultViewModel
                             {
                                 Title = b.Title,
+                                AuthorFirst = b.AuthorFirstName,
+                                AuthorLast = b.AuthorLastName,
                                 Author = b.AuthorFirstName + " " + b.AuthorLastName,
                                 Quality = si.Quality,
                                 Price = si.Price,
-                                ISBN = b.Isbn
+                                ISBN = b.Isbn,
+                                SaleItemID = si.SaleItemId
                             };
-
-            if (!String.IsNullOrEmpty(searchType))
-            {
+            //Filter type
+            if (!String.IsNullOrEmpty(searchType) && !String.IsNullOrEmpty(id))
+            {  
                 if (searchType.Equals("title"))
                 {
                     resultSet = resultSet.Where(sr => sr.Title.ToLower().Contains(id.ToLower()));
@@ -50,6 +53,27 @@ namespace BookBarn.Controllers
                 else if (searchType.Equals("isbn"))
                 {
                     resultSet = resultSet.Where(sr => sr.ISBN.Contains(id));
+                }
+            }
+
+            //Sort option
+            if (!String.IsNullOrEmpty(sortType))
+            {
+                if (sortType.Equals("price"))
+                {
+                    resultSet = resultSet.OrderBy(sr => sr.Price);
+                }
+                else if (sortType.Equals("title"))
+                {
+                    resultSet = resultSet.OrderBy(sr => sr.Title);
+                }
+                else if (sortType.Equals("authorFirst"))
+                {
+                    resultSet = resultSet.OrderBy(sr => sr.AuthorFirst);
+                }
+                else if (sortType.Equals("authorLast"))
+                {
+                    resultSet = resultSet.OrderBy(sr => sr.AuthorLast);
                 }
             }
 
