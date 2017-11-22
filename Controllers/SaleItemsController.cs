@@ -162,7 +162,7 @@ namespace BookBarn.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Search(string searchType, string searchString)
+        public async Task<IActionResult> Search(string searchType, string searchString, string sortType)
         {
             SearchViewModel searchVm;
 
@@ -171,12 +171,15 @@ namespace BookBarn.Controllers
                             select new SearchResultViewModel
                             {
                                 Title = b.Title,
+                                AuthorFirst = b.AuthorFirstName,
+                                AuthorLast = b.AuthorLastName,
                                 Author = b.AuthorFirstName + " " + b.AuthorLastName,
                                 Quality = si.Quality,
                                 Price = si.Price,
-                                ISBN = b.Isbn
+                                ISBN = b.Isbn,
+                                SaleItemID = si.SaleItemId
                             };
-
+            //Filter type
             if (!string.IsNullOrWhiteSpace(searchString) && !string.IsNullOrEmpty(searchType))
             {
                 if (searchType.Equals("title"))
@@ -194,6 +197,27 @@ namespace BookBarn.Controllers
                 else
                 {
                     throw new NotImplementedException("The current search type is not defined");
+                }
+            }
+
+            //Sort option
+            if (!String.IsNullOrEmpty(sortType))
+            {
+                if (sortType.Equals("price"))
+                {
+                    resultSet = resultSet.OrderBy(sr => sr.Price);
+                }
+                else if (sortType.Equals("title"))
+                {
+                    resultSet = resultSet.OrderBy(sr => sr.Title);
+                }
+                else if (sortType.Equals("authorFirst"))
+                {
+                    resultSet = resultSet.OrderBy(sr => sr.AuthorFirst);
+                }
+                else if (sortType.Equals("authorLast"))
+                {
+                    resultSet = resultSet.OrderBy(sr => sr.AuthorLast);
                 }
             }
 

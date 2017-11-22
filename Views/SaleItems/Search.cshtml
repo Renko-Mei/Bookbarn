@@ -10,17 +10,26 @@
 
 	<p>Search for books.</p>
 
-	<form asp-controller="Search" asp-action="Index" method="get">
+	<form asp-controller="SaleItems" asp-action="Search" method="get">
 		<select asp-for="SearchType" asp-items="Model.SearchTypes">
 			<option value="title">Title</option>
 			<option value="author">Author</option>
 			<option value="isbn">ISBN</option>
 		</select>
 
-		<input type="text" name="id" />
+		<input type="text" name="searchString" />
 		<input type="submit" value="Search" />
-	</form>
 
+		<div>
+			Sort by:
+			<select asp-for="SortType" asp-items="Model.SortTypes">
+				<option value="title">Title: A-Z</option>
+				<option value="authorFirst">Author - First Name: A-Z</option>
+				<option value="authorLast">Author - Last Name: A-Z</option>
+				<option value="price">Price: Lowest first</option>
+			</select>
+		</div>
+	</form>
 </div>
 
 <table class="table">
@@ -58,7 +67,7 @@
 					@Html.DisplayFor(model => resultItem.Price)
 				</td>
 				<td>
-					<a asp-action="Details" asp-route-id="@resultItem.SaleItemID">Details</a> |
+					<a asp-action="Details" asp-route-id="@resultItem.SaleItemID">Details</a>
 				</td>
 			</tr>
 		}
