@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Http;
 using BookBarn.ChatRoom.ClientSide;
 using BookBarn.ChatRoom.ServerSide;
 using UserManagement.Utilities;
+using BookBarn.Utilities;
 
 //for HTTPS
 using Microsoft.AspNetCore.Mvc;
@@ -85,6 +86,12 @@ namespace BookBarn
                 // User settings
                 options.User.RequireUniqueEmail = true;
             });
+
+            // Register custom username / password combination validator
+            services.AddTransient<IPasswordValidator<User>, PwInNameValidator>();
+
+            // Register a custom user email validator
+            services.AddTransient<IUserValidator<User>, UserEmailValidator>();
 
             // Configure cookie
             services.ConfigureApplicationCookie(options =>

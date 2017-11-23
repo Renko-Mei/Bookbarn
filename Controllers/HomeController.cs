@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
+using BookBarn.Models.SearchViewModels;
 
 
 namespace BookBarn.Controllers
@@ -13,8 +14,13 @@ namespace BookBarn.Controllers
     {
         public IActionResult Index()
         {
+<<<<<<< HEAD
 
             return View();
+=======
+            var searchVM = new SearchViewModel();
+            return View(searchVM);
+>>>>>>> master
         }
 
         public IActionResult Error()
