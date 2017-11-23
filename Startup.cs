@@ -23,7 +23,8 @@ using BookBarn.ChatRoom.ClientSide;
 using BookBarn.ChatRoom.ServerSide;
 using UserManagement.Utilities;
 
-//using WebSocketASPNetCore.WebSocketManager;
+//for HTTPS
+using Microsoft.AspNetCore.Mvc;
 
 namespace BookBarn
 {
@@ -50,6 +51,7 @@ namespace BookBarn
             services
                 .AddDbContext<AuthenticationContext>(options => options
                     .UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
 
             // Configure Authentication
             services.AddIdentity<User, IdentityRole>()
@@ -89,6 +91,13 @@ namespace BookBarn
                 options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
                 options.SlidingExpiration = true;
             });
+
+            //services.Configure<AuthMessageSenderOptions>(Configuration);
+            // services.Configure<MvcOptions>(options =>
+            // {
+            //     options.Filters.Add(new RequireHttpsAttribute());
+            // });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
