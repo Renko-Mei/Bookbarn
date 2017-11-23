@@ -30,14 +30,16 @@ namespace Bookbarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var shoppingCart = await _context.ShoppingCart
                 .SingleOrDefaultAsync(m => m.ShoppingCartId == id);
             if (shoppingCart == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             return View(shoppingCart);
@@ -50,7 +52,7 @@ namespace Bookbarn.Controllers
         }
 
         // POST: ShoppingCarts/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -70,19 +72,21 @@ namespace Bookbarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var shoppingCart = await _context.ShoppingCart.SingleOrDefaultAsync(m => m.ShoppingCartId == id);
             if (shoppingCart == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
             return View(shoppingCart);
         }
 
         // POST: ShoppingCarts/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -90,7 +94,8 @@ namespace Bookbarn.Controllers
         {
             if (id != shoppingCart.ShoppingCartId)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             if (ModelState.IsValid)
@@ -104,7 +109,8 @@ namespace Bookbarn.Controllers
                 {
                     if (!ShoppingCartExists(shoppingCart.ShoppingCartId))
                     {
-                        return NotFound();
+                      Response.StatusCode = 404;
+                      return View("NotFound");
                     }
                     else
                     {
@@ -121,14 +127,16 @@ namespace Bookbarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var shoppingCart = await _context.ShoppingCart
                 .SingleOrDefaultAsync(m => m.ShoppingCartId == id);
             if (shoppingCart == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             return View(shoppingCart);
