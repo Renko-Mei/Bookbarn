@@ -74,7 +74,7 @@ namespace BookBarn.Controllers
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     await emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
-                    await signInManager.SignInAsync(user, isPersistent: false);
+                    //await signInManager.SignInAsync(user, isPersistent: false);
                     logger.LogInformation("User created a new account with password.");
                     return RedirectToLocal(returnUrl);
                 }
@@ -91,7 +91,6 @@ namespace BookBarn.Controllers
         #endregion
 
         #region Login
-
         public async Task<IActionResult> Login(string returnUrl = null)
         {
             // Clear the existing external cookie to ensure a clean login process
@@ -109,6 +108,18 @@ namespace BookBarn.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                // Require the user to have a confirmed email before they can log on.
+                // var user = await userManager.FindByEmailAsync(model.UserName);
+                // if (user != null)
+                // {
+                //     if (!await userManager.IsEmailConfirmedAsync(user))
+                //     {
+                //         ModelState.AddModelError(string.Empty, "You must have a confirmed email to log in.");
+                //         return View(model);
+                //     }
+                // }
+
+            
                 var result = await signInManager.PasswordSignInAsync(
                     model.UserName,
                     model.Password,
@@ -157,7 +168,8 @@ namespace BookBarn.Controllers
             }
         }
 
-        // GET: /Account/ConfirmEmail
+        
+        #region ConfirmEmail
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
@@ -174,6 +186,7 @@ namespace BookBarn.Controllers
             var result = await userManager.ConfirmEmailAsync(user, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
+        #endregion
     }
 }
 

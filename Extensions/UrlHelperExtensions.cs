@@ -12,7 +12,7 @@ namespace Microsoft.AspNetCore.Mvc
         {
             return urlHelper.Action(
                 action: nameof(UserController.ConfirmEmail),
-                controller: "Account",
+                controller: "User",
                 values: new { userId, code },
                 protocol: scheme);
         }

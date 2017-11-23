@@ -14,13 +14,8 @@ namespace BookBarn.Controllers
     {
         public IActionResult Index()
         {
-<<<<<<< HEAD
-
-            return View();
-=======
             var searchVM = new SearchViewModel();
             return View(searchVM);
->>>>>>> master
         }
 
         public IActionResult Error()
