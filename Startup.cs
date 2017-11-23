@@ -26,6 +26,9 @@ using UserManagement.Utilities;
 //for HTTPS
 using Microsoft.AspNetCore.Mvc;
 
+//for confirmation email
+using BookBarn.Services;
+
 namespace BookBarn
 {
     public class Startup
@@ -42,6 +45,8 @@ namespace BookBarn
         {
             services.AddWebSocketManager();
             services.AddTransient<ClientHandler>();
+            //for confirmation email
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddMvc();
 
             // Configure database model
@@ -53,11 +58,13 @@ namespace BookBarn
                     .UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
 
-            // Configure Authentication
-            services.AddIdentity<User, IdentityRole>()
+            // Configure Authentication. now need to confirm the reality of email address first.
+            services.AddIdentity<User, IdentityRole>(config =>{config.SignIn.RequireConfirmedEmail = true;})
                 .AddEntityFrameworkStores<AuthenticationContext>()
                 .AddDefaultTokenProviders()
                 .AddErrorDescriber<CustomIdentityErrorDescriber>();
+
+
 
             // Configure identity constraints
             services.Configure<IdentityOptions>(options =>
@@ -92,11 +99,7 @@ namespace BookBarn
                 options.SlidingExpiration = true;
             });
 
-            //services.Configure<AuthMessageSenderOptions>(Configuration);
-            // services.Configure<MvcOptions>(options =>
-            // {
-            //     options.Filters.Add(new RequireHttpsAttribute());
-            // });
+            
 
         }
 

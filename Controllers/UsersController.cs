@@ -11,6 +11,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using BookBarn.Models.IdentityViewModels;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Options;
+using BookBarn.Services;
+
+
 
 namespace BookBarn.Controllers
 {
@@ -20,16 +24,19 @@ namespace BookBarn.Controllers
         private readonly SignInManager<User> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly ILogger logger;
+        private readonly IEmailSender emailSender;
 
         public UserController(UserManager<User> userManager,
            SignInManager<User> signInManager,
            RoleManager<IdentityRole> roleManager,
+           IEmailSender emailSender,
            ILogger<UserController> logger)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
             this.logger = logger;
+            this.emailSender = emailSender;
         }
 
         #region Register
@@ -58,9 +65,17 @@ namespace BookBarn.Controllers
 
                 IdentityResult result = await userManager.CreateAsync(user, model.Password);
 
+
                 if (result.Succeeded)
                 {
+                    logger.LogInformation("User created a new account with password.");
+
+                    var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                    await emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+
                     await signInManager.SignInAsync(user, isPersistent: false);
+                    logger.LogInformation("User created a new account with password.");
                     return RedirectToLocal(returnUrl);
                 }
                 else
@@ -141,5 +156,25 @@ namespace BookBarn.Controllers
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
         }
+
+        // GET: /Account/ConfirmEmail
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{userId}'.");
+            }
+            var result = await userManager.ConfirmEmailAsync(user, code);
+            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+        }
     }
 }
+
+    
