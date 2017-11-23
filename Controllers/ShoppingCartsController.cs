@@ -54,7 +54,7 @@ namespace Bookbarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ShoppingCartId,BuyerId")] ShoppingCart shoppingCart)
+        public async Task<IActionResult> Create([Bind("ShoppingCartId")] ShoppingCart shoppingCart)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace Bookbarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ShoppingCartId,BuyerId")] ShoppingCart shoppingCart)
+        public async Task<IActionResult> Edit(int id, [Bind("ShoppingCartId")] ShoppingCart shoppingCart)
         {
             if (id != shoppingCart.ShoppingCartId)
             {
