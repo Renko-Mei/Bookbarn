@@ -10,6 +10,8 @@ using BookBarn.Data;
 using BookBarn.Models.SearchViewModels;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace BookBarn.Controllers
 {
@@ -65,10 +67,16 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,IsSold,BookId")] SaleItem saleItem)
+        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,IsSold,BookId,Image")] SaleItem saleItem, IFormFile files)
         {
             if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await files.CopyToAsync(memoryStream);
+                    saleItem.Image = memoryStream.ToArray();
+                }
+
                 _context.Add(saleItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
