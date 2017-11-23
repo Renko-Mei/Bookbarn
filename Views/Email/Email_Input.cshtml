@@ -1,0 +1,32 @@
+
+
+<h1>Request for Assistance</h1> 
+
+<form action="@Url.Action("Index")" method="post">
+	<div>
+        <p>Contact Information</p>
+        <label>Your Email address:</label>
+		<div>
+            <input type="email" name="customerEmail" value="@ViewData["userEmail"]" size="30" required />
+		</div>
+	</div>
+	<br>
+	<div>
+		<label>Your phone number:</label>
+        <div>
+            <input type="text" name="customerPhoneNumber" size="30" placeholder="this is optional"/>
+        </div>
+	</div>
+    <br>
+	<div>
+		<label>Details about the problem:</label>
+		<div>
+            <textarea name="customerRequest" cols="45" rows="4" placeholder="Please provide details information here" required></textarea> 
+            <p><input type="submit" value="Enter" /></p>
+		</div>
+<!--		<p>@ViewData["userName"]</p>-->
+        
+	</div>
+</form>
+
+

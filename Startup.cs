@@ -24,7 +24,11 @@ using BookBarn.ChatRoom.ServerSide;
 using UserManagement.Utilities;
 using BookBarn.Utilities;
 
-//using WebSocketASPNetCore.WebSocketManager;
+//for HTTPS
+using Microsoft.AspNetCore.Mvc;
+
+//for confirmation email
+using BookBarn.Services;
 
 namespace BookBarn
 {
@@ -42,6 +46,8 @@ namespace BookBarn
         {
             services.AddWebSocketManager();
             services.AddTransient<ClientHandler>();
+            //for confirmation email
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddMvc();
 
             // Configure database model
@@ -52,11 +58,14 @@ namespace BookBarn
                 .AddDbContext<AuthenticationContext>(options => options
                     .UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            // Configure Authentication
-            services.AddIdentity<User, IdentityRole>()
+
+            // Configure Authentication. now need to confirm the reality of email address first.
+            services.AddIdentity<User, IdentityRole>(config =>{config.SignIn.RequireConfirmedEmail = true;})
                 .AddEntityFrameworkStores<AuthenticationContext>()
                 .AddDefaultTokenProviders()
                 .AddErrorDescriber<CustomIdentityErrorDescriber>();
+
+
 
             // Configure identity constraints
             services.Configure<IdentityOptions>(options =>
@@ -96,6 +105,9 @@ namespace BookBarn
                 options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
                 options.SlidingExpiration = true;
             });
+
+            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -141,10 +153,10 @@ namespace BookBarn
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
 
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
-            });
+            //     routes.MapSpaFallbackRoute(
+            //         name: "spa-fallback",
+            //         defaults: new { controller = "Home", action = "Index" });
+             });
         }
     }
 }
