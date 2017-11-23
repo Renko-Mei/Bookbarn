@@ -169,7 +169,7 @@ namespace BookBarn.Controllers
         }
 
         
-        #region ConfirmEmail
+       
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
@@ -186,7 +186,7 @@ namespace BookBarn.Controllers
             var result = await userManager.ConfirmEmailAsync(user, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
-        #endregion
+ 
     }
 }
 

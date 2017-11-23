@@ -25,11 +25,10 @@ namespace BookBarn.Services
                 mimeMessage.From.Add(new MailboxAddress("BookBarn", "info@bookbarncanada.com"));
                 mimeMessage.To.Add(new MailboxAddress(ToAdressTitle, ToAddress));
                 mimeMessage.Subject = Subject;
-                mimeMessage.Body = new TextPart("plain")
-                {
-                    Text = BodyContent
-                };
-
+                var builder = new BodyBuilder();
+                builder.TextBody = @"Dear seller,";
+                builder.HtmlBody = BodyContent;
+                mimeMessage.Body = builder.ToMessageBody();
                 using (var client = new SmtpClient())
                 {
                     client.Connect("smtp.gmail.com", 587, false);
