@@ -20,6 +20,9 @@ namespace BookBarn.Controllers
         private IPasswordValidator<User> passwordValidator;
         private IPasswordHasher<User> passwordHasher;
 
+        /// <summary>
+        /// Created to validate password before password validator DI.
+        /// </summary>
         private User testUser = new User
         {
             UserName = "TestTestForPassword",
