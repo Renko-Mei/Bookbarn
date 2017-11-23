@@ -76,7 +76,7 @@ namespace BookBarn.Controllers
 
                     //await signInManager.SignInAsync(user, isPersistent: false);
                     logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction(nameof(AccountActivateNotify));
                 }
                 else
                 {
@@ -89,6 +89,14 @@ namespace BookBarn.Controllers
             return View(model);
         }
         #endregion
+
+        //the page that notify users to check their email and activate their account before login
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccountActivateNotify()
+        {
+            return View();
+        }
 
         #region Login
         public async Task<IActionResult> Login(string returnUrl = null)
@@ -108,6 +116,7 @@ namespace BookBarn.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                //maybe keep it here to see if confirm works. If not, unmute it
                 // Require the user to have a confirmed email before they can log on.
                 // var user = await userManager.FindByEmailAsync(model.UserName);
                 // if (user != null)
@@ -169,7 +178,7 @@ namespace BookBarn.Controllers
         }
 
         
-       
+       //send confirmation Email
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
@@ -185,6 +194,86 @@ namespace BookBarn.Controllers
             }
             var result = await userManager.ConfirmEmailAsync(user, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userManager.FindByEmailAsync(model.Email);
+                if (user == null || !(await userManager.IsEmailConfirmedAsync(user)))
+                {
+                    // Don't reveal that the user does not exist or is not confirmed
+                    return RedirectToAction(nameof(ForgotPasswordConfirmation));
+                }
+                var code = await userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
+                await emailSender.SendEmailAsync(model.Email, "Reset Password",
+                   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+                return RedirectToAction(nameof(ForgotPasswordConfirmation));
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(string code = null)
+        {
+            if (code == null)
+            {
+                throw new ApplicationException("A code must be supplied for password reset.");
+            }
+            var model = new ResetPasswordViewModel { Code = code };
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                return RedirectToAction(nameof(ResetPasswordConfirmation));
+            }
+            var result = await userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(ResetPasswordConfirmation));
+            }
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
         }
  
     }
