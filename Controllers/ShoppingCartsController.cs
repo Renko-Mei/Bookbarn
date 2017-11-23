@@ -5,27 +5,27 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using BookBarn.Models;
 using BookBarn.Data;
+using BookBarn.Models;
 
-namespace BookBarn.Controllers
+namespace Bookbarn.Controllers
 {
-    public class AddressController : Controller
+    public class ShoppingCartsController : Controller
     {
         private readonly InitialModelsContext _context;
 
-        public AddressController(InitialModelsContext context)
+        public ShoppingCartsController(InitialModelsContext context)
         {
             _context = context;
         }
 
-        // GET: Address
+        // GET: ShoppingCarts
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Address.ToListAsync());
+            return View(await _context.ShoppingCart.ToListAsync());
         }
 
-        // GET: Address/Details/5
+        // GET: ShoppingCarts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,40 +34,40 @@ namespace BookBarn.Controllers
               return View("NotFound");
             }
 
-            var address = await _context.Address
-                .SingleOrDefaultAsync(m => m.AddressId == id);
-            if (address == null)
+            var shoppingCart = await _context.ShoppingCart
+                .SingleOrDefaultAsync(m => m.ShoppingCartId == id);
+            if (shoppingCart == null)
             {
               Response.StatusCode = 404;
               return View("NotFound");
             }
 
-            return View(address);
+            return View(shoppingCart);
         }
 
-        // GET: Address/Create
+        // GET: ShoppingCarts/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Address/Create
+        // POST: ShoppingCarts/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AddressId,Unit,StreetNumber,StreetName,PostalCode")] Address address)
+        public async Task<IActionResult> Create([Bind("ShoppingCartId")] ShoppingCart shoppingCart)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(address);
+                _context.Add(shoppingCart);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(address);
+            return View(shoppingCart);
         }
 
-        // GET: Address/Edit/5
+        // GET: ShoppingCarts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,23 +76,23 @@ namespace BookBarn.Controllers
               return View("NotFound");
             }
 
-            var address = await _context.Address.SingleOrDefaultAsync(m => m.AddressId == id);
-            if (address == null)
+            var shoppingCart = await _context.ShoppingCart.SingleOrDefaultAsync(m => m.ShoppingCartId == id);
+            if (shoppingCart == null)
             {
               Response.StatusCode = 404;
               return View("NotFound");
             }
-            return View(address);
+            return View(shoppingCart);
         }
 
-        // POST: Address/Edit/5
+        // POST: ShoppingCarts/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AddressId,Unit,StreetNumber,StreetName,PostalCode")] Address address)
+        public async Task<IActionResult> Edit(int id, [Bind("ShoppingCartId")] ShoppingCart shoppingCart)
         {
-            if (id != address.AddressId)
+            if (id != shoppingCart.ShoppingCartId)
             {
               Response.StatusCode = 404;
               return View("NotFound");
@@ -102,12 +102,12 @@ namespace BookBarn.Controllers
             {
                 try
                 {
-                    _context.Update(address);
+                    _context.Update(shoppingCart);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AddressExists(address.AddressId))
+                    if (!ShoppingCartExists(shoppingCart.ShoppingCartId))
                     {
                       Response.StatusCode = 404;
                       return View("NotFound");
@@ -119,10 +119,10 @@ namespace BookBarn.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(address);
+            return View(shoppingCart);
         }
 
-        // GET: Address/Delete/5
+        // GET: ShoppingCarts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,31 +131,31 @@ namespace BookBarn.Controllers
               return View("NotFound");
             }
 
-            var address = await _context.Address
-                .SingleOrDefaultAsync(m => m.AddressId == id);
-            if (address == null)
+            var shoppingCart = await _context.ShoppingCart
+                .SingleOrDefaultAsync(m => m.ShoppingCartId == id);
+            if (shoppingCart == null)
             {
               Response.StatusCode = 404;
               return View("NotFound");
             }
 
-            return View(address);
+            return View(shoppingCart);
         }
 
-        // POST: Address/Delete/5
+        // POST: ShoppingCarts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var address = await _context.Address.SingleOrDefaultAsync(m => m.AddressId == id);
-            _context.Address.Remove(address);
+            var shoppingCart = await _context.ShoppingCart.SingleOrDefaultAsync(m => m.ShoppingCartId == id);
+            _context.ShoppingCart.Remove(shoppingCart);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AddressExists(int id)
+        private bool ShoppingCartExists(int id)
         {
-            return _context.Address.Any(e => e.AddressId == id);
+            return _context.ShoppingCart.Any(e => e.ShoppingCartId == id);
         }
     }
 }
