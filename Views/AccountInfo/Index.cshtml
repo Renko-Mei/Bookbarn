@@ -1,11 +1,11 @@
-@model ProfileViewModel
+@model BookBarn.Models.AccountInfoViewModels.ProfileViewModel
 @{
     ViewData["Title"] = "Profile";
-    ViewData.AddActivePage(AccountInfoNavPages.Index);
+    <!-- ViewData.AddActivePage(AccountInfoNavPages.Index); -->
 }
 
 <h4>@ViewData["Title"]</h4>
-@Html.Partial("_EmailConfirm", Model.EmailConfirm)
+@Html.Partial("_StatusMessage", Model.StatusMessage)
 <div class="row">
     <div class="col-md-6">
         <form method="post">
