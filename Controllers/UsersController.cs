@@ -21,6 +21,7 @@ namespace BookBarn.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly ILogger logger;
 
+
         public UserController(UserManager<User> userManager,
            SignInManager<User> signInManager,
            RoleManager<IdentityRole> roleManager,
@@ -140,6 +141,34 @@ namespace BookBarn.Controllers
             {
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
+        }
+
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (IdentityError error in result.Errors)
+            {
+                ModelState.TryAddModelError("", error.Description);
+            }
+        }
+
+        private User testUser = new User
+        {
+            UserName = "TestTestForPassword",
+            Email = "testForPassword@test.test"
+        };
+
+
+        [Route("User/{userID:int}")]
+        public IActionResult Setting(int userID)
+        {
+            //Check that userID is authorized to view this page
+
+            ViewData["User Name"] = "Andy Yao Testing";
+            
+            //Render all the necessary stuff, one of which is the sales viz
+            return View();
+
         }
     }
 }
