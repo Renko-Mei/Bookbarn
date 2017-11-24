@@ -35,14 +35,16 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var saleItem = await _context.SaleItem
                 .SingleOrDefaultAsync(m => m.SaleItemId == id);
             if (saleItem == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             return View(saleItem);
@@ -57,8 +59,8 @@ namespace BookBarn.Controllers
             }
             else
             {
-              // do this for now, need to change to not authorized TODO - ushma
-              return NotFound();
+              Response.StatusCode = 401;
+              return View("NotLoggedIn");
             }
         }
 
@@ -89,13 +91,15 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var saleItem = await _context.SaleItem.SingleOrDefaultAsync(m => m.SaleItemId == id);
             if (saleItem == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
             return View(saleItem);
         }
@@ -109,7 +113,8 @@ namespace BookBarn.Controllers
         {
             if (id != saleItem.SaleItemId)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             if (ModelState.IsValid)
@@ -123,7 +128,8 @@ namespace BookBarn.Controllers
                 {
                     if (!SaleItemExists(saleItem.SaleItemId))
                     {
-                        return NotFound();
+                      Response.StatusCode = 404;
+                      return View("NotFound");
                     }
                     else
                     {
@@ -140,14 +146,16 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var saleItem = await _context.SaleItem
                 .SingleOrDefaultAsync(m => m.SaleItemId == id);
             if (saleItem == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             return View(saleItem);
