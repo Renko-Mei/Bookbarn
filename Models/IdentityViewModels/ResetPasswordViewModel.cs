@@ -8,9 +8,7 @@ namespace BookBarn.Models.IdentityViewModels
 {
     public class ResetPasswordViewModel
     {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        public string UserId { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]

@@ -13,6 +13,7 @@ using BookBarn.Models.IdentityViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using BookBarn.Services;
+using BookBarn.Data;
 
 
 
@@ -26,17 +27,22 @@ namespace BookBarn.Controllers
         private readonly ILogger logger;
         private readonly IEmailSender emailSender;
 
+        private readonly AuthenticationContext context;
+
+
         public UserController(UserManager<User> userManager,
            SignInManager<User> signInManager,
            RoleManager<IdentityRole> roleManager,
            IEmailSender emailSender,
-           ILogger<UserController> logger)
+           ILogger<UserController> logger,
+           AuthenticationContext context)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
             this.logger = logger;
             this.emailSender = emailSender;
+            this.context = context;
         }
 
         #region Register
@@ -236,13 +242,17 @@ namespace BookBarn.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult ResetPassword(string code = null)
+        public IActionResult ResetPassword(string userId, string code =null)
         {
-            if (code == null)
+            if ( code == null)
             {
                 throw new ApplicationException("A code must be supplied for password reset.");
             }
-            var model = new ResetPasswordViewModel { Code = code };
+            
+            //string userEmail = context.Users.FirstOrDefault()                      
+            //var user = userManager.FindByIdAsync(userId);
+            
+            var model = new ResetPasswordViewModel { Code = code, UserId = userId };
             return View(model);
         }
 
@@ -255,7 +265,9 @@ namespace BookBarn.Controllers
             {
                 return View(model);
             }
-            var user = await userManager.FindByEmailAsync(model.Email);
+            var user = await userManager.FindByIdAsync(model.UserId);
+            //var test = await userManager.FindByNameAsync(model.UserId);
+            //string userName = user.UserName;
             if (user == null)
             {
                 // Don't reveal that the user does not exist
