@@ -33,7 +33,8 @@ namespace BookBarn.Data
                 User user = new User
                 {
                     UserName = userName,
-                    Email = email
+                    Email = email,
+                    EmailConfirmed = true
                 };
 
                 IdentityResult result = await userManager.CreateAsync(user, password);
