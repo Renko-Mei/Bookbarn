@@ -6,7 +6,7 @@ namespace BookBarn.Models.AccountInfoViewModels
     {
         public string Username { get; set; }
 
-        public bool IsEmailConfirmed { get; set; }
+        public bool EmailConfirmation { get; set; }
 
         [Required]
         [EmailAddress]
