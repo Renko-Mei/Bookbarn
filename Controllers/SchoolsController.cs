@@ -30,14 +30,16 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var school = await _context.School
                 .SingleOrDefaultAsync(m => m.SchoolId == id);
             if (school == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             return View(school);
@@ -50,7 +52,7 @@ namespace BookBarn.Controllers
         }
 
         // POST: Schools/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -70,19 +72,21 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var school = await _context.School.SingleOrDefaultAsync(m => m.SchoolId == id);
             if (school == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
             return View(school);
         }
 
         // POST: Schools/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -90,7 +94,8 @@ namespace BookBarn.Controllers
         {
             if (id != school.SchoolId)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             if (ModelState.IsValid)
@@ -104,7 +109,8 @@ namespace BookBarn.Controllers
                 {
                     if (!SchoolExists(school.SchoolId))
                     {
-                        return NotFound();
+                      Response.StatusCode = 404;
+                      return View("NotFound");
                     }
                     else
                     {
@@ -121,14 +127,16 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var school = await _context.School
                 .SingleOrDefaultAsync(m => m.SchoolId == id);
             if (school == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             return View(school);
