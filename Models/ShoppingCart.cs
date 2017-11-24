@@ -7,7 +7,7 @@ namespace BookBarn.Models
   public class ShoppingCart
   {
     public int ShoppingCartId { get; set; }
-    public List<SaleItem> SaleItems { get; set; }
+    // public List<SaleItem> SaleItems { get; set; }
   }
 }
 

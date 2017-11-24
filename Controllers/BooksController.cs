@@ -62,7 +62,7 @@ namespace BookBarn.Controllers
             {
                 _context.Add(book);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Create", "SaleItems", new {@BookId = book.BookId});
             }
             return View(book);
         }

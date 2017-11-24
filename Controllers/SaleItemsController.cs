@@ -73,10 +73,13 @@ namespace BookBarn.Controllers
         {
             if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
-                using (var memoryStream = new MemoryStream())
+                if (saleItem.Image != null)
                 {
-                    await files.CopyToAsync(memoryStream);
-                    saleItem.Image = memoryStream.ToArray();
+                  using (var memoryStream = new MemoryStream())
+                  {
+                      await files.CopyToAsync(memoryStream);
+                      saleItem.Image = memoryStream.ToArray();
+                  }
                 }
 
                 _context.Add(saleItem);
