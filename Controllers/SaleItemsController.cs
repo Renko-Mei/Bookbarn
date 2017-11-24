@@ -73,12 +73,14 @@ namespace BookBarn.Controllers
         {
             if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
-                using (var memoryStream = new MemoryStream())
+                if (files != null)
                 {
-                    await files.CopyToAsync(memoryStream);
-                    saleItem.Image = memoryStream.ToArray();
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await files.CopyToAsync(memoryStream);
+                        saleItem.Image = memoryStream.ToArray();
+                    }
                 }
-
                 _context.Add(saleItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -101,6 +103,7 @@ namespace BookBarn.Controllers
               Response.StatusCode = 404;
               return View("NotFound");
             }
+
             return View(saleItem);
         }
 
@@ -193,7 +196,8 @@ namespace BookBarn.Controllers
                                 Quality = si.Quality,
                                 Price = si.Price,
                                 ISBN = b.Isbn,
-                                SaleItemID = si.SaleItemId
+                                SaleItemID = si.SaleItemId,
+                                Image = si.Image
                             };
             //Filter type
             if (!string.IsNullOrWhiteSpace(searchString) && !string.IsNullOrEmpty(searchType))
@@ -214,6 +218,8 @@ namespace BookBarn.Controllers
                 {
                     throw new NotImplementedException("The current search type is not defined");
                 }
+
+
             }
 
             //Sort option
@@ -241,7 +247,7 @@ namespace BookBarn.Controllers
             {
                 SearchResults = await resultSet.ToListAsync()
             };
-
+            
             return View(searchVm);
         }
 

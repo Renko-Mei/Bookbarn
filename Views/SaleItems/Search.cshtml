@@ -1,5 +1,4 @@
 @model BookBarn.Models.SearchViewModels.SearchViewModel
-
 @{
     ViewData["Title"] = "Search";
 }
@@ -36,6 +35,9 @@
 	<thead>
 		<tr>
 			<th>
+				Image
+			</th>
+			<th>
 				@Html.DisplayNameFor(model => model.SearchResults[0].Title)
 			</th>
 			<th>
@@ -54,6 +56,13 @@
 		@foreach (var resultItem in Model.SearchResults)
 		{
 			<tr>
+				<td>
+					@if (resultItem.Image != null && resultItem.Image.Length > 0)
+					{
+						<img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(resultItem.Image))" height="70" width="70"/>
+
+					}
+				</td>
 				<td>					
 					@Html.DisplayFor(model => resultItem.Title)
 				</td>
