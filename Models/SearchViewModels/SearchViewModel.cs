@@ -12,5 +12,10 @@ namespace BookBarn.Models.SearchViewModels
         public string SearchType { get; set; }
         public SelectList SortTypes { get; set; }
         public string SortType { get; set; }
+        public string title { get; set; }
+        public string author { get; set; }
+        public string isbn { get; set; }
+        public float minPrice { get; set; }
+        public float maxPrice { get; set; }
     }
 }

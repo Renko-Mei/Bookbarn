@@ -181,7 +181,7 @@ namespace BookBarn.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Search(string searchType, string searchString, string sortType)
+        public async Task<IActionResult> Search(string searchType, string searchString, string sortType, string title, string author, string isbn, float minPrice, float maxPrice)
         {
             SearchViewModel searchVm;
 
@@ -237,11 +237,42 @@ namespace BookBarn.Controllers
                 }
             }
 
+            //Advanced search
+            if (!String.IsNullOrWhiteSpace(title))
+            {
+                resultSet = resultSet.Where(sr => sr.Title.ToLowerInvariant().Contains(title.ToLower()));
+            }
+            if (!String.IsNullOrWhiteSpace(author))
+            {
+                resultSet = resultSet.Where(sr => sr.Author.ToLowerInvariant().Contains(author.ToLower()));
+            }
+            if (!String.IsNullOrWhiteSpace(isbn))
+            {
+                resultSet = resultSet.Where(sr => sr.ISBN.ToLowerInvariant().Contains(isbn.ToLower()));
+            }
+            if (!float.IsNaN(minPrice))
+            {
+                resultSet = resultSet.Where(sr => sr.Price >= minPrice);
+            }
+            if (!float.IsNaN(maxPrice) && maxPrice > 0 && maxPrice >= minPrice)
+            {
+                resultSet = resultSet.Where(sr => sr.Price <= maxPrice);
+            }
+            
             searchVm = new SearchViewModel()
             {
                 SearchResults = await resultSet.ToListAsync()
             };
             
+            return View(searchVm);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> AdvancedSearch(string searchType, string searchString, string sortType, string titleString)
+        {
+            SearchViewModel searchVm;
+            searchVm = new SearchViewModel();
+
             return View(searchVm);
         }
 
