@@ -16,7 +16,10 @@ namespace BookBarn.ChatRoom
 {
     public class ChatWebSocketMiddleware
     {
+        public static object objLock = new object();
         private static ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
+
+        public static List<string> historicalMessage = new List<string>();
 
         private readonly RequestDelegate _next;
 
@@ -78,6 +81,7 @@ namespace BookBarn.ChatRoom
 
         private static Task SendStringAsync(WebSocket socket, string data, CancellationToken ct = default(CancellationToken))
         {
+            SaveHistoricalMessage(data);
             var buffer = Encoding.UTF8.GetBytes(data);
             var segment = new ArraySegment<byte>(buffer);
             return socket.SendAsync(segment, WebSocketMessageType.Text, true, ct);
@@ -85,6 +89,7 @@ namespace BookBarn.ChatRoom
 
         private static async Task<string> ReceiveStringAsync(WebSocket socket, CancellationToken ct = default(CancellationToken))
         {
+            
             var buffer = new ArraySegment<byte>(new byte[8192]);
             using (var ms = new MemoryStream())
             {
@@ -104,12 +109,22 @@ namespace BookBarn.ChatRoom
                     return null;
                 }
 
-                // Encoding UTF8: https://tools.ietf.org/html/rfc6455#section-5.6
                 using (var reader = new StreamReader(ms, Encoding.UTF8))
                 {
                     return await reader.ReadToEndAsync();
                 }
             }
+        }
+
+        static object lockSaveMsg = new object();
+        public static void SaveHistoricalMessage(string data)
+        {
+            
+            //var chatData = new ChatData(){data=data};
+
+            //var position = historicalMessage.Length;
+            historicalMessage.Add(data);
+            
         }
     }
 }

@@ -7,6 +7,7 @@ using BookBarn.Data;
 using BookBarn.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 
 namespace BookBarn.Controllers
@@ -44,6 +45,7 @@ namespace BookBarn.Controllers
             }
             var name = user.UserName;
             ViewData["UserName"] = name;
+            ViewBag.historicalMessage = JsonConvert.SerializeObject(BookBarn.ChatRoom.ChatWebSocketMiddleware.historicalMessage);
             return View();
         }
     }

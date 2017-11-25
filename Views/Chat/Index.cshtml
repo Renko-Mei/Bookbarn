@@ -28,7 +28,10 @@
     <script>
     $(function () {
         var userName = "@ViewData["UserName"]";
-
+        var historicalMessage = @Html.Raw(@ViewBag.historicalMessage)
+        for (var i = 0; i < historicalMessage.length; i++) {
+            $('#msgs').append(historicalMessage[i] + '<br />');
+        }
        // var protocol = location.protocol === "https:" ? "wss:" : "ws:";
         var wsUri = `ws://${window.location.host}`;
         var socket = new WebSocket(wsUri);
