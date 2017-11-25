@@ -128,17 +128,12 @@ namespace BookBarn
 
             app.UseAuthentication();
 
-            //Mark - use static page
-            //我调用websockets
-            //然后，通过分配"/LiveChat"路径来branch pipeline,如果调用的路径和"/LiveChat"一样就运行branch (middleware)
-            //在extensions里面，通过使用IApplicationBuilder来公开需要使用的middleware的位置,
             app.UseWebSockets();
 
             app.UseStaticFiles();
 
             app.UseAuthentication();
 
-            //app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ClientHandler>());
             app.UseMiddleware<BookBarn.ChatRoom.ChatWebSocketMiddleware>();
 
 
