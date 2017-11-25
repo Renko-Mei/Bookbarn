@@ -103,12 +103,13 @@ namespace BookBarn.Controllers
         public async Task<IActionResult> ChangePassword()
         {
             var user = await userManager.GetUserAsync(User);
-
-            var hasPassword = await userManager.HasPasswordAsync(user);
             if(user == null){
                 Response.StatusCode = 401;
                 return View("NotLoggedIn");
             }
+
+            var hasPassword = await userManager.HasPasswordAsync(user);
+            
             var model = new ChangePasswordViewModel { StatusMessage = StatusMessage };
             return View(model);
         }
