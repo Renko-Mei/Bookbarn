@@ -49,11 +49,11 @@ namespace BookBarn.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+            if(user == null){
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
             }
-
+            
             var model = new ProfileViewModel
             {
                 Username = user.UserName,
@@ -75,11 +75,7 @@ namespace BookBarn.Controllers
             }
 
             var user = await userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
-            }
-
+            
             var email = user.Email;
             if (model.Email != email)
             {
@@ -107,9 +103,13 @@ namespace BookBarn.Controllers
         public async Task<IActionResult> ChangePassword()
         {
             var user = await userManager.GetUserAsync(User);
+            if(user == null){
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
+            }
 
             var hasPassword = await userManager.HasPasswordAsync(user);
-
+            
             var model = new ChangePasswordViewModel { StatusMessage = StatusMessage };
             return View(model);
         }
@@ -140,6 +140,19 @@ namespace BookBarn.Controllers
             StatusMessage = "Your password has been changed.";
             return RedirectToAction(nameof(ChangePassword));
         }
+
+        // [HttpGet]
+        // public async Task<IActionResult> AddressChange()
+        // {
+        //     var user = await userManager.GetUserAsync(User);
+
+        //     var hasPassword = await userManager.HasPasswordAsync(user);
+
+        //     var model = new AddressViewModel { StatusMessage = StatusMessage };
+        //     return View(model);
+        // }
+
+
     }
 
     
