@@ -40,7 +40,9 @@ namespace BookBarn.Controllers
         //     var user = await userManager.GetUserAsync(User);
         //     if(user ==null){
 
+        
         //     }
+        // }
     }
             
  }

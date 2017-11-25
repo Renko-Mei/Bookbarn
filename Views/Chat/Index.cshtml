@@ -1,6 +1,6 @@
-@model string
+
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Chat";
 }
 <style>
     body {margin:0px; padding:0px;}
@@ -16,7 +16,7 @@
         white-space:nowrap;
     }
 </style>
-<div class="msg">
+<div class="msg" style="margin-top:60px">
     <div style="position:absolute; bottom:0;" id="msgs"></div>
 </div>
 
@@ -27,7 +27,7 @@
 @section Scripts {
     <script>
     $(function () {
-        var userName = '@Model';
+        var userName = "test";
 
         var protocol = location.protocol === "https:" ? "wss:" : "ws:";
         var wsUri = protocol + "//" + window.location.host;
