@@ -27,7 +27,7 @@
 @section Scripts {
     <script>
     $(function () {
-        var userName = "test";
+        var userName = "@ViewData["UserName"]";
 
         var protocol = location.protocol === "https:" ? "wss:" : "ws:";
         var wsUri = protocol + "//" + window.location.host;

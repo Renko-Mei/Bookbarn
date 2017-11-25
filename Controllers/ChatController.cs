@@ -35,14 +35,17 @@ namespace BookBarn.Controllers
 
         // GET: /<controller>/
   
-        // public async Task <IActionResult> Index()
-        // {
-        //     var user = await userManager.GetUserAsync(User);
-        //     if(user ==null){
-
-        
-        //     }
-        // }
+        public async Task <IActionResult> Index()
+        {
+            var user = await userManager.GetUserAsync(User);
+            if(user ==null){
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
+            }
+            var name = user.UserName;
+            ViewData["UserName"] = name;
+            return View();
+        }
     }
             
  }
