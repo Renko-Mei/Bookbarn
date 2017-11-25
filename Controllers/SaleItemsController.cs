@@ -73,15 +73,14 @@ namespace BookBarn.Controllers
         {
             if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
-                if (saleItem.Image != null)
+                if (files != null)
                 {
-                  using (var memoryStream = new MemoryStream())
-                  {
-                      await files.CopyToAsync(memoryStream);
-                      saleItem.Image = memoryStream.ToArray();
-                  }
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await files.CopyToAsync(memoryStream);
+                        saleItem.Image = memoryStream.ToArray();
+                    }
                 }
-
                 _context.Add(saleItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -104,6 +103,7 @@ namespace BookBarn.Controllers
               Response.StatusCode = 404;
               return View("NotFound");
             }
+
             return View(saleItem);
         }
 
@@ -181,7 +181,7 @@ namespace BookBarn.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Search(string searchType, string searchString, string sortType)
+        public async Task<IActionResult> Search(string searchType, string searchString, string sortType, string title, string author, string isbn, float minPrice, float maxPrice)
         {
             SearchViewModel searchVm;
 
@@ -190,13 +190,12 @@ namespace BookBarn.Controllers
                             select new SearchResultViewModel
                             {
                                 Title = b.Title,
-                                AuthorFirst = b.AuthorFirstName,
-                                AuthorLast = b.AuthorLastName,
-                                Author = b.AuthorFirstName + " " + b.AuthorLastName,
+                                Author = b.Author,
                                 Quality = si.Quality,
                                 Price = si.Price,
                                 ISBN = b.Isbn,
-                                SaleItemID = si.SaleItemId
+                                SaleItemID = si.SaleItemId,
+                                Image = si.Image
                             };
             //Filter type
             if (!string.IsNullOrWhiteSpace(searchString) && !string.IsNullOrEmpty(searchType))
@@ -217,6 +216,8 @@ namespace BookBarn.Controllers
                 {
                     throw new NotImplementedException("The current search type is not defined");
                 }
+
+
             }
 
             //Sort option
@@ -226,24 +227,51 @@ namespace BookBarn.Controllers
                 {
                     resultSet = resultSet.OrderBy(sr => sr.Price);
                 }
-                else if (sortType.Equals("title"))
+                if (sortType.Equals("title"))
                 {
                     resultSet = resultSet.OrderBy(sr => sr.Title);
                 }
-                else if (sortType.Equals("authorFirst"))
+                if (sortType.Equals("author"))
                 {
-                    resultSet = resultSet.OrderBy(sr => sr.AuthorFirst);
+                    resultSet = resultSet.OrderBy(sr => sr.Author);
                 }
-                else if (sortType.Equals("authorLast"))
-                {
-                    resultSet = resultSet.OrderBy(sr => sr.AuthorLast);
-                }
+            }
+
+            //Advanced search
+            if (!String.IsNullOrWhiteSpace(title))
+            {
+                resultSet = resultSet.Where(sr => sr.Title.ToLowerInvariant().Contains(title.ToLower()));
+            }
+            if (!String.IsNullOrWhiteSpace(author))
+            {
+                resultSet = resultSet.Where(sr => sr.Author.ToLowerInvariant().Contains(author.ToLower()));
+            }
+            if (!String.IsNullOrWhiteSpace(isbn))
+            {
+                resultSet = resultSet.Where(sr => sr.ISBN.ToLowerInvariant().Contains(isbn.ToLower()));
+            }
+            if (!float.IsNaN(minPrice))
+            {
+                resultSet = resultSet.Where(sr => sr.Price >= minPrice);
+            }
+            if (!float.IsNaN(maxPrice) && maxPrice > 0 && maxPrice >= minPrice)
+            {
+                resultSet = resultSet.Where(sr => sr.Price <= maxPrice);
             }
 
             searchVm = new SearchViewModel()
             {
                 SearchResults = await resultSet.ToListAsync()
             };
+
+            return View(searchVm);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> AdvancedSearch(string searchType, string searchString, string sortType, string titleString)
+        {
+            SearchViewModel searchVm;
+            searchVm = new SearchViewModel();
 
             return View(searchVm);
         }

@@ -3,23 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using BookBarn.Data;
+using BookBarn.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 
 namespace BookBarn.Controllers
 {
     public class ChatController : Controller
     {
-        // GET: /<controller>/
-        [HttpGet]
-        public IActionResult Index()
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly ILogger logger;
+
+        public ChatController(
+            UserManager<User> userManager, 
+            SignInManager<User> signInManager, 
+            RoleManager<IdentityRole> roleManager, 
+            ILogger<AccountInfoController> logger)
         {
-            return View("UserName");
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.roleManager = roleManager;
+            this.logger = logger;
         }
 
-        [HttpPost]
-        public IActionResult Index(string username)
+
+
+
+        // GET: /<controller>/
+  
+        public async Task <IActionResult> Index()
         {
-            return View("Index", username);
+            var user = await userManager.GetUserAsync(User);
+            if(user ==null){
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
+            }
+            var name = user.UserName;
+            ViewData["UserName"] = name;
+            ViewBag.historicalMessage = JsonConvert.SerializeObject(BookBarn.ChatRoom.ChatWebSocketMiddleware.historicalMessage);
+            return View();
         }
     }
-}
+            
+ }

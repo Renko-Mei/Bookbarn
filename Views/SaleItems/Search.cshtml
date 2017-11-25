@@ -1,11 +1,10 @@
 @model BookBarn.Models.SearchViewModels.SearchViewModel
-
 @{
     ViewData["Title"] = "Search";
 }
 
 
-<div>
+<div style="margin-top:50px">
 	<h1>Search</h1>
 
 	<p>Search for books.</p>
@@ -17,7 +16,7 @@
 			<option value="isbn">ISBN</option>
 		</select>
 
-		<input type="text" name="searchString" />
+		<input type="text" name="searchString" value= "@Context.Request.Query["searchString"]" />
 		<input type="submit" value="Search" />
 
 		<div>
@@ -28,13 +27,18 @@
 				<option value="authorLast">Author - Last Name: A-Z</option>
 				<option value="price">Price: Lowest first</option>
 			</select>
-		</div>
+			<div>
+				<a asp-action="AdvancedSearch">Advanced Search</a>
+			</div>
 	</form>
 </div>
 
 <table class="table">
 	<thead>
 		<tr>
+			<th>
+				Image
+			</th>
 			<th>
 				@Html.DisplayNameFor(model => model.SearchResults[0].Title)
 			</th>
@@ -54,6 +58,13 @@
 		@foreach (var resultItem in Model.SearchResults)
 		{
 			<tr>
+				<td>
+					@if (resultItem.Image != null && resultItem.Image.Length > 0)
+					{
+						<img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(resultItem.Image))" height="70" width="70"/>
+
+					}
+				</td>
 				<td>					
 					@Html.DisplayFor(model => resultItem.Title)
 				</td>

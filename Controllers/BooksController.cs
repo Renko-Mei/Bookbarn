@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookBarn.Models;
 using BookBarn.Data;
+using BookBarn.Utilities;
 
 namespace BookBarn.Controllers
 {
@@ -56,13 +57,21 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,Isbn,Title,AuthorFirstName,AuthorLastName")] Book book)
+        public async Task<IActionResult> Create([Bind("BookId,Isbn,Title,Author")] Book book)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(book);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Create", "SaleItems", new {@BookId = book.BookId});
+                if (Isbn.IsValidIsbn(book.Isbn))
+                {
+                    book.Isbn = Isbn.NormalizeIsbn(book.Isbn);
+                    _context.Add(book);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid ISBN");
+                }
+                return RedirectToAction(nameof(Index));
             }
             return View(book);
         }
@@ -90,7 +99,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookId,Isbn,Title,AuthorFirstName,AuthorLastName")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("BookId,Isbn,Title,Author")] Book book)
         {
             if (id != book.BookId)
             {
@@ -102,8 +111,12 @@ namespace BookBarn.Controllers
             {
                 try
                 {
-                    _context.Update(book);
-                    await _context.SaveChangesAsync();
+                    if (Isbn.IsValidIsbn(book.Isbn))
+                    {
+                        book.Isbn = Isbn.NormalizeIsbn(book.Isbn);
+                        _context.Update(book);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {

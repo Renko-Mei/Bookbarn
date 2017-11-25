@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -39,8 +40,9 @@
                     <li><a asp-area="" asp-controller="Chat" asp-action="Index">Chat Room</a></li>
                     <li><a asp-area="" asp-controller="SaleItems" asp-action="Search">Search</a></li>
                     <li><a asp-area="" asp-controller="Books" asp-action="Index">Sell</a></li>
-                    <li><a asp-area="" asp-controller="User" asp-action="Index">Account</a></li>
                 </ul>
+
+
                 @await Html.PartialAsync("_LoginPartial")
                 <ul class ="nav navbar-nav navbar-right">
                   <li><a asp-area="" asp-controller="ShoppingCarts" asp-action="Index">
@@ -48,6 +50,7 @@
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart
                   </a></li>
                 </ul>
+
             </div>
         </div>
     </nav>
@@ -81,5 +84,7 @@
     </environment>
 
     @RenderSection("Scripts", required: false)
+
+
 </body>
 </html>
