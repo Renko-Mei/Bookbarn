@@ -8,7 +8,7 @@ namespace BookBarn.Utilities
     /// <summary>
     /// Validate a ISBN string
     /// </summary>
-    public static class IsbnValidator
+    public static class Isbn
     {
         public enum IsbnType
         {
@@ -111,13 +111,13 @@ namespace BookBarn.Utilities
             return result;
         }
 
-        public static IsbnType GetIsbnType(this string self)
+        public static IsbnType GetIsbnType(this string isbn)
         {
-            if (IsValidIsbn10(self))
+            if (IsValidIsbn10(isbn))
             {
                 return IsbnType.ISBN10;
             }
-            else if (IsValidIsbn13(self))
+            else if (IsValidIsbn13(isbn))
             {
                 return IsbnType.ISBN13;
             }
@@ -127,21 +127,21 @@ namespace BookBarn.Utilities
             }
         }
 
-        public static bool TryParseIsbn(this string self, out string parsed)
+        public static bool TryParseIsbn(this string isbn, out string parsed)
         {
-            if (self.Contains("-"))
+            if (isbn.Contains("-"))
             {
-                self = self.Replace("-", "");
+                isbn = isbn.Replace("-", "");
             }
 
-            if (IsValidIsbn10(self))
+            if (IsValidIsbn10(isbn))
             {
-                parsed = self;
+                parsed = isbn;
                 return true;
             }
-            else if (IsValidIsbn13(self))
+            else if (IsValidIsbn13(isbn))
             {
-                parsed = self;
+                parsed = isbn;
                 return true;
             }
             else
@@ -149,6 +149,48 @@ namespace BookBarn.Utilities
                 parsed = null;
                 return false;
             }
+        }
+
+        public static bool IsValidIsbn(string isbn) => IsValidIsbn10(isbn) || IsValidIsbn13(isbn);
+        public static string NormalizeIsbn(string isbn) => isbn.Contains("-") ? isbn.Replace("-", "") : isbn;
+
+        public static string ConvertTo10(string isbn13)
+        {
+            string isbn10 = string.Empty;
+            long temp;
+
+            if (!(string.IsNullOrEmpty(isbn13) && isbn13.Length == 13 && long.TryParse(isbn13, out temp)))
+            {
+                isbn10 = isbn13.Substring(3, 9);
+                int sum = 0;
+                for (int i = 0; i <= 8; i++)
+                {
+                    sum += Int32.Parse(isbn10[i].ToString()) * (i + 1);
+                }
+                int result = sum % 11;
+                char checkDigit = (result > 9) ? 'X' : result.ToString()[0];
+                isbn10 += checkDigit;
+            }
+
+            return isbn10;
+        }
+
+        public static string ConvertTo13(string isbn10)
+        {
+            string isbn13 = string.Empty;
+            long temp;
+            if (!(string.IsNullOrEmpty(isbn10) && isbn10.Length == 10 && long.TryParse(isbn10.Substring(0, 9), out temp)))
+            {
+                int result = 0;
+                isbn13 = "978" + isbn10.Substring(0, 9);
+                for (int i = 0; i < isbn13.Length; i++)
+                {
+                    result += int.Parse(isbn13[i].ToString()) * ((i % 2 == 0) ? 1 : 3);
+                }
+                int checkDigit = (10 - (result % 10)) % 10;
+                isbn13 += checkDigit.ToString();
+            }
+            return isbn13;
         }
     }
 }
