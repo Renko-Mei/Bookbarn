@@ -29,6 +29,7 @@ using Microsoft.AspNetCore.Mvc;
 
 //for confirmation email
 using BookBarn.Services;
+using BookBarn.Services.Paypal;
 
 namespace BookBarn
 {
@@ -64,8 +65,6 @@ namespace BookBarn
                 .AddEntityFrameworkStores<AuthenticationContext>()
                 .AddDefaultTokenProviders()
                 .AddErrorDescriber<CustomIdentityErrorDescriber>();
-
-
 
             // Configure identity constraints
             services.Configure<IdentityOptions>(options =>
@@ -106,8 +105,7 @@ namespace BookBarn
                 options.SlidingExpiration = true;
             });
 
-            
-
+            services.Configure<PaypalSettings>(Configuration.GetSection("PaypalSettings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
