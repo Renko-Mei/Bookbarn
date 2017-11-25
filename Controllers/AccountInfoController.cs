@@ -142,7 +142,7 @@ namespace BookBarn.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddressChange()
+        public async Task<IActionResult> ChangeAddress()
         {
             var user = await userManager.GetUserAsync(User);
 
@@ -150,9 +150,39 @@ namespace BookBarn.Controllers
                 Response.StatusCode = 401;
                 return View("NotLoggedIn");
             }
+
             var model = new AddressViewModel { StatusMessage = StatusMessage };
             return View(model);
         }
+
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> ChangeAddress(ChangeAddressViewModel model)
+        // {
+        //     if (!ModelState.IsValid)
+        //     {
+        //         return View(model);
+        //     }
+
+        //     var user = await userManager.GetUserAsync(User);
+        //     if (user == null)
+        //     {
+        //         throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+        //     }
+
+        //     var changeAddressResult = await userManager
+        //     //ChangeStreetAddressAsync(user, model.OldPassword, model.NewPassword);
+        //     if (!changeAddressResult.Succeeded)
+        //     {
+        //         return View(model);
+        //     }
+
+        //     await signInManager.SignInAsync(user, isPersistent: false);
+        //     logger.LogInformation("User changed their password successfully.");
+        //     StatusMessage = "Your address has been changed.";
+        //     return RedirectToAction(nameof(ChangePassword));
+        // }
+
 
 
     }
