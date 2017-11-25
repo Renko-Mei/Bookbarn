@@ -1,12 +1,17 @@
+@using BookBarn.Views.AccountInfo
 @{
-    ViewData["Title"] = "Sales Viz Test";
+    ViewData["Title"] = "Sales History";
+    ViewData.AddActivePage(NavigationBarPages.SalesVisualization);
 }
-<h2>See Sales History</h2>
+<h4>@ViewData["Title"]</h4>
+@Html.Partial("_StatusMessage", Model.StatusMessage)
+
 <div><canvas id="lineChart"></canvas></div>
 
 @{ChartJSCore.Models.Chart chart = (ChartJSCore.Models.Chart)ViewData["chart"]; }
 
 @section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
     <script src="~/lib/Chart.js/dist/Chart.js"></script>
     <script>
         @Html.Raw(chart.CreateChartCode("lineChart"));

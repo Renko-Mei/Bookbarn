@@ -11,15 +11,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using BookBarn.Models.IdentityViewModels;
 using Microsoft.AspNetCore.Authentication;
-<<<<<<< HEAD
-using ChartJSCore.Models;
-=======
+
 using Microsoft.Extensions.Options;
 using BookBarn.Services;
 using BookBarn.Data;
 
 
->>>>>>> master
 
 namespace BookBarn.Controllers
 {
@@ -188,9 +185,6 @@ namespace BookBarn.Controllers
             }
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
         private void AddErrors(IdentityResult result)
         {
             foreach (IdentityError error in result.Errors)
@@ -198,65 +192,6 @@ namespace BookBarn.Controllers
                 ModelState.TryAddModelError("", error.Description);
             }
         }
-
-        private User testUser = new User
-        {
-            UserName = "TestTestForPassword",
-            Email = "testForPassword@test.test"
-        };
-
-
-        [Route("User/{userID:int}")]
-        public IActionResult Setting(int userID)
-        {
-            //Check that userID is authorized to view this page
-
-            ViewData["User Name"] = "Andy Yao Testing";
-            
-            //Render all the necessary stuff, one of which is the sales viz
-            return View();
-
-=======
-        public IActionResult SalesVisualization(){
-            Chart chart = new Chart();
-            chart.Type = "line";
-            ChartJSCore.Models.Data data = new ChartJSCore.Models.Data();
-            data.Labels = new List<string>() { "January", "February", "March", "April", "May", "June", "July" };
-            LineDataset dataset = new LineDataset()
-            {
-                Label = "My First dataset",
-                Data = new List<double>() { 65, 59, 80, 81, 56, 55, 40 },
-                Fill = false,
-                LineTension = 0.1,
-                BackgroundColor = "rgba(75, 192, 192, 0.4)",
-                BorderColor = "rgba(75,192,192,1)",
-                BorderCapStyle = "butt",
-                BorderDash = new List<int> { },
-                BorderDashOffset = 0.0,
-                BorderJoinStyle = "miter",
-                PointBorderColor = new List<string>() { "rgba(75,192,192,1)" },
-                PointBackgroundColor = new List<string>() { "#fff" },
-                PointBorderWidth = new List<int> { 1 },
-                PointHoverRadius = new List<int> { 5 },
-                PointHoverBackgroundColor = new List<string>() { "rgba(75,192,192,1)" },
-                PointHoverBorderColor = new List<string>() { "rgba(220,220,220,1)" },
-                PointHoverBorderWidth = new List<int> { 2 },
-                PointRadius = new List<int> { 1 },
-                PointHitRadius = new List<int> { 10 },
-                SpanGaps = false
-            };
-
-            data.Datasets = new List<Dataset>();
-            data.Datasets.Add(dataset);
-
-            chart.Data = data;
-
-            ViewData["chart"] = chart;
-
-            return View();
->>>>>>> salesVizDotNet
-        }
-=======
         
        //send confirmation Email
         [HttpGet]
@@ -361,8 +296,6 @@ namespace BookBarn.Controllers
         {
             return View();
         }
- 
->>>>>>> master
     }
 }
 
