@@ -1,0 +1,66 @@
+@model BookBarn.Models.SearchViewModels.SearchViewModel
+
+@{
+    ViewData["Title"] = "AdvancedSearch";
+}
+
+<div style="margin-top:50px">
+	<h1>Advanced Search</h1>
+
+	<p>Search for books.</p>
+
+	<form asp-controller="SaleItems" asp-action="Search"  method="get">
+		<div>
+			Title
+			<input asp-for="title" class="form-control"/>
+			<span asp-validation-for="title" class="text-danger"></span>
+		</div>
+
+		<div>
+			Author first name:
+			<input asp-for="authorFirst" class="form-control" />
+			<span asp-validation-for="authorFirst" class="text-danger"></span>
+		</div>
+
+		<div>
+			Author last name:
+			<input asp-for="authorLast" class="form-control" />
+			<span asp-validation-for="authorLast" class="text-danger"></span>
+		</div>
+
+		<div>
+			ISBN:
+			<input asp-for="isbn" class="form-control" />
+			<span asp-validation-for="isbn" class="text-danger"></span>
+		</div>
+
+		<div>
+			Minimum price:
+			<input asp-for="minPrice" class="form-control" />
+			<span asp-validation-for="minPrice" class="text-danger"></span>
+		</div>
+
+		<div>
+			Maximum price:
+			<input asp-for="maxPrice" class="form-control"  value="9999.99"/>
+			<span asp-validation-for="maxPrice" class="text-danger"></span>
+		</div>
+
+
+		<div>
+			Sort by:
+			<select asp-for="SortType" asp-items="Model.SortTypes">
+				<option value="title">Title: A-Z</option>
+				<option value="authorFirst">Author - First Name: A-Z</option>
+				<option value="authorLast">Author - Last Name: A-Z</option>
+				<option value="price">Price: Lowest first</option>
+			</select>
+		</div>
+		<div>
+			<input type="submit" value="Search" />
+		</div>
+</form>
+</div>
+
+
+    
