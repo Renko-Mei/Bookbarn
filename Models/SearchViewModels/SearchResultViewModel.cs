@@ -11,5 +11,6 @@ namespace BookBarn.Models.SearchViewModels
         public float Price { get; set; }
         public int SaleItemID { get; set; }
         public string ISBN { get; set; }
+        public byte[] Image { get; set; }
     }
 }
