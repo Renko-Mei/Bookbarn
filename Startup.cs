@@ -19,12 +19,14 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 
 //for ChatRoom
-using BookBarn.ChatRoom.ClientSide;
-using BookBarn.ChatRoom.ServerSide;
+
 using UserManagement.Utilities;
 using BookBarn.Utilities;
 
-//using WebSocketASPNetCore.WebSocketManager;
+
+//for confirmation email
+using BookBarn.Services;
+using BookBarn.Services.Paypal;
 
 namespace BookBarn
 {
@@ -40,8 +42,8 @@ namespace BookBarn
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddWebSocketManager();
-            services.AddTransient<ClientHandler>();
+            //for confirmation email
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddMvc();
 
             // Configure database model
@@ -52,8 +54,9 @@ namespace BookBarn
                 .AddDbContext<AuthenticationContext>(options => options
                     .UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            // Configure Authentication
-            services.AddIdentity<User, IdentityRole>()
+
+            // Configure Authentication. now need to confirm the reality of email address first.
+            services.AddIdentity<User, IdentityRole>(config =>{config.SignIn.RequireConfirmedEmail = true;})
                 .AddEntityFrameworkStores<AuthenticationContext>()
                 .AddDefaultTokenProviders()
                 .AddErrorDescriber<CustomIdentityErrorDescriber>();
@@ -96,6 +99,8 @@ namespace BookBarn
                 options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
                 options.SlidingExpiration = true;
             });
+
+            services.Configure<PaypalSettings>(Configuration.GetSection("PaypalSettings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -123,17 +128,14 @@ namespace BookBarn
 
             app.UseAuthentication();
 
-            //Mark - use static page
-            //我调用websockets
-            //然后，通过分配"/LiveChat"路径来branch pipeline,如果调用的路径和"/LiveChat"一样就运行branch (middleware)
-            //在extensions里面，通过使用IApplicationBuilder来公开需要使用的middleware的位置,
             app.UseWebSockets();
 
             app.UseStaticFiles();
 
             app.UseAuthentication();
 
-            app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ClientHandler>());
+            app.UseMiddleware<BookBarn.ChatRoom.ChatWebSocketMiddleware>();
+
 
             app.UseMvc(routes =>
             {
@@ -141,10 +143,10 @@ namespace BookBarn
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
 
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
-            });
+            //     routes.MapSpaFallbackRoute(
+            //         name: "spa-fallback",
+            //         defaults: new { controller = "Home", action = "Index" });
+             });
         }
     }
 }

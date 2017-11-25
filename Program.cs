@@ -27,6 +27,8 @@ namespace BookBarn
                 try
                 {
                     SeedAdministrator.Seed(services).Wait();
+                    SeedBooks.Seed(services);
+                    SeedSaleItems.Seed(services);
                 }
                 catch (Exception ex)
                 {

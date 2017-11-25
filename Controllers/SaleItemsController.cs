@@ -10,6 +10,8 @@ using BookBarn.Data;
 using BookBarn.Models.SearchViewModels;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace BookBarn.Controllers
 {
@@ -33,14 +35,16 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var saleItem = await _context.SaleItem
                 .SingleOrDefaultAsync(m => m.SaleItemId == id);
             if (saleItem == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             return View(saleItem);
@@ -55,8 +59,8 @@ namespace BookBarn.Controllers
             }
             else
             {
-              // do this for now, need to change to not authorized TODO - ushma
-              return NotFound();
+              Response.StatusCode = 401;
+              return View("NotLoggedIn");
             }
         }
 
@@ -65,10 +69,18 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,IsSold,BookId")] SaleItem saleItem)
+        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,IsSold,BookId,Image")] SaleItem saleItem, IFormFile files)
         {
             if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
+                if (files != null)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await files.CopyToAsync(memoryStream);
+                        saleItem.Image = memoryStream.ToArray();
+                    }
+                }
                 _context.Add(saleItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -81,14 +93,17 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var saleItem = await _context.SaleItem.SingleOrDefaultAsync(m => m.SaleItemId == id);
             if (saleItem == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
+
             return View(saleItem);
         }
 
@@ -101,7 +116,8 @@ namespace BookBarn.Controllers
         {
             if (id != saleItem.SaleItemId)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             if (ModelState.IsValid)
@@ -115,7 +131,8 @@ namespace BookBarn.Controllers
                 {
                     if (!SaleItemExists(saleItem.SaleItemId))
                     {
-                        return NotFound();
+                      Response.StatusCode = 404;
+                      return View("NotFound");
                     }
                     else
                     {
@@ -132,14 +149,16 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var saleItem = await _context.SaleItem
                 .SingleOrDefaultAsync(m => m.SaleItemId == id);
             if (saleItem == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             return View(saleItem);
@@ -162,7 +181,7 @@ namespace BookBarn.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Search(string searchType, string searchString, string sortType)
+        public async Task<IActionResult> Search(string searchType, string searchString, string sortType, string title, string author, string isbn, float minPrice, float maxPrice)
         {
             SearchViewModel searchVm;
 
@@ -171,13 +190,12 @@ namespace BookBarn.Controllers
                             select new SearchResultViewModel
                             {
                                 Title = b.Title,
-                                AuthorFirst = b.AuthorFirstName,
-                                AuthorLast = b.AuthorLastName,
-                                Author = b.AuthorFirstName + " " + b.AuthorLastName,
+                                Author = b.Author,
                                 Quality = si.Quality,
                                 Price = si.Price,
                                 ISBN = b.Isbn,
-                                SaleItemID = si.SaleItemId
+                                SaleItemID = si.SaleItemId,
+                                Image = si.Image
                             };
             //Filter type
             if (!string.IsNullOrWhiteSpace(searchString) && !string.IsNullOrEmpty(searchType))
@@ -198,6 +216,8 @@ namespace BookBarn.Controllers
                 {
                     throw new NotImplementedException("The current search type is not defined");
                 }
+
+
             }
 
             //Sort option
@@ -207,24 +227,51 @@ namespace BookBarn.Controllers
                 {
                     resultSet = resultSet.OrderBy(sr => sr.Price);
                 }
-                else if (sortType.Equals("title"))
+                if (sortType.Equals("title"))
                 {
                     resultSet = resultSet.OrderBy(sr => sr.Title);
                 }
-                else if (sortType.Equals("authorFirst"))
+                if (sortType.Equals("author"))
                 {
-                    resultSet = resultSet.OrderBy(sr => sr.AuthorFirst);
-                }
-                else if (sortType.Equals("authorLast"))
-                {
-                    resultSet = resultSet.OrderBy(sr => sr.AuthorLast);
+                    resultSet = resultSet.OrderBy(sr => sr.Author);
                 }
             }
 
+            //Advanced search
+            if (!String.IsNullOrWhiteSpace(title))
+            {
+                resultSet = resultSet.Where(sr => sr.Title.ToLowerInvariant().Contains(title.ToLower()));
+            }
+            if (!String.IsNullOrWhiteSpace(author))
+            {
+                resultSet = resultSet.Where(sr => sr.Author.ToLowerInvariant().Contains(author.ToLower()));
+            }
+            if (!String.IsNullOrWhiteSpace(isbn))
+            {
+                resultSet = resultSet.Where(sr => sr.ISBN.ToLowerInvariant().Contains(isbn.ToLower()));
+            }
+            if (!float.IsNaN(minPrice))
+            {
+                resultSet = resultSet.Where(sr => sr.Price >= minPrice);
+            }
+            if (!float.IsNaN(maxPrice) && maxPrice > 0 && maxPrice >= minPrice)
+            {
+                resultSet = resultSet.Where(sr => sr.Price <= maxPrice);
+            }
+            
             searchVm = new SearchViewModel()
             {
                 SearchResults = await resultSet.ToListAsync()
             };
+            
+            return View(searchVm);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> AdvancedSearch(string searchType, string searchString, string sortType, string titleString)
+        {
+            SearchViewModel searchVm;
+            searchVm = new SearchViewModel();
 
             return View(searchVm);
         }

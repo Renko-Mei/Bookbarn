@@ -30,14 +30,16 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var address = await _context.Address
                 .SingleOrDefaultAsync(m => m.AddressId == id);
             if (address == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             return View(address);
@@ -50,7 +52,7 @@ namespace BookBarn.Controllers
         }
 
         // POST: Address/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -70,19 +72,21 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var address = await _context.Address.SingleOrDefaultAsync(m => m.AddressId == id);
             if (address == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
             return View(address);
         }
 
         // POST: Address/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -90,7 +94,8 @@ namespace BookBarn.Controllers
         {
             if (id != address.AddressId)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             if (ModelState.IsValid)
@@ -104,7 +109,8 @@ namespace BookBarn.Controllers
                 {
                     if (!AddressExists(address.AddressId))
                     {
-                        return NotFound();
+                      Response.StatusCode = 404;
+                      return View("NotFound");
                     }
                     else
                     {
@@ -121,14 +127,16 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var address = await _context.Address
                 .SingleOrDefaultAsync(m => m.AddressId == id);
             if (address == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             return View(address);

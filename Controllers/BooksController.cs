@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookBarn.Models;
 using BookBarn.Data;
+using BookBarn.Utilities;
 
 namespace BookBarn.Controllers
 {
@@ -30,14 +31,16 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var book = await _context.Book
                 .SingleOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             return View(book);
@@ -50,16 +53,24 @@ namespace BookBarn.Controllers
         }
 
         // POST: Books/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,Isbn,Title,AuthorFirstName,AuthorLastName")] Book book)
+        public async Task<IActionResult> Create([Bind("BookId,Isbn,Title,Author")] Book book)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(book);
-                await _context.SaveChangesAsync();
+                if (Isbn.IsValidIsbn(book.Isbn))
+                {
+                    book.Isbn = Isbn.NormalizeIsbn(book.Isbn);
+                    _context.Add(book);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid ISBN");
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(book);
@@ -70,41 +81,49 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var book = await _context.Book.SingleOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
             return View(book);
         }
 
         // POST: Books/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookId,Isbn,Title,AuthorFirstName,AuthorLastName")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("BookId,Isbn,Title,Author")] Book book)
         {
             if (id != book.BookId)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(book);
-                    await _context.SaveChangesAsync();
+                    if (Isbn.IsValidIsbn(book.Isbn))
+                    {
+                        book.Isbn = Isbn.NormalizeIsbn(book.Isbn);
+                        _context.Update(book);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!BookExists(book.BookId))
                     {
-                        return NotFound();
+                      Response.StatusCode = 404;
+                      return View("NotFound");
                     }
                     else
                     {
@@ -121,14 +140,16 @@ namespace BookBarn.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             var book = await _context.Book
                 .SingleOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {
-                return NotFound();
+              Response.StatusCode = 404;
+              return View("NotFound");
             }
 
             return View(book);
