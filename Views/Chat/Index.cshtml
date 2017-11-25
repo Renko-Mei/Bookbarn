@@ -30,7 +30,7 @@
         var userName = "@ViewData["UserName"]";
 
        // var protocol = location.protocol === "https:" ? "wss:" : "ws:";
-        var wsUri = `ws://${window.location.host}/ws?Name=${userName}`;
+        var wsUri = `ws://${window.location.host}`;
         var socket = new WebSocket(wsUri);
         socket.onopen = e => {
             console.log("socket opened", e);
