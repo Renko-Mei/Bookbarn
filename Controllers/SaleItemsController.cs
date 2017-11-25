@@ -181,7 +181,7 @@ namespace BookBarn.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Search(string searchType, string searchString, string sortType, string title, string authorFirst, string authorLast, string isbn, float minPrice, float maxPrice)
+        public async Task<IActionResult> Search(string searchType, string searchString, string sortType, string title, string author, string isbn, float minPrice, float maxPrice)
         {
             SearchViewModel searchVm;
 
@@ -242,13 +242,9 @@ namespace BookBarn.Controllers
             {
                 resultSet = resultSet.Where(sr => sr.Title.ToLowerInvariant().Contains(title.ToLower()));
             }
-            if (!String.IsNullOrWhiteSpace(authorFirst))
+            if (!String.IsNullOrWhiteSpace(author))
             {
-                resultSet = resultSet.Where(sr => sr.AuthorFirst.ToLowerInvariant().Contains(authorFirst.ToLower()));
-            }
-            if (!String.IsNullOrWhiteSpace(authorLast))
-            {
-                resultSet = resultSet.Where(sr => sr.AuthorLast.ToLowerInvariant().Contains(authorLast.ToLower()));
+                resultSet = resultSet.Where(sr => sr.Author.ToLowerInvariant().Contains(author.ToLower()));
             }
             if (!String.IsNullOrWhiteSpace(isbn))
             {
