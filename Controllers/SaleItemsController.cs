@@ -190,9 +190,7 @@ namespace BookBarn.Controllers
                             select new SearchResultViewModel
                             {
                                 Title = b.Title,
-                                AuthorFirst = b.AuthorFirstName,
-                                AuthorLast = b.AuthorLastName,
-                                Author = b.AuthorFirstName + " " + b.AuthorLastName,
+                                Author = b.Author,
                                 Quality = si.Quality,
                                 Price = si.Price,
                                 ISBN = b.Isbn,
@@ -229,17 +227,13 @@ namespace BookBarn.Controllers
                 {
                     resultSet = resultSet.OrderBy(sr => sr.Price);
                 }
-                else if (sortType.Equals("title"))
+                if (sortType.Equals("title"))
                 {
                     resultSet = resultSet.OrderBy(sr => sr.Title);
                 }
-                else if (sortType.Equals("authorFirst"))
+                if (sortType.Equals("author"))
                 {
-                    resultSet = resultSet.OrderBy(sr => sr.AuthorFirst);
-                }
-                else if (sortType.Equals("authorLast"))
-                {
-                    resultSet = resultSet.OrderBy(sr => sr.AuthorLast);
+                    resultSet = resultSet.OrderBy(sr => sr.Author);
                 }
             }
 

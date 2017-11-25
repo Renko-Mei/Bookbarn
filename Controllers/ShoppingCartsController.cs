@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BookBarn.Data;
 using BookBarn.Models;
 
-namespace Bookbarn.Controllers
+namespace BookBarn.Controllers
 {
     public class ShoppingCartsController : Controller
     {
