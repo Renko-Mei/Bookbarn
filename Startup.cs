@@ -19,13 +19,10 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 
 //for ChatRoom
-using BookBarn.ChatRoom.ClientSide;
-using BookBarn.ChatRoom.ServerSide;
+
 using UserManagement.Utilities;
 using BookBarn.Utilities;
 
-//for HTTPS
-using Microsoft.AspNetCore.Mvc;
 
 //for confirmation email
 using BookBarn.Services;
@@ -45,8 +42,6 @@ namespace BookBarn
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddWebSocketManager();
-            services.AddTransient<ClientHandler>();
             //for confirmation email
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddMvc();
@@ -143,7 +138,9 @@ namespace BookBarn
 
             app.UseAuthentication();
 
-            app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ClientHandler>());
+            //app.MapWebSocketManager("/LiveChat", serviceProvider.GetService<ClientHandler>());
+            app.UseMiddleware<BookBarn.ChatRoom.ChatWebSocketMiddleware>();
+
 
             app.UseMvc(routes =>
             {

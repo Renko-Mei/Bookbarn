@@ -1,85 +1,65 @@
 @model string
-
-    <style>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    body {margin:0px; padding:0px;}
     .msg {
         position: absolute;
-        top: 200px;
+        top: 0;
         bottom: 30px;
+        border: 1px solid green;
         margin-bottom: auto;
-        background-color: rgba(72, 189, 49, 0.249);
         display:block;
         overflow: scroll;
         width:100%;
         white-space:nowrap;
     }
 </style>
+<div class="msg">
+    <div style="position:absolute; bottom:0;" id="msgs"></div>
+</div>
 
-    <head>
-        <meta charset="utf-8" />
-        <title>Customer Service</title>
-    </head>
+<div style="position:absolute;height:20px;bottom:10px;left:0; display:block;width:100%">
+    <input type="text" style="max-width:unset;width:100%;max-width:100%" id="MessageField" placeholder="type message and press enter" />
+</div>
 
-    <body style="margin-top:60px">
-        <div id="chat">
-            <p id="test">Hello</p>
-            <p id="available">No Available</p>
-            <!-- <p>From: <input type="text" id="from"></p> -->
-            <p>To:<input type="text" id="to" /></p>
-            <p>content:<input type="text" id="content" /></p>
-            <p><button id="Send">Send</button></p>
-            <ul id="messages"></ul>
-            <div class="msg">
-                <div style="position:absolute; bottom:0;" id="msgs"></div>
-            </div>
-        </div>  
-    </body>
-
-
-
+@section Scripts {
     <script>
-        var socket = undefined;
-        
-         //var username = document.getElementById(from).value;
-        var userName = "@Model";
-        //要改 userName 以后要变成userID
-        if (userName){ //userName
-            var uri = "ws://" + window.location.host + "/LiveChat?Name=" + userName; //以后要改成id
-            socket = new WebSocket(uri);  
-            socket.onopen = function () {
-                
-            };
-            
-            var list = document.getElementById("messages");
-            document.getElementById("Send").onclick = function () {
-                
-                 socket.send(JSON.stringify({
-                    //Sender: userName;
-                    Receiver: document.getElementById("to").value,
-                    Message: document.getElementById("content").value
-                }));
+    $(function () {
+        var userName = '@Model';
 
-                //这个要改成在send里面加一个sender,现在先不改
-                socket.send(JSON.stringify({
-                    Receiver: userName,
-                    Message: document.getElementById("content").value
-                }));
-                document.getElementById("content").value = "";
+        var protocol = location.protocol === "https:" ? "wss:" : "ws:";
+        var wsUri = protocol + "//" + window.location.host;
+        var socket = new WebSocket(wsUri);
+        socket.onopen = e => {
+            console.log("socket opened", e);
+        };
+
+        socket.onclose = function (e) {
+            console.log("socket closed", e);
+        };
+
+        socket.onmessage = function (e) {
+            console.log(e);
+            $('#msgs').append(e.data + '<br />');
+        };
+
+        socket.onerror = function (e) {
+            console.error(e.data);
+        };
+
+        $('#MessageField').keypress(function (e) {
+            if (e.which != 13) {
+                return;
             }
-       
 
-                socket.onmessage = function (event) {
-                    var result = JSON.parse(event.data);
-                    var name = result.Sender;
-                    var message = result.Message;
-                    var item = document.createElement("li");
-                    item.appendChild(document.createTextNode((name + ": " + message)));
-                    list.appendChild(item);
-                };
+            e.preventDefault();
 
-        }
-        else{
-            document.getElementById('test').innerHTML = "Bye" //this is a test
-
-        }
-        
+            var message = userName + ": " + $('#MessageField').val();
+            socket.send(message);
+            $('#MessageField').val('');
+        });
+    });
     </script>
+}
