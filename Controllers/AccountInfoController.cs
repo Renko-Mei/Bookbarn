@@ -103,12 +103,13 @@ namespace BookBarn.Controllers
         public async Task<IActionResult> ChangePassword()
         {
             var user = await userManager.GetUserAsync(User);
-
-            var hasPassword = await userManager.HasPasswordAsync(user);
             if(user == null){
                 Response.StatusCode = 401;
                 return View("NotLoggedIn");
             }
+
+            var hasPassword = await userManager.HasPasswordAsync(user);
+            
             var model = new ChangePasswordViewModel { StatusMessage = StatusMessage };
             return View(model);
         }
@@ -140,16 +141,18 @@ namespace BookBarn.Controllers
             return RedirectToAction(nameof(ChangePassword));
         }
 
-        // [HttpGet]
-        // public async Task<IActionResult> AddressChange()
-        // {
-        //     var user = await userManager.GetUserAsync(User);
+        [HttpGet]
+        public async Task<IActionResult> AddressChange()
+        {
+            var user = await userManager.GetUserAsync(User);
 
-        //     var hasPassword = await userManager.HasPasswordAsync(user);
-
-        //     var model = new AddressViewModel { StatusMessage = StatusMessage };
-        //     return View(model);
-        // }
+            if(user ==null){
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
+            }
+            var model = new AddressViewModel { StatusMessage = StatusMessage };
+            return View(model);
+        }
 
 
     }
