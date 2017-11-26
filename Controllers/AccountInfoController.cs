@@ -141,19 +141,19 @@ namespace BookBarn.Controllers
             return RedirectToAction(nameof(ChangePassword));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ChangeAddress()
-        {
-            var user = await userManager.GetUserAsync(User);
+        // [HttpGet]
+        // public async Task<IActionResult> ChangeAddress()
+        // {
+        //     var user = await userManager.GetUserAsync(User);
 
-            if(user ==null){
-                Response.StatusCode = 401;
-                return View("NotLoggedIn");
-            }
+        //     if(user ==null){
+        //         Response.StatusCode = 401;
+        //         return View("NotLoggedIn");
+        //     }
 
-            var model = new AddressViewModel { StatusMessage = StatusMessage };
-            return View(model);
-        }
+        //     var model = new AddressViewModel { StatusMessage = StatusMessage };
+        //     return View(model);
+        // }
 
         // [HttpPost]
         // [ValidateAntiForgeryToken]
