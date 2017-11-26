@@ -13,8 +13,8 @@ namespace BookBarn.Models
     public bool IsSold { get; set; }
 
     public List<SaleItem> SaleItems { get; set; }
-    public int BuyerId { get; set; }
-    public int SellerId { get; set; }
+    public String BuyerId { get; set; }
+    public String SellerId { get; set; }
   }
 }
 

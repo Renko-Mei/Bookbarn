@@ -186,12 +186,12 @@ namespace BookBarn.Controllers
             SearchViewModel searchVm;
 
             var resultSet = from si in _context.SaleItem
-                            join b in _context.Book on si.BookId equals b.BookId
+                            join b in _context.Book on si.Isbn equals b.Isbn
                             select new SearchResultViewModel
                             {
                                 Title = b.Title,
                                 Author = b.Author,
-                                Quality = si.Quality,
+                                Quality = si.Quality.ToString(),
                                 Price = si.Price,
                                 ISBN = b.Isbn,
                                 SaleItemID = si.SaleItemId,

@@ -15,8 +15,6 @@ using Microsoft.Extensions.Options;
 using BookBarn.Services;
 using BookBarn.Data;
 
-
-
 namespace BookBarn.Controllers
 {
     public class UserController : Controller
