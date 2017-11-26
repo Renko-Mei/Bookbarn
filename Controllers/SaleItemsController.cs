@@ -12,6 +12,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using BookBarn.Utilities;
 
 namespace BookBarn.Controllers
 {
@@ -69,7 +70,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,IsSold,BookId,Image")] SaleItem saleItem, IFormFile files)
+        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,IsSold,Isbn,Image")] SaleItem saleItem, IFormFile files)
         {
             if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
@@ -81,8 +82,15 @@ namespace BookBarn.Controllers
                         saleItem.Image = memoryStream.ToArray();
                     }
                 }
-                _context.Add(saleItem);
-                await _context.SaveChangesAsync();
+                if (Isbn.IsValidIsbn(saleItem.Isbn))
+                {
+                    _context.Add(saleItem);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid ISBN");
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(saleItem);
@@ -112,7 +120,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SaleItemId,Price,Quality,IsSold,BookId")] SaleItem saleItem)
+        public async Task<IActionResult> Edit(int id, [Bind("SaleItemId,Price,Quality,Isbn,BookId")] SaleItem saleItem)
         {
             if (id != saleItem.SaleItemId)
             {
@@ -186,12 +194,12 @@ namespace BookBarn.Controllers
             SearchViewModel searchVm;
 
             var resultSet = from si in _context.SaleItem
-                            join b in _context.Book on si.BookId equals b.BookId
+                            join b in _context.Book on si.Isbn equals b.Isbn
                             select new SearchResultViewModel
                             {
                                 Title = b.Title,
                                 Author = b.Author,
-                                Quality = si.Quality,
+                                Quality = si.Quality.ToString(),
                                 Price = si.Price,
                                 ISBN = b.Isbn,
                                 SaleItemID = si.SaleItemId,
