@@ -14,17 +14,19 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Isbn" class="control-label"></label>
-                <input asp-for="Isbn" class="form-control" />
-                <span asp-validation-for="Isbn" class="text-danger"></span>
+                <input asp-for="Isbn" class="form-control" id="ISBN"/>
+                <span asp-validation-for="Isbn" class="text-danger"></span><br>
+                <button type="button" class="btn btn-default" id="checkISBN" >Check ISBN</button>
             </div>
+            
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
+                <input asp-for="Title" class="form-control" id="title"/>
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Author" class="control-label"></label>
-                <input asp-for="Author" class="form-control" />
+                <input asp-for="Author" class="form-control" id="author"/>
                 <span asp-validation-for="Author" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -40,4 +42,28 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function checkISBN(){
+            var isbn = document.getElementById("ISBN").value;
+            var url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`;
+            //document.getElementById("title").value = url;
+            $.ajax({
+                url: url,
+                dataType: "json",
+                success: function(data){
+                   var title = data.items[0].volumeInfo.title;
+                   var author = data.items[0].volumeInfo.authors;
+                    document.getElementById("title").value = title;
+                    document.getElementById("author").value = author;
+                },
+
+                type: 'GET'
+            });
+
+        }
+
+       document.getElementById("checkISBN").addEventListener('click', checkISBN);
+    </script>
 }
+
+
