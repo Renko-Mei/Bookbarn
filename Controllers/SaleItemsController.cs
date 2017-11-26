@@ -181,19 +181,17 @@ namespace BookBarn.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Search(string searchType, string searchString, string sortType)
+        public async Task<IActionResult> Search(string searchType, string searchString, string sortType, string title, string author, string isbn, float minPrice, float maxPrice)
         {
             SearchViewModel searchVm;
 
             var resultSet = from si in _context.SaleItem
-                            join b in _context.Book on si.BookId equals b.BookId
+                            join b in _context.Book on si.Isbn equals b.Isbn
                             select new SearchResultViewModel
                             {
                                 Title = b.Title,
-                                AuthorFirst = b.AuthorFirstName,
-                                AuthorLast = b.AuthorLastName,
-                                Author = b.AuthorFirstName + " " + b.AuthorLastName,
-                                Quality = si.Quality,
+                                Author = b.Author,
+                                Quality = si.Quality.ToString(),
                                 Price = si.Price,
                                 ISBN = b.Isbn,
                                 SaleItemID = si.SaleItemId,
@@ -229,25 +227,52 @@ namespace BookBarn.Controllers
                 {
                     resultSet = resultSet.OrderBy(sr => sr.Price);
                 }
-                else if (sortType.Equals("title"))
+                if (sortType.Equals("title"))
                 {
                     resultSet = resultSet.OrderBy(sr => sr.Title);
                 }
-                else if (sortType.Equals("authorFirst"))
+                if (sortType.Equals("author"))
                 {
-                    resultSet = resultSet.OrderBy(sr => sr.AuthorFirst);
-                }
-                else if (sortType.Equals("authorLast"))
-                {
-                    resultSet = resultSet.OrderBy(sr => sr.AuthorLast);
+                    resultSet = resultSet.OrderBy(sr => sr.Author);
                 }
             }
 
+            //Advanced search
+            if (!String.IsNullOrWhiteSpace(title))
+            {
+                resultSet = resultSet.Where(sr => sr.Title.ToLowerInvariant().Contains(title.ToLower()));
+            }
+            if (!String.IsNullOrWhiteSpace(author))
+            {
+                resultSet = resultSet.Where(sr => sr.Author.ToLowerInvariant().Contains(author.ToLower()));
+            }
+            if (!String.IsNullOrWhiteSpace(isbn))
+            {
+                resultSet = resultSet.Where(sr => sr.ISBN.ToLowerInvariant().Contains(isbn.ToLower()));
+            }
+            if (!float.IsNaN(minPrice))
+            {
+                resultSet = resultSet.Where(sr => sr.Price >= minPrice);
+            }
+            if (!float.IsNaN(maxPrice) && maxPrice > 0 && maxPrice >= minPrice)
+            {
+                resultSet = resultSet.Where(sr => sr.Price <= maxPrice);
+            }
+            
             searchVm = new SearchViewModel()
             {
                 SearchResults = await resultSet.ToListAsync()
             };
             
+            return View(searchVm);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> AdvancedSearch(string searchType, string searchString, string sortType, string titleString)
+        {
+            SearchViewModel searchVm;
+            searchVm = new SearchViewModel();
+
             return View(searchVm);
         }
 

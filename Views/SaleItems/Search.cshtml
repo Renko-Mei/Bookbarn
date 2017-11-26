@@ -16,7 +16,7 @@
 			<option value="isbn">ISBN</option>
 		</select>
 
-		<input type="text" name="searchString" />
+		<input type="text" name="searchString" value= "@Context.Request.Query["searchString"]" />
 		<input type="submit" value="Search" />
 
 		<div>
@@ -27,7 +27,9 @@
 				<option value="authorLast">Author - Last Name: A-Z</option>
 				<option value="price">Price: Lowest first</option>
 			</select>
-		</div>
+			<div>
+				<a asp-action="AdvancedSearch">Advanced Search</a>
+			</div>
 	</form>
 </div>
 
