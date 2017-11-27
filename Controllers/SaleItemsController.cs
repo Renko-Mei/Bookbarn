@@ -69,8 +69,11 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,IsSold,BookId,Image")] SaleItem saleItem, IFormFile files)
+        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,Image, BookId")] SaleItem saleItem, IFormFile files, int BookId)
         {
+            var test = BookId;
+            Console.WriteLine(test);
+            Console.WriteLine("-----------------------------------`s`-------------------------------");
             if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
                 if (files != null)
@@ -82,6 +85,7 @@ namespace BookBarn.Controllers
                     }
                 }
                 _context.Add(saleItem);
+                saleItem.BookId = BookId;
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
