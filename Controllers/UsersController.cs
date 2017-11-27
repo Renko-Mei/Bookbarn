@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using BookBarn.Models.IdentityViewModels;
 using Microsoft.AspNetCore.Authentication;
+
 using Microsoft.Extensions.Options;
 using BookBarn.Services;
 using BookBarn.Data;
@@ -26,6 +27,7 @@ namespace BookBarn.Controllers
         private readonly IEmailSender emailSender;
 
         private readonly AuthenticationContext context;
+
 
 
         public UserController(UserManager<User> userManager,
@@ -181,6 +183,13 @@ namespace BookBarn.Controllers
             }
         }
 
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (IdentityError error in result.Errors)
+            {
+                ModelState.TryAddModelError("", error.Description);
+            }
+        }
         
        //send confirmation Email
         [HttpGet]
@@ -285,7 +294,6 @@ namespace BookBarn.Controllers
         {
             return View();
         }
- 
     }
 }
 
