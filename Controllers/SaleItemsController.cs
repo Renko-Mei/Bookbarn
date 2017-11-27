@@ -70,13 +70,9 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-<<<<<<< HEAD
-        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,IsSold,Isbn,Image")] SaleItem saleItem, IFormFile files)
-=======
-        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,Image, BookId")] SaleItem saleItem, IFormFile files, int BookId)
->>>>>>> 9a146eb47d0dac6f52d5a32b8fb4e6879fbb26dd
+        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,Image, BookId")] SaleItem saleItem, IFormFile files, string isbn)
         {
-            var test = BookId;
+            var test = isbn;
             Console.WriteLine(test);
             Console.WriteLine("-----------------------------------`s`-------------------------------");
             if (ModelState.IsValid && User.Identity.IsAuthenticated)
@@ -89,21 +85,9 @@ namespace BookBarn.Controllers
                         saleItem.Image = memoryStream.ToArray();
                     }
                 }
-<<<<<<< HEAD
-                if (Isbn.IsValidIsbn(saleItem.Isbn))
-                {
-                    _context.Add(saleItem);
-                    await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid ISBN");
-                }
-=======
                 _context.Add(saleItem);
-                saleItem.BookId = BookId;
+                saleItem.Isbn = isbn;
                 await _context.SaveChangesAsync();
->>>>>>> 9a146eb47d0dac6f52d5a32b8fb4e6879fbb26dd
                 return RedirectToAction(nameof(Index));
             }
             return View(saleItem);

@@ -57,7 +57,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,Isbn,Title,Author")] Book book)
+        public async Task<IActionResult> Create([Bind("Isbn,Title,Author")] Book book)
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -79,7 +79,7 @@ namespace BookBarn.Controllers
                 }
 
                 // https://stackoverflow.com/questions/1257482/redirecttoaction-with-parameter
-                return RedirectToAction("Create","SaleItems", new {@BookId=book.BookId});
+                return RedirectToAction("Create","SaleItems", new {@Isbn=book.Isbn});
             }
             return View(book);
         }
