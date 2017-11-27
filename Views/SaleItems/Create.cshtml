@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h2 style="margin-top:60px">Add a book to sell</h2>
+<h2 style="margin-top:60px">Add details</h2>
 
 <hr />
 <div class="row">
@@ -25,7 +25,7 @@
 					<option value="USED_VERY_OLD">Used - Very old/Poor</option>
 				</select>
             </div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <div class="checkbox">
                     <label>
                         <input asp-for="IsSold" /> @Html.DisplayNameFor(model => model.IsSold)
@@ -33,10 +33,17 @@
                 </div>
             </div>
             <div class="form-group">
+<<<<<<< HEAD
                 <label asp-for="Isbn" class="control-label"></label>
                 <input asp-for="Isbn" class="form-control" />
                 <span asp-validation-for="Isbn" class="text-danger"></span>
             </div>
+=======
+                <label asp-for="BookId" class="control-label"></label>
+                <input asp-for="BookId" class="form-control" />
+                <span asp-validation-for="BookId" class="text-danger"></span>
+            </div> *@
+>>>>>>> 9a146eb47d0dac6f52d5a32b8fb4e6879fbb26dd
 
 			<div class="form-group">
 				<label asp-for="Image" class="control-label"></label>
