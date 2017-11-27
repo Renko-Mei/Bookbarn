@@ -15,6 +15,7 @@ namespace BookBarn.Models.SearchViewModels
         public string title { get; set; }
         public string author { get; set; }
         public string isbn { get; set; }
+        public string quality { get; set; }
         public float minPrice { get; set; }
         public float maxPrice { get; set; }
     }

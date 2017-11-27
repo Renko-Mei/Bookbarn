@@ -1,0 +1,13 @@
+﻿img {
+    max-height: 150px;
+    max-width: 150px;
+    height: auto;
+    width: auto;
+}
+
+.image > img:hover {
+    max-height: 500px;
+    max-width: 500px;
+    height: auto;
+    width: auto;
+}
