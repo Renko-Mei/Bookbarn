@@ -59,8 +59,6 @@ We have created our data model & set up the entities and relationships.
 
 # Technology Stack
  - ASP.NET Core 2.0 MVC
- - React.js
- - Typescript for React.js
  - jQuery
  - Bootstrap
  - Chart.js
