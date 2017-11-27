@@ -27,16 +27,16 @@ namespace BookBarn.Controllers
         }
 
         // GET: Books/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string isbn)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(isbn))
             {
               Response.StatusCode = 404;
               return View("NotFound");
             }
 
             var book = await _context.Book
-                .SingleOrDefaultAsync(m => m.BookId == id);
+                .SingleOrDefaultAsync(m => m.Isbn == isbn);
             if (book == null)
             {
               Response.StatusCode = 404;
@@ -77,15 +77,15 @@ namespace BookBarn.Controllers
         }
 
         // GET: Books/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string isbn)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(isbn))
             {
               Response.StatusCode = 404;
               return View("NotFound");
             }
 
-            var book = await _context.Book.SingleOrDefaultAsync(m => m.BookId == id);
+            var book = await _context.Book.SingleOrDefaultAsync(m => m.Isbn == isbn);
             if (book == null)
             {
               Response.StatusCode = 404;
@@ -99,9 +99,9 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookId,Isbn,Title,Author")] Book book)
+        public async Task<IActionResult> Edit(string isbn, [Bind("BookId,Isbn,Title,Author")] Book book)
         {
-            if (id != book.BookId)
+            if (isbn != book.Isbn)
             {
               Response.StatusCode = 404;
               return View("NotFound");
@@ -120,7 +120,7 @@ namespace BookBarn.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BookExists(book.BookId))
+                    if (!BookExists(book.Isbn))
                     {
                       Response.StatusCode = 404;
                       return View("NotFound");
@@ -136,16 +136,16 @@ namespace BookBarn.Controllers
         }
 
         // GET: Books/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string isbn)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(isbn))
             {
               Response.StatusCode = 404;
               return View("NotFound");
             }
 
             var book = await _context.Book
-                .SingleOrDefaultAsync(m => m.BookId == id);
+                .SingleOrDefaultAsync(m => m.Isbn == isbn);
             if (book == null)
             {
               Response.StatusCode = 404;
@@ -158,17 +158,17 @@ namespace BookBarn.Controllers
         // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string isbn)
         {
-            var book = await _context.Book.SingleOrDefaultAsync(m => m.BookId == id);
+            var book = await _context.Book.SingleOrDefaultAsync(m => m.Isbn == isbn);
             _context.Book.Remove(book);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BookExists(int id)
+        private bool BookExists(string isbn)
         {
-            return _context.Book.Any(e => e.BookId == id);
+            return _context.Book.Any(e => e.Isbn == isbn);
         }
     }
 }
