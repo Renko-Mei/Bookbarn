@@ -105,7 +105,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string isbn, [Bind("BookId,Isbn,Title,Author")] Book book)
+        public async Task<IActionResult> Edit(string isbn, [Bind("Isbn,Title,Author")] Book book)
         {
             if (isbn != book.Isbn)
             {
