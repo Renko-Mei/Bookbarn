@@ -49,7 +49,14 @@ namespace BookBarn.Controllers
         // GET: Books/Create
         public IActionResult Create()
         {
+          if (!User.Identity.IsAuthenticated)
+          {
+            Response.StatusCode = 401;
+            return View("NotLoggedIn");
+          }
+          else {
             return View();
+          }
         }
 
         // POST: Books/Create
@@ -59,12 +66,6 @@ namespace BookBarn.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BookId,Isbn,Title,Author")] Book book)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-              Response.StatusCode = 401;
-              return View("NotLoggedIn");
-            }
-
             if (ModelState.IsValid)
             {
                 if (Isbn.IsValidIsbn(book.Isbn))
@@ -77,9 +78,6 @@ namespace BookBarn.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "Invalid ISBN");
                 }
-
-                // https://stackoverflow.com/questions/1257482/redirecttoaction-with-parameter
-                return RedirectToAction("Create","SaleItems", new {@BookId=book.BookId});
             }
             return View(book);
         }

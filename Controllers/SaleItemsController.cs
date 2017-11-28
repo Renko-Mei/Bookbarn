@@ -1,4 +1,4 @@
-1using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -72,9 +72,6 @@ namespace BookBarn.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,Isbn,Image")] SaleItem saleItem, IFormFile files)
         {
-            var test = BookId;
-            Console.WriteLine(test);
-            Console.WriteLine("-----------------------------------`s`-------------------------------");
             if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
                 if (files != null)
