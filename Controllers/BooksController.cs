@@ -64,7 +64,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,Isbn,Title,Author")] Book book)
+        public async Task<IActionResult> Create([Bind("Isbn,Title,Author")] Book book)
         {
             if (ModelState.IsValid)
             {
