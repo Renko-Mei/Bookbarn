@@ -18,8 +18,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Quality" class="control-label"></label>
-                <input asp-for="Quality" class="form-control" />
-                <span asp-validation-for="Quality" class="text-danger"></span>
+				<select asp-for="Quality" >
+					<option value="NEW">New</option>
+					<option value="USED_LIKE_NEW">Used - Like new</option>
+					<option value="USED_OLD">Used - Old</option>
+					<option value="USED_VERY_OLD">Used - Very old/Poor</option>
+				</select>
             </div>
             @* <div class="form-group">
                 <div class="checkbox">
@@ -27,12 +31,12 @@
                         <input asp-for="IsSold" /> @Html.DisplayNameFor(model => model.IsSold)
                     </label>
                 </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="BookId" class="control-label"></label>
-                <input asp-for="BookId" class="form-control" />
-                <span asp-validation-for="BookId" class="text-danger"></span>
             </div> *@
+            <div class="form-group">
+                <label asp-for="Isbn" class="control-label"></label>
+                <input asp-for="Isbn" class="form-control" />
+                <span asp-validation-for="Isbn" class="text-danger"></span>
+            </div>
 
 			<div class="form-group">
 				<label asp-for="Image" class="control-label"></label>

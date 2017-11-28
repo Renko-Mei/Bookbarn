@@ -4,6 +4,8 @@
     ViewData["Title"] = "Details";
 }
 
+<link rel="stylesheet" href="~/css/SaleItem.css" />
+
 <h2 style="margin-top:50px">Details</h2>
 
 <div>
@@ -29,11 +31,22 @@
             @Html.DisplayFor(model => model.IsSold)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.BookId)
+            @Html.DisplayNameFor(model => model.Isbn)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.BookId)
+            @Html.DisplayFor(model => model.Isbn)
         </dd>
+		<dt>
+			@Html.DisplayNameFor(model => model.Image)	
+		</dt>	
+		<dd>
+			<div class="image">
+				@if (Model.Image != null && Model.Image.Length > 0)
+				{
+					<img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.Image))" />
+				}
+			</div>
+		</dd>
     </dl>
 </div>
 <div>

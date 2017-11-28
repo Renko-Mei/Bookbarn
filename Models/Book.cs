@@ -5,8 +5,7 @@ namespace BookBarn.Models
 {
     public class Book
     {
-        public int BookId { get; set; }
-        [Required]
+        [Key]
         [Display(Name = "ISBN")]
         public string Isbn { get; set; }
         [Required]

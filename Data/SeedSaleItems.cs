@@ -20,24 +20,24 @@ namespace BookBarn.Data
                 {
                     context.SaleItem.AddRange
                     (
-                        //new SaleItem
-                        //{
-                        //    Isbn = "0495012408",
-                        //    Title = "Student Solutions Manual for Stewart's / Single Variable Calculus: Early Transcendentals",
-                        //    Author = "James Stewart"
-                        //},
-                        //new SaleItem
-                        //{
-                        //    Isbn = "978-3-319-66966-3",
-                        //    Title = "Introduction to Compiler Design",
-                        //    Author = "Torben Ægidius Mogensen"
-                        //},
-                        //new SaleItem
-                        //{
-                        //    Isbn = "",
-                        //    Title = "Metaprogramming Ruby 2: Program Like the Ruby Pros",
-                        //    Author = "Paolo Perrotta"
-                        //}
+                       new SaleItem
+                       {
+                           Isbn = "0495012408",
+                           Quality = SaleItem.BookQuality.NEW,
+                           Price = 10.5f
+                       },
+                       new SaleItem
+                       {
+                           Isbn = "978-3-319-66966-3",
+                           Quality = SaleItem.BookQuality.USED_LIKE_NEW,
+                           Price = 5.25f
+                       },
+                       new SaleItem
+                       {
+                           Isbn = "978-1-94122-212-6",
+                           Quality = SaleItem.BookQuality.USED_OLD,
+                           Price = 6.66f
+                       }
                     );
                     context.SaveChanges();
                 }

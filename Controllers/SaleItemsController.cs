@@ -1,4 +1,4 @@
-using System;
+1using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +12,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using BookBarn.Utilities;
 
 namespace BookBarn.Controllers
 {
@@ -69,7 +70,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,Image, BookId")] SaleItem saleItem, IFormFile files, int BookId)
+        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,Isbn,Image")] SaleItem saleItem, IFormFile files)
         {
             var test = BookId;
             Console.WriteLine(test);
@@ -84,9 +85,16 @@ namespace BookBarn.Controllers
                         saleItem.Image = memoryStream.ToArray();
                     }
                 }
-                _context.Add(saleItem);
-                saleItem.BookId = BookId;
-                await _context.SaveChangesAsync();
+                if (Isbn.IsValidIsbn(saleItem.Isbn))
+                {
+                    saleItem.IsSold = false;
+                    _context.Add(saleItem);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid ISBN");
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(saleItem);
@@ -116,7 +124,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SaleItemId,Price,Quality,IsSold,BookId")] SaleItem saleItem)
+        public async Task<IActionResult> Edit(int id, [Bind("SaleItemId,Price,Quality,Isbn,BookId")] SaleItem saleItem)
         {
             if (id != saleItem.SaleItemId)
             {
@@ -185,17 +193,17 @@ namespace BookBarn.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Search(string searchType, string searchString, string sortType, string title, string author, string isbn, float minPrice, float maxPrice)
+        public async Task<IActionResult> Search(string searchType, string searchString, string sortType, string title, string author, string isbn, string quality, float minPrice, float maxPrice)
         {
             SearchViewModel searchVm;
 
             var resultSet = from si in _context.SaleItem
-                            join b in _context.Book on si.BookId equals b.BookId
+                            join b in _context.Book on si.Isbn equals b.Isbn
                             select new SearchResultViewModel
                             {
                                 Title = b.Title,
                                 Author = b.Author,
-                                Quality = si.Quality,
+                                Quality = si.Quality.ToString(),
                                 Price = si.Price,
                                 ISBN = b.Isbn,
                                 SaleItemID = si.SaleItemId,
@@ -253,6 +261,10 @@ namespace BookBarn.Controllers
             if (!String.IsNullOrWhiteSpace(isbn))
             {
                 resultSet = resultSet.Where(sr => sr.ISBN.ToLowerInvariant().Contains(isbn.ToLower()));
+            }
+            if (!String.IsNullOrEmpty(quality))
+            {
+                resultSet = resultSet.Where(sr => sr.Quality.Contains(quality));
             }
             if (!float.IsNaN(minPrice))
             {

@@ -35,6 +35,7 @@
     "@types/chart.js": "^2.7.0",
     "@types/react-chartjs-2": "^2.0.2",
     "chart.js": "^2.7.1",
+    "qqface": "^0.1.2",
     "react": "^15.4.2",
     "react-chartjs-2": "^2.6.4",
     "react-dom": "^15.4.2"
