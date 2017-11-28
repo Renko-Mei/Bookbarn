@@ -121,7 +121,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SaleItemId,Price,Quality,Isbn,BookId")] SaleItem saleItem)
+        public async Task<IActionResult> Edit(int id, [Bind("SaleItemId,Price,Quality,Isbn")] SaleItem saleItem)
         {
             if (id != saleItem.SaleItemId)
             {
@@ -271,12 +271,12 @@ namespace BookBarn.Controllers
             {
                 resultSet = resultSet.Where(sr => sr.Price <= maxPrice);
             }
-            
+
             searchVm = new SearchViewModel()
             {
                 SearchResults = await resultSet.ToListAsync()
             };
-            
+
             return View(searchVm);
         }
 

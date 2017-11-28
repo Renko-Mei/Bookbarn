@@ -49,7 +49,14 @@ namespace BookBarn.Controllers
         // GET: Books/Create
         public IActionResult Create()
         {
+          if (!User.Identity.IsAuthenticated)
+          {
+            Response.StatusCode = 401;
+            return View("NotLoggedIn");
+          }
+          else {
             return View();
+          }
         }
 
         // POST: Books/Create
@@ -57,7 +64,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,Isbn,Title,Author")] Book book)
+        public async Task<IActionResult> Create([Bind("Isbn,Title,Author")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -71,7 +78,6 @@ namespace BookBarn.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "Invalid ISBN");
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(book);
         }
@@ -99,7 +105,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string isbn, [Bind("BookId,Isbn,Title,Author")] Book book)
+        public async Task<IActionResult> Edit(string isbn, [Bind("Isbn,Title,Author")] Book book)
         {
             if (isbn != book.Isbn)
             {

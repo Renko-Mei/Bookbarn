@@ -26,12 +26,5 @@ namespace BookBarn.Data
 
         public DbSet<BookBarn.Models.ShoppingCart> ShoppingCart { get; set; }
 
-        // protected override void OnModelCreating(ModelBuilder modelBuilder)
-        // {
-        //     modelBuilder.Entity<SaleItem>()
-        //         .HasOne(b => b.Book)
-        //         .WithMany(s => s.SaleItems)
-        //         .HasForeignKey(s => s.BookId);
-        // }
     }
 }
