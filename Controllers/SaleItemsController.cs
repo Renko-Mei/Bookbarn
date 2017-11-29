@@ -70,7 +70,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,IsSold,Isbn,Image")] SaleItem saleItem, IFormFile files)
+        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,Isbn,Image")] SaleItem saleItem, IFormFile files)
         {
             if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
@@ -84,6 +84,7 @@ namespace BookBarn.Controllers
                 }
                 if (Isbn.IsValidIsbn(saleItem.Isbn))
                 {
+                    saleItem.IsSold = false;
                     _context.Add(saleItem);
                     await _context.SaveChangesAsync();
                 }
@@ -120,7 +121,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SaleItemId,Price,Quality,Isbn,BookId")] SaleItem saleItem)
+        public async Task<IActionResult> Edit(int id, [Bind("SaleItemId,Price,Quality,Isbn")] SaleItem saleItem)
         {
             if (id != saleItem.SaleItemId)
             {
@@ -270,12 +271,12 @@ namespace BookBarn.Controllers
             {
                 resultSet = resultSet.Where(sr => sr.Price <= maxPrice);
             }
-            
+
             searchVm = new SearchViewModel()
             {
                 SearchResults = await resultSet.ToListAsync()
             };
-            
+
             return View(searchVm);
         }
 

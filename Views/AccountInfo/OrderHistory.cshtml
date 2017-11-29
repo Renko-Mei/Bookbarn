@@ -1,0 +1,38 @@
+@using BookBarn.Views.AccountInfo
+
+@model IEnumerable<BookBarn.Models.Order>
+
+@{
+    ViewData["Title"] = "Your Order History";
+    ViewData.AddActivePage(NavigationBarPages.OrderHistory);
+}
+<h4>@ViewData["Title"]</h4>
+
+<h5>You Bought</h5>
+<table>
+    <thead>
+        <th>Total</th>
+        
+        <th>Order Date</th>
+    </thead>
+
+    @foreach(var item in Model)
+    {
+
+        <tr>
+        <td>@item.SalePrice.ToString("c0")</td> 
+        <td>@item.OrderDate.ToString("dd MMM yyyy")</td>
+        </tr>
+        @if(item.SaleItems != null)
+        {
+            @foreach(var saleItem in @item.SaleItems)
+            {
+                <tr>
+                    <td>@saleItem.Isbn</td>
+                    <td>@saleItem.Quality</td>
+                </tr>
+            }
+        }
+    }
+</table>
+
