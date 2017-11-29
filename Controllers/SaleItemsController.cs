@@ -36,8 +36,13 @@ namespace BookBarn.Controllers
         // GET: SaleItems
         public async Task<IActionResult> Index()
         {
+
+            var temp = await _context.SaleItem.ToListAsync();
+            var viewList = from a in temp
+                        where a.UserKey == UserID()
+                        select a;
            
-           return View(await _context.SaleItem.ToListAsync());
+           return View(viewList);
            //Select(c =>c.UserKey==UserID()).ToListAsync());
             //return View(await _context.SaleItem.ToListAsync());
         }
