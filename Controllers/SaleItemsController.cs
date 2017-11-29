@@ -43,8 +43,6 @@ namespace BookBarn.Controllers
                         select a;
            
            return View(viewList);
-           //Select(c =>c.UserKey==UserID()).ToListAsync());
-            //return View(await _context.SaleItem.ToListAsync());
         }
 
         // GET: SaleItems/Details/5
@@ -63,8 +61,17 @@ namespace BookBarn.Controllers
               Response.StatusCode = 404;
               return View("NotFound");
             }
+            if(saleItem.UserKey==UserID()){
+                return View(saleItem);
+            }
+            else{
+                return View("NoAccess");
+            }
+            // ViewData["LogInId"] = UserID();
+            // ViewData["saleId"] = saleItem.UserKey;
+            // return View(saleItem);
 
-            return View(saleItem);
+            
         }
 
         // GET: SaleItems/Create
