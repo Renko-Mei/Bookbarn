@@ -19,16 +19,27 @@ namespace BookBarn.Controllers
     public class SaleItemsController : Controller
     {
         private readonly InitialModelsContext _context;
+        private readonly AuthenticationContext _Acontext;
 
-        public SaleItemsController(InitialModelsContext context)
+        public SaleItemsController(InitialModelsContext context, AuthenticationContext Acontext)
         {
             _context = context;
+            _Acontext = Acontext;
         }
+
+        public string UserID()
+        {
+            return _Acontext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Id;
+        }
+
 
         // GET: SaleItems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SaleItem.ToListAsync());
+           
+           return View(await _context.SaleItem.ToListAsync());
+           //Select(c =>c.UserKey==UserID()).ToListAsync());
+            //return View(await _context.SaleItem.ToListAsync());
         }
 
         // GET: SaleItems/Details/5
@@ -70,7 +81,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,Isbn,Image")] SaleItem saleItem, IFormFile files)
+        public async Task<IActionResult> Create([Bind("SaleItemId,Price,IsSold,Quality,Isbn,Image,UserKey,Title,Subtitle,Authors,Publisher,PublishedData,Description,Isbn10Or13,ImageLinks")] SaleItem saleItem, IFormFile files)
         {
             if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
@@ -85,6 +96,7 @@ namespace BookBarn.Controllers
                 if (Isbn.IsValidIsbn(saleItem.Isbn))
                 {
                     saleItem.IsSold = false;
+                    saleItem.UserKey = UserID();
                     _context.Add(saleItem);
                     await _context.SaveChangesAsync();
                 }
@@ -121,7 +133,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SaleItemId,Price,Quality,Isbn")] SaleItem saleItem)
+        public async Task<IActionResult> Edit(int id, [Bind("SaleItemId,Price,IsSold,Quality,Isbn,Image,UserKey,Title,Subtitle,Authors,Publisher,PublishedData,Description,Isbn10Or13,ImageLinks")] SaleItem saleItem)
         {
             if (id != saleItem.SaleItemId)
             {

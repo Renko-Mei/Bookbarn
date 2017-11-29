@@ -26,7 +26,7 @@ namespace BookBarn.Services
                 mimeMessage.To.Add(new MailboxAddress(ToAdressTitle, ToAddress));
                 mimeMessage.Subject = Subject;
                 var builder = new BodyBuilder();
-                builder.TextBody = @"Dear seller,";
+                builder.TextBody = @"This is an important message from BookBarn Canada";
                 builder.HtmlBody = BodyContent;
                 mimeMessage.Body = builder.ToMessageBody();
                 using (var client = new SmtpClient())

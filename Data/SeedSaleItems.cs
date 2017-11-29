@@ -24,19 +24,22 @@ namespace BookBarn.Data
                        {
                            Isbn = "0495012408",
                            Quality = SaleItem.BookQuality.NEW,
-                           Price = 10.5f
+                           Price = 10.6f,
+                           Title = "test"
                        },
                        new SaleItem
                        {
-                           Isbn = "978-3-319-66966-3",
+                           Isbn = "9783319669663",
                            Quality = SaleItem.BookQuality.USED_LIKE_NEW,
-                           Price = 5.25f
+                           Price = 5.25f,
+                           Title = "test2"
                        },
                        new SaleItem
                        {
-                           Isbn = "978-1-94122-212-6",
+                           Isbn = "9781941222126",
                            Quality = SaleItem.BookQuality.USED_OLD,
-                           Price = 6.66f
+                           Price = 6.66f,
+                           Title = "test3"
                        }
                     );
                     context.SaveChanges();

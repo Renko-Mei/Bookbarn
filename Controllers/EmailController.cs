@@ -52,7 +52,7 @@ namespace BookBarn.Controllers
             message.To.Add(new MailboxAddress("mark", customerEmail));//this should be changed to seller email
             message.Subject = "test mail in asp.net core";
             var builder = new BodyBuilder();
-            builder.TextBody = @"Dear seller,";
+            builder.TextBody = @"Dear seller, you have received an email request from your customer";
             if(customerPhoneNumber ==null){
                 customerPhoneNumber = "not provided";
             }
