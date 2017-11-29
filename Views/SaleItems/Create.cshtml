@@ -58,6 +58,9 @@
 				<label asp-for="Image" class="control-label"></label>
 				<input type="file" name="files" multiple />
 			</div>
+            <div style="display: none" id="ImageDiv">
+                <img src='' id="RealImage">
+            </div>
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -98,6 +101,7 @@
                 <input asp-for="Description" class="form-control" id="Description"/>
                 <span asp-validation-for="Description" class="text-danger"></span>
         </div>
+        
         <div class="form-group">
                 <label asp-for="Isbn10Or13" class="control-label"></label>
                 <input asp-for="Isbn10Or13" class="form-control" id="Isbn10Or13"/>
@@ -105,7 +109,7 @@
         </div>
         <div class="form-group">
                 <label asp-for="ImageLinks" class="control-label"></label>
-                <input asp-for="ImageLinks" class="form-control" id="imageLinks"/>
+                <input asp-for="ImageLinks" class="form-control" id="ImageLinks"/>
                 <span asp-validation-for="ImageLinks" class="text-danger"></span>
         </div>
     </div>
@@ -120,6 +124,7 @@
     <script>
         function checkISBN(){
             var isbn = document.getElementById("ISBN").value;
+            var isbnLength = isbn.length;
             var url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`;
             //document.getElementById("title").value = url;
             $.ajax({
@@ -132,7 +137,11 @@
                     var publisher = data.items[0].volumeInfo.publisher;
                     var publishedDate = data.items[0].volumeInfo.publishedDate;
                     var description = data.items[0].volumeInfo.description;
-                    var ISBN10 = data.items[0].volumeInfo.description;
+                    var ISBN10Type = data.items[0].volumeInfo.industryIdentifiers[0].type;
+                    var ISBN13Type = data.items[0].volumeInfo.industryIdentifiers[1].type;
+                    var sImageLink = data.items[0].volumeInfo.imageLinks.smallThumbnail;
+                    var ImageLink = data.items[0].volumeInfo.imageLinks.thumbnail;
+                    var substituteISBN;
                     if(String(title) =="undefinied"){
                         title = "unknown";
                     }
@@ -151,6 +160,25 @@
                     if(String(description) == "undefined"){
                         description = "";
                     };
+                    if(isbnLength ==10){
+                        if(ISBN13Type ="ISBN_13"){
+                            substituteISBN = data.items[0].volumeInfo.industryIdentifiers[1].identifier;
+                        }else{
+                            substituteISBN = '';
+                        }
+                    }else{
+                        if(String(ISBN10Type) == "ISBN_10"){
+                            substituteISBN = items[0].volumeInfo.industryIdentifiers[0].identifier;
+                        }else{
+                            substituteISBN='';
+                        }
+                    }
+                    if(String(ImageLink) =="undefined"){
+                        if(String(sImageLink)=="undefined"){
+                            ImageLink = "";
+                        }
+                        ImageLink = sImageLink;
+                    }
 
                     document.getElementById("Title").value = title;
                     document.getElementById("Subtitle").value = subtitle;
@@ -158,9 +186,12 @@
                     document.getElementById("Publisher").value = publisher;
                     document.getElementById("PublishedData").value = publishedDate;
                     document.getElementById("Description").value = description;
-
-
-                    
+                    document.getElementById("Isbn10Or13").value = substituteISBN;
+                    document.getElementById('ImageLinks').value = ImageLink;
+                    if(ImageLink !=''){
+                        document.getElementById('RealImage').src = ImageLink;
+                        document.getElementById('ImageDiv').style.display = 'block';
+                    }  
                 },
                 type: 'GET'
             });
