@@ -12,10 +12,31 @@
         <form method="post" enctype="multipart/form-data" form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <table>
+                    <tr>
+                        <td>
+                            <label asp-for="Isbn" class="control-label"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>    
+                            <input asp-for="Isbn" class="form-control" id="ISBN"/>
+                        </td>
+                        <td style="padding: 15px"></td>
+                        <td>
+                            <button type="button" class="btn btn-default" id="checkISBN">Check ISBN</button>
+                        </td>
+                    </tr>
+                </table>
+                <span asp-validation-for="Isbn" class="text-danger"></span>  
+            </div>
+
+            <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Quality" class="control-label"></label>
 				<select asp-for="Quality" >
@@ -25,6 +46,7 @@
 					<option value="USED_VERY_OLD">Used - Very old/Poor</option>
 				</select>
             </div>
+
             @* <div class="form-group">
                 <div class="checkbox">
                     <label>
@@ -32,12 +54,6 @@
                     </label>
                 </div>
             </div> *@
-            <div class="form-group">
-                <label asp-for="Isbn" class="control-label"></label>
-                <input asp-for="Isbn" class="form-control" />
-                <span asp-validation-for="Isbn" class="text-danger"></span>
-            </div>
-
 			<div class="form-group">
 				<label asp-for="Image" class="control-label"></label>
 				<input type="file" name="files" multiple />
@@ -48,6 +64,51 @@
             </div>
         </form>
     </div>
+    <div class="col-md-4">
+        <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" id="Title"/>
+                <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+                <label asp-for="Subtitle" class="control-label"></label>
+                <input asp-for="Subtitle" class="form-control" id="Subtitle"/>
+                <span asp-validation-for="Subtitle" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+                <label asp-for="Authors" class="control-label"></label>
+                <input asp-for="Authors" class="form-control" id="Authors"/>
+                <span asp-validation-for="Authors" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+                <label asp-for="Publisher" class="control-label"></label>
+                <input asp-for="Publisher" class="form-control" id="Publisher"/>
+                <span asp-validation-for="Publisher" class="text-danger"></span>
+        </div>
+
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+                <label asp-for="PublishedData" class="control-label"></label>
+                <input asp-for="PublishedData" class="form-control" id="PublishedData"/>
+                <span asp-validation-for="PublishedData" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" id="Description"/>
+                <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+                <label asp-for="Isbn10Or13" class="control-label"></label>
+                <input asp-for="Isbn10Or13" class="form-control" id="Isbn10Or13"/>
+                <span asp-validation-for="Isbn10Or13" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+                <label asp-for="ImageLinks" class="control-label"></label>
+                <input asp-for="ImageLinks" class="form-control" id="imageLinks"/>
+                <span asp-validation-for="ImageLinks" class="text-danger"></span>
+        </div>
+    </div>
 </div>
 
 <div>
@@ -56,4 +117,54 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function checkISBN(){
+            var isbn = document.getElementById("ISBN").value;
+            var url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`;
+            //document.getElementById("title").value = url;
+            $.ajax({
+                url: url,
+                dataType: "json",
+                success: function(data){
+                    var title = data.items[0].volumeInfo.title;
+                    var author = data.items[0].volumeInfo.authors;
+                    var subtitle = data.items[0].volumeInfo.subtitle;
+                    var publisher = data.items[0].volumeInfo.publisher;
+                    var publishedDate = data.items[0].volumeInfo.publishedDate;
+                    var description = data.items[0].volumeInfo.description;
+                    var ISBN10 = data.items[0].volumeInfo.description;
+                    if(String(title) =="undefinied"){
+                        title = "unknown";
+                    }
+                    if(String(subtitle) == "undefined"){
+                        subtitle = "no subtitle";
+                    };
+                    if(String(author) == "undefined"){
+                        author = "unknown";
+                    };
+                    if(String(publisher) == "undefined"){
+                        publisher = "unknown";
+                    };
+                    if(String(publishedDate) == "undefined"){
+                        publishedDate = "unknown";
+                    };
+                    if(String(description) == "undefined"){
+                        description = "";
+                    };
+
+                    document.getElementById("Title").value = title;
+                    document.getElementById("Subtitle").value = subtitle;
+                    document.getElementById("Authors").value = author;
+                    document.getElementById("Publisher").value = publisher;
+                    document.getElementById("PublishedData").value = publishedDate;
+                    document.getElementById("Description").value = description;
+
+
+                    
+                },
+                type: 'GET'
+            });
+        }
+       document.getElementById("checkISBN").addEventListener('click', checkISBN);
+    </script>
 }
