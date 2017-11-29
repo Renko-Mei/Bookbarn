@@ -76,11 +76,12 @@
         <dd id="IsbnValue_2">
             @Html.DisplayFor(model => model.Isbn10Or13)
         </dd>
-
-
-
-
-
+        <dt>
+            <p>Default Cover Page</p>
+        </dt>
+        <dd>
+            <image src="@Html.DisplayFor(model => model.ImageLinks)"></image>
+        </dd>
 
 
 		<dt>
@@ -94,15 +95,11 @@
 				}
 			</div>
 		</dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ImageLinks)
-        </dt>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.SaleItemId" id="edit">Edit</a> |
     <a asp-action="Index">Back to List</a>
-    <p id="test"></p>
 </div>
 
 
