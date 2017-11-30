@@ -16,7 +16,7 @@
             <div class="form-group">
                 <label asp-for="Isbn" class="control-label">ISBN</label>
                 <input asp-for="Isbn" class="form-control"/>
-                <span asp-validation-for="Isbn" class="text-danger">Delete current stuff and recreate another if you really want to change ISBN</span>
+                <span asp-validation-for="Isbn" class="text-danger"></span>
             </div>
             <div class="form-group">
                     <label asp-for="Isbn10Or13" class="control-label">Optional ISBN number</label>
@@ -73,7 +73,7 @@
              <div class="form-group">
                 <label asp-for="ImageLinks" class="control-label">Image Link</label>
                 <input asp-for="ImageLinks" class="form-control" id="ImageLinks"/>
-                <span asp-validation-for="ImageLinks" class="text-danger">Update/Delete the Image Link if you want to change Default cover page shown as below:</span>
+                <span asp-validation-for="ImageLinks" class="text-danger"></span>
                 <div id="ImageDiv">
                     <img src="@Html.DisplayFor(model => model.ImageLinks))" id="RealImage">
                 </div>

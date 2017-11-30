@@ -135,10 +135,9 @@ namespace BookBarn.Controllers
 
         // GET: SaleItems/Edit/5
         [HttpGet]
+        //[Authorize (Roles = "User")]
         public async Task<IActionResult> Edit(int? id)
         {
-            if(User.Identity.IsAuthenticated)
-            {
                 if (id == null)
                 {
                 Response.StatusCode = 404;
@@ -157,12 +156,6 @@ namespace BookBarn.Controllers
                 else{
                     return View("NoAccess");
                 }  
-            }
-            else
-            {
-                Response.StatusCode = 401;
-                return View("NotLoggedIn");
-            }
             
         }
 
@@ -183,6 +176,7 @@ namespace BookBarn.Controllers
             {
                 try
                 {
+                    saleItem.UserKey = UserID();
                     _context.Update(saleItem);
                     await _context.SaveChangesAsync();
                 }
