@@ -253,6 +253,9 @@ namespace BookBarn.Controllers
                 Response.StatusCode = 404;
                 return View("NotFound");
             }
+
+            string sellerEmail = _Acontext.Users.FirstOrDefault(c => c.Id== saleItem.UserKey).Email;
+            ViewData["sellerEmail"]= sellerEmail;
             return View(saleItem); 
         }
 
@@ -389,49 +392,51 @@ namespace BookBarn.Controllers
             return _Acontext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).UserName;
         }
 
-        // [HttpGet]
-        // public IActionResult Email()
-        // {
-        //     ViewData["userEmail"] = EmailInfo();
-        //     //ViewData["SellerEmail"] = ;
+        [HttpGet]
+        public IActionResult Email(string id)
+        {
+            ViewData["userEmail"] = EmailInfo();
 
-        //     return View("Email_Input");
-        // }
+            //string sellerEmail = _Acontext.Users.FirstOrDefault(c => c.Id== id).Email;
+            ViewData["sellerEmail"] = id;
 
-        // [HttpPost]
-        // //[ValidateAntiForgeryToken]
-        // public IActionResult Email(string customerEmail, string customerRequest, string customerPhoneNumber)
-        // {
+            return View("Email_Input");
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public IActionResult Email(string customerEmail, string customerRequest, string customerPhoneNumber, string sellerEmail)
+        {
             
-        //     string customerName = "Customer Name: " + NameInfo();
-        //     //string customerDetail = "CustomerName: " + customerName;
-        //     var message = new MimeMessage();
-        //     message.From.Add(new MailboxAddress("BookBarn", "info@bookbarncanada.com"));
-        //     message.To.Add(new MailboxAddress("mark", customerEmail));//this should be changed to seller email
-        //     message.Subject = "test mail in asp.net core";
-        //     var builder = new BodyBuilder();
-        //     builder.TextBody = @"Dear seller, you have received an email request from your customer";
-        //     if(customerPhoneNumber ==null){
-        //         customerPhoneNumber = "not provided";
-        //     }
-        //     builder.HtmlBody = "<em>"+customerName+"<br>Customer Email: "+customerEmail+ "<br>Customer Phone Number: "+ customerPhoneNumber + "</em><br><br>Customer concern is: <br>"+customerRequest;
+            string customerName = "Customer Name: " + NameInfo();
+            //string customerDetail = "CustomerName: " + customerName;
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("BookBarn", "info@bookbarncanada.com"));
+            message.To.Add(new MailboxAddress("mark", sellerEmail));//this should be changed to seller email
+            message.Subject = "Customer Requests";
+            var builder = new BodyBuilder();
+            builder.TextBody = @"Dear seller, you have received an email request from your customer";
+            if(customerPhoneNumber ==null){
+                customerPhoneNumber = "not provided";
+            }
+            builder.HtmlBody = "<em>"+customerName+"<br>Customer Email: "+customerEmail+ "<br>Customer Phone Number: "+ customerPhoneNumber + "</em><br><br>Customer concern is: <br>"+customerRequest;
 
-        //     message.Body = builder.ToMessageBody();
-        //     //message.Body = new TextPart("plain")
-        //     //{
-        //     //    Text = "CustomerName: " + customerName +
-        //     //        customerRequest
-        //     //};
-        //     using (var client = new SmtpClient())
-        //     {
-        //         client.Connect("smtp.gmail.com", 587, false);
-        //         client.Authenticate("info@bookbarncanada.com", "InfoBookBarn");
-        //         client.Send(message);
+            message.Body = builder.ToMessageBody();
+            //message.Body = new TextPart("plain")
+            //{
+            //    Text = "CustomerName: " + customerName +
+            //        customerRequest
+            //};
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, false);
+                client.Authenticate("info@bookbarncanada.com", "InfoBookBarn");
+                client.Send(message);
 
-        //         client.Disconnect(true);
-        //     }
+                client.Disconnect(true);
+            }
 
-        //     return View("Index");
-        // }
+            return View("Email_Result");
+        }
     }
 }
