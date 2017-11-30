@@ -42,39 +42,51 @@ namespace BookBarn.Controllers
                         where a.UserKey == UserID()
                         select a;
            
-           return View(viewList);
+            if (User.Identity.IsAuthenticated)
+            {
+              return View(viewList);
+            }
+            else
+            {
+              Response.StatusCode = 401;
+              return View("NotLoggedIn");
+            }
         }
 
         // GET: SaleItems/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
 
-            var saleItem = await _context.SaleItem
-                .SingleOrDefaultAsync(m => m.SaleItemId == id);
-            if (saleItem == null)
+            if (User.Identity.IsAuthenticated)
             {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
-            if(saleItem.UserKey==UserID()){
-                return View(saleItem);
+                if (id == null)
+                {
+                Response.StatusCode = 404;
+                return View("NotFound");
+                }
+                var saleItem = await _context.SaleItem
+                    .SingleOrDefaultAsync(m => m.SaleItemId == id);
+                if (saleItem == null)
+                {
+                Response.StatusCode = 404;
+                return View("NotFound");
+                }
+                if(saleItem.UserKey==UserID()){
+                    return View(saleItem);
+                }
+                else{
+                    return View("NoAccess");
+                }  
             }
             else{
-                return View("NoAccess");
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
             }
-            // ViewData["LogInId"] = UserID();
-            // ViewData["saleId"] = saleItem.UserKey;
-            // return View(saleItem);
-
             
         }
 
         // GET: SaleItems/Create
+        [HttpGet]
         public IActionResult Create()
         {
             if (User.Identity.IsAuthenticated)
@@ -122,22 +134,36 @@ namespace BookBarn.Controllers
         }
 
         // GET: SaleItems/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if(User.Identity.IsAuthenticated)
             {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
+                if (id == null)
+                {
+                Response.StatusCode = 404;
+                return View("NotFound");
+                }
 
-            var saleItem = await _context.SaleItem.SingleOrDefaultAsync(m => m.SaleItemId == id);
-            if (saleItem == null)
+                var saleItem = await _context.SaleItem.SingleOrDefaultAsync(m => m.SaleItemId == id);
+                if (saleItem == null)
+                {
+                Response.StatusCode = 404;
+                return View("NotFound");
+                }
+                if(saleItem.UserKey==UserID()){
+                    return View(saleItem);
+                }
+                else{
+                    return View("NoAccess");
+                }  
+            }
+            else
             {
-              Response.StatusCode = 404;
-              return View("NotFound");
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
             }
-
-            return View(saleItem);
+            
         }
 
         // POST: SaleItems/Edit/5
@@ -180,21 +206,30 @@ namespace BookBarn.Controllers
         // GET: SaleItems/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
+             if(User.Identity.IsAuthenticated)
+             {
+                 if (id == null)
+                {
+                Response.StatusCode = 404;
+                return View("NotFound");
+                }
 
-            var saleItem = await _context.SaleItem
-                .SingleOrDefaultAsync(m => m.SaleItemId == id);
-            if (saleItem == null)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
+                var saleItem = await _context.SaleItem
+                    .SingleOrDefaultAsync(m => m.SaleItemId == id);
+                if (saleItem == null)
+                {
+                Response.StatusCode = 404;
+                return View("NotFound");
+                }
 
-            return View(saleItem);
+                return View(saleItem);
+            }
+            else
+            {
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
+            }
+            
         }
 
         // POST: SaleItems/Delete/5
@@ -207,6 +242,7 @@ namespace BookBarn.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool SaleItemExists(int id)
         {
