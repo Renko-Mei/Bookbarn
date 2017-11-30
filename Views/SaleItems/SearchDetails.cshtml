@@ -1,2 +1,129 @@
+@model BookBarn.Models.SaleItem
 
-<p tyle="margin-top:60px">test</p>
+@{
+    ViewData["Title"] = "Details";
+}
+
+<link rel="stylesheet" href="~/css/SaleItem.css" />
+
+<h2 style="margin-top:50px">Details</h2>
+
+<div>
+    <h4>SaleItem</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Subtitle)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Subtitle)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Authors)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Authors)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Publisher)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Publisher)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PublishedData)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PublishedData)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>     
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Quality)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Quality)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsSold)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsSold)
+        </dd>
+        <dt id="IsbnName_1">
+        </dt>
+        <dd id="IsbnValue_1">
+            @Html.DisplayFor(model => model.Isbn)
+        </dd>
+        <dt id="IsbnName_2">
+        </dt>
+        <dd id="IsbnValue_2">
+            @Html.DisplayFor(model => model.Isbn10Or13)
+        </dd>
+        <dt>
+            <p>Default Cover Page</p>
+        </dt>
+        <dd>
+            <image src="@Html.DisplayFor(model => model.ImageLinks)"></image>
+        </dd>
+
+
+		<dt>
+			@Html.DisplayNameFor(model => model.Image)	
+		</dt>	
+		<dd>
+			<div class="image">
+				@if (Model.Image != null && Model.Image.Length > 0)
+				{
+					<img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.Image))" />
+				}
+			</div>
+		</dd>
+    </dl>
+</div>
+<div>
+    <a>Email Seller</a>
+</div>
+<div>
+    <a >Add to Shopping Cart</a>
+</div>
+<div>
+    <a asp-action="Search">Back to Search</a>
+</div>
+
+
+
+
+<script>
+    var Isbn1 = document.getElementById("IsbnValue_1").textContent;
+    var Isbn2 = document.getElementById("IsbnValue_2").textContent;
+    if(Isbn1 && Isbn2){
+        if(Isbn1.length >Isbn2.length){
+            document.getElementById("IsbnName_1").innerHTML="ISBN_13";
+            document.getElementById("IsbnName_2").innerHTML="ISBN_10";
+        }else{
+            document.getElementById("IsbnName_1").innerHTML="ISBN_10";
+            document.getElementById("IsbnName_2").innerHTML="ISBN_13";
+        }
+    }
+    else{
+        document.getElementById("IsbnName_1").innerHTML="ISBN";
+    }
+    
+</script>
