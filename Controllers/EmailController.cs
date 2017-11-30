@@ -14,22 +14,22 @@ namespace BookBarn.Controllers
     public class EmailController : Controller
     {
 
-        private readonly AuthenticationContext _context;
+        private readonly AuthenticationContext _Acontext;
 
         public EmailController(AuthenticationContext context)
         {
-            _context = context;
+            _Acontext = context;
         }
 
         public string EmailInfo()
         {
-            string userEmail = _context.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Email;                         
+            string userEmail = _Acontext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Email;                         
             return userEmail;
         }
 
         public string NameInfo()
         {
-            return _context.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).UserName;
+            return _Acontext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).UserName;
         }
 
         [HttpGet]

@@ -1,7 +1,8 @@
 @model BookBarn.Models.SaleItem
 
+
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Search Details";
 }
 
 <link rel="stylesheet" href="~/css/SaleItem.css" />
@@ -98,11 +99,10 @@
     </dl>
 </div>
 <div>
-    <a>Email Seller</a>
+    <a>Add to cart</a>
 </div>
-<div>
-    <a >Add to Shopping Cart</a>
-</div>
+        <a asp-action="Email" asp-route-id="@ViewData["sellerEmail"]" >Email Seller</a>
+
 <div>
     <a asp-action="Search">Back to Search</a>
 </div>
