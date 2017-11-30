@@ -10,8 +10,18 @@ namespace BookBarn.Models
         public int SaleItemId { get; set; }
         public float Price { get; set; }
         public bool IsSold { get; set; }
+        [Required]
         public string Isbn { get; set; }
         public byte[] Image { get; set; }
+        public string UserKey {get; set;}
+        public string Title { get; set; }
+        public string Subtitle {get; set;}
+        public string Authors { get; set; }
+        public string Publisher { get; set; }
+        public string PublishedData {get; set;}
+        public string Description {get; set;}
+        public string Isbn10Or13 {get; set;}
+        public string ImageLinks {get; set;}
 
         [Column("Quality")]
         public string QualityString

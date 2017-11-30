@@ -17,7 +17,7 @@
                     @Html.DisplayNameFor(model => model.Quality)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Isbn)
+                    @Html.DisplayNameFor(model => model.Title)
                 </th>
             <th></th>
         </tr>
@@ -32,7 +32,7 @@
                 @Html.DisplayFor(modelItem => item.Quality)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Isbn)
+                @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.SaleItemId">Edit</a> |
