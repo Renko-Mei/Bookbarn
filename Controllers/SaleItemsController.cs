@@ -100,9 +100,6 @@ namespace BookBarn.Controllers
             }
         }
 
-        // POST: SaleItems/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SaleItemId,Price,IsSold,Quality,Isbn,Image,UserKey,Title,Subtitle,Authors,Publisher,PublishedData,Description,Isbn10Or13,ImageLinks")] SaleItem saleItem, IFormFile files)
@@ -238,6 +235,28 @@ namespace BookBarn.Controllers
         }
 
 
+
+        public async Task<IActionResult> SearchDetails(int? id)
+        {
+            if (id == null)
+            {
+                Response.StatusCode = 404;
+                return View("NotFound");
+            }
+            var saleItem = await _context.SaleItem
+                .SingleOrDefaultAsync(m => m.SaleItemId == id);
+            if (saleItem == null)
+            {
+                Response.StatusCode = 404;
+                return View("NotFound");
+            }
+            return View(saleItem); 
+        }
+
+
+
+
+
         private bool SaleItemExists(int id)
         {
             return _context.SaleItem.Any(e => e.SaleItemId == id);
@@ -246,31 +265,41 @@ namespace BookBarn.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Search(string searchType, string searchString, string sortType, string title, string author, string isbn, string quality, float minPrice, float maxPrice)
         {
-            //SearchViewModel searchVm;
-             var temp = await _context.SaleItem.ToListAsync();
-            //var resultList = temp;
-            // var viewList = from a in temp
-            //             where a.UserKey == UserID()
-            //             select a;
-            //IEnumerable <SaleItem> resultList;
-            var resultList = from a in temp select a;
+            SearchViewModel searchVm;
+
+            var resultSet = from si in _context.SaleItem
+                            select new SearchResultViewModel
+                            {
+                                Title = si.Title,
+                                Subtitle = si.Subtitle,
+                                Author = si.Authors,
+                                Quality = si.Quality.ToString(),
+                                Price = si.Price,
+                                ISBN = si.Isbn,
+                                SaleItemID = si.SaleItemId,
+                                Image = si.Image,
+                                IsSold = si.IsSold,
+                                UserKey = si.UserKey,
+                                Publisher = si.Publisher,
+                                PublishedDate = si.PublishedData,
+                                Description = si.Description,
+                                Isbn10Or13 = si.Isbn10Or13,
+                                ImageLinks = si.ImageLinks
+                            };
             //Filter type
             if (!string.IsNullOrWhiteSpace(searchString) && !string.IsNullOrEmpty(searchType))
             {
                 if (searchType.Equals("title"))
                 {
-                    resultList = from a in temp where a.Title.ToLowerInvariant().Contains(searchString.ToLower()) select a;
-                    //resultList = temp.Where(sr => sr.Title.ToLowerInvariant().Contains(searchString.ToLower()));
+                    resultSet = resultSet.Where(sr => sr.Title.ToLowerInvariant().Contains(searchString.ToLower()));
                 }
                 else if (searchType.Equals("author"))
                 {
-                    resultList =  from a in temp where a.Authors.ToLowerInvariant().Contains(searchString.ToLower()) select a;
-                    //resultList = temp.Where(sr => sr.Authors.ToLowerInvariant().Contains(searchString.ToLower()));
+                    resultSet = resultSet.Where(sr => sr.Author.ToLowerInvariant().Contains(searchString.ToLower()));
                 }
                 else if (searchType.Equals("isbn"))
                 {
-                     resultList = from a in temp where (a.Isbn.ToLowerInvariant().Contains(searchString.ToLower()) || a.Isbn10Or13.ToLowerInvariant().Contains(searchString.ToLower())) select a;
-                    //resultList = resultList.Where(sr => sr.Isbn.Contains(searchString));
+                    resultSet = resultSet.Where(sr => (sr.ISBN.Contains(searchString) ||sr.Isbn10Or13.Contains(searchString)));
                 }
                 else
                 {
@@ -285,61 +314,60 @@ namespace BookBarn.Controllers
             {
                 if (sortType.Equals("price"))
                 {
-                    resultList = resultList.OrderBy(sr => sr.Price);
+                    resultSet = resultSet.OrderBy(sr => sr.Price);
                 }
                 if (sortType.Equals("title"))
                 {
-                    resultList = resultList.OrderBy(sr => sr.Title);
+                    resultSet = resultSet.OrderBy(sr => sr.Title);
                 }
                 if (sortType.Equals("author"))
                 {
-                    resultList = resultList.OrderBy(sr => sr.Authors);
+                    resultSet = resultSet.OrderBy(sr => sr.Author);
                 }
             }
 
             //Advanced search
-            // if (!String.IsNullOrWhiteSpace(title))
-            // {
-            //     resultList = resultList.Where(sr => sr.Title.ToLowerInvariant().Contains(title.ToLower()));
-            // }
-            // if (!String.IsNullOrWhiteSpace(author))
-            // {
-            //     resultList = resultList.Where(sr => sr.Authors.ToLowerInvariant().Contains(author.ToLower()));
-            // }
-            // if (!String.IsNullOrWhiteSpace(isbn))
-            // {
-            //     resultList = from a in temp where (a.Isbn.ToLowerInvariant().Contains(searchString.ToLower()) || a.Isbn10Or13.ToLowerInvariant().Contains(searchString.ToLower())) select a;
-            //     //resultList = resultList.Where(sr => sr.Isbn.ToLowerInvariant().Contains(isbn.ToLower()));
-            // }
-            // if (!String.IsNullOrEmpty(quality))
-            // {
-            //     //resultSet = resultSet.Where(sr => sr.Quality.Contains(quality));
-            // }
-            // if (!float.IsNaN(minPrice))
-            // {
-            //     //resultSet = resultSet.Where(sr => sr.Price >= minPrice);
-            // }
-            // if (!float.IsNaN(maxPrice) && maxPrice > 0 && maxPrice >= minPrice)
-            // {
-            //     //resultSet = resultSet.Where(sr => sr.Price <= maxPrice);
-            // }
+            if (!String.IsNullOrWhiteSpace(title))
+            {
+                resultSet = resultSet.Where(sr => sr.Title.ToLowerInvariant().Contains(title.ToLower()));
+            }
+            if (!String.IsNullOrWhiteSpace(author))
+            {
+                resultSet = resultSet.Where(sr => sr.Author.ToLowerInvariant().Contains(author.ToLower()));
+            }
+            if (!String.IsNullOrWhiteSpace(isbn))
+            {
+                resultSet = resultSet.Where(sr => sr.ISBN.ToLowerInvariant().Contains(isbn.ToLower()));
+            }
+            if (!String.IsNullOrEmpty(quality))
+            {
+                resultSet = resultSet.Where(sr => sr.Quality.Contains(quality));
+            }
+            if (!float.IsNaN(minPrice))
+            {
+                resultSet = resultSet.Where(sr => sr.Price >= minPrice);
+            }
+            if (!float.IsNaN(maxPrice) && maxPrice > 0 && maxPrice >= minPrice)
+            {
+                resultSet = resultSet.Where(sr => sr.Price <= maxPrice);
+            }
 
-            // searchVm = new SearchViewModel()
-            // {
-            //     SearchResults = await resultSet.ToListAsync()
-            // };
+            searchVm = new SearchViewModel()
+            {
+                SearchResults = await resultSet.ToListAsync()
+            };
 
-            return View(resultList);
+            return View(searchVm);
         }
 
-        // [AllowAnonymous]
-        // public async Task<IActionResult> AdvancedSearch(string searchType, string searchString, string sortType, string titleString)
-        // {
-        //     SearchViewModel searchVm;
-        //     searchVm = new SearchViewModel();
+        [AllowAnonymous]
+        public async Task<IActionResult> AdvancedSearch(string searchType, string searchString, string sortType, string titleString)
+        {
+            SearchViewModel searchVm;
+            searchVm = new SearchViewModel();
 
-        //     return View(searchVm);
-        // }
+            return View(searchVm);
+        }
 
         public IActionResult Error()
         {
