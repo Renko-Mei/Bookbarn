@@ -87,7 +87,9 @@ namespace BookBarn.Controllers
                 {
                     logger.LogError($"User {user.UserName} register failed {Environment.NewLine}" +
                         $"    {string.Join(Environment.NewLine, result.Errors.Select(o => o.ToString()).ToArray())}");
-                    result.Errors.Select(x => x.Description).AsParallel().ForAll(x => ModelState.AddModelError(string.Empty, x));
+                    result.Errors.Select(x => x.Description)
+                        .AsParallel()
+                        .ForAll(x => ModelState.AddModelError(string.Empty, x));
                     return View(model);
                 }
             }
