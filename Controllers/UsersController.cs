@@ -71,7 +71,6 @@ namespace BookBarn.Controllers
 
                 IdentityResult result = await userManager.CreateAsync(user, model.Password);
 
-
                 if (result.Succeeded)
                 {
                     logger.LogInformation("User created a new account with password.");
@@ -88,7 +87,7 @@ namespace BookBarn.Controllers
                 {
                     logger.LogError($"User {user.UserName} register failed {Environment.NewLine}" +
                         $"    {string.Join(Environment.NewLine, result.Errors.Select(o => o.ToString()).ToArray())}");
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    result.Errors.Select(x => x.Description).AsParallel().ForAll(x => ModelState.AddModelError(string.Empty, x));
                     return View(model);
                 }
             }
