@@ -16,88 +16,115 @@ namespace BookBarn.ChatRoom
 {
     public class ChatWebSocketMiddleware
     {
-        public static object objLock = new object();
+        //public static object objLock = new object();
         private static ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
-
+        private static ConcurrentDictionary<string, string> _nameCompare = new ConcurrentDictionary<string, string>();
         public static List<string> historicalMessage = new List<string>();
-
         private readonly RequestDelegate _next;
-
         public ChatWebSocketMiddleware(RequestDelegate next)
         {
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
-        {
-            if (context.WebSockets.IsWebSocketRequest)
-            {
+        public async Task Invoke(HttpContext context){
+            int TotalUser = 0;
+            string tempUserName = "unknown";
+            
+            if (context.WebSockets.IsWebSocketRequest){
+                
                 CancellationToken ct = context.RequestAborted;
                 WebSocket currentSocket = await context.WebSockets.AcceptWebSocketAsync();
                 var socketId = Guid.NewGuid().ToString();
-
-                _sockets.TryAdd(socketId, currentSocket);
-
+                var addSuccess = _sockets.TryAdd(socketId, currentSocket);
+                TotalUser +=1;
                 
-                while (true)
-                {
-                    if (ct.IsCancellationRequested)
-                    {
+                // if(addSuccess){
+                //     var currentUser = _sockets.Count;
+                //     var available =  "[SYSTEM]: Currently, " + currentUser +" people in this chatroom";
+                //     await SendStringAsync( _sockets, available);
+                // }
+
+                while (true){
+                    if (ct.IsCancellationRequested){
                         break;
                     }
+                    var buffer = new ArraySegment<byte>(new byte[4096]);
+                    var receive = await currentSocket.ReceiveAsync(buffer, ct);
+                    // if(receive.MessageType == WebSocketMessageType.Close){
+                    //     var leftSuccess = _sockets.TryRemove(socketId, out currentSocket);
+                    //     TotalUser -=1;
+                    //     if(leftSuccess){
+                    //         foreach(var t in _nameCompare){
+                    //             if(t.Key == socketId){
+                    //                 tempUserName = t.Value;  
+                    //             }
+                    //         }
+                    //         var leftMessage = "[SYSTEM]: " + tempUserName +" left the chatroom. Now remains " + TotalUser + " people";
+                    //         await SendStringAsync( _sockets, leftMessage);
+                    //         break;
+                                    
+                    //     } 
+                    // }
 
-                    var response = await ReceiveStringAsync(currentSocket, ct);
-                    if(string.IsNullOrEmpty(response))
-                    {
-                        if(currentSocket.State != WebSocketState.Open)
-                        {
+
+                    var response = await ReceiveStringAsync(currentSocket, CancellationToken.None);
+
+                    if(response.Contains("[SYSTEM]: Welcome")){
+                        var WelcomeIndex = response.LastIndexOf("Welcome");
+                        int tempS = WelcomeIndex +8;
+                        int tempL = response.Length-tempS;
+                        var userName = response.Substring(tempS, tempL);
+                        var isCompared = _nameCompare.TryAdd(socketId, userName);
+                        if(isCompared){
+                            //var currentUser = _sockets.Count;
+                            response = response + " Currently " + TotalUser + " people online";
+                            //var available =  "[SYSTEM]: Currently, " + TotalUser.ToString() +" people in this chatroom";
+                            //await SendStringAsync( _sockets, available);
+                        } 
+                    }
+
+                    if(string.IsNullOrEmpty(response)){
+                        if(currentSocket.State != WebSocketState.Open){
                             break;
                         }
-
-                        continue;
                     }
-
-                    foreach (var socket in _sockets)
-                    {
-                        if(socket.Value.State != WebSocketState.Open)
-                        {
-                            continue;
-                        }
-
-                        await SendStringAsync(socket.Value, response, ct);
+                    else{
+                        await SendStringAsync(_sockets, response);
                     }
+                        
+                    
+                    
                 }
 
-                WebSocket dummy;
-                _sockets.TryRemove(socketId, out dummy);
+               // WebSocket dummy;
+                _sockets.TryRemove(socketId, out currentSocket);
                 await currentSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
                 currentSocket.Dispose();
                 
-            }
-            else
-            {
+            }else{
                 await _next.Invoke(context);
                 return;
             } 
         }
 
-        private static Task SendStringAsync(WebSocket socket, string data, CancellationToken ct = default(CancellationToken))
-        {
+        private async static Task SendStringAsync( ConcurrentDictionary<string, WebSocket> socket, string data){
+            
             SaveHistoricalMessage(data);
             var buffer = Encoding.UTF8.GetBytes(data);
             var segment = new ArraySegment<byte>(buffer);
-            return socket.SendAsync(segment, WebSocketMessageType.Text, true, ct);
+            foreach (var a in _sockets){
+                if(a.Value.State == WebSocketState.Open){
+                    await a.Value.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None);   
+                }
+            }
         }
 
-        private static async Task<string> ReceiveStringAsync(WebSocket socket, CancellationToken ct = default(CancellationToken))
-        {
+        private static async Task<string> ReceiveStringAsync(WebSocket socket, CancellationToken ct = default(CancellationToken)){
             
             var buffer = new ArraySegment<byte>(new byte[8192]);
-            using (var ms = new MemoryStream())
-            {
+            using (var ms = new MemoryStream()){
                 WebSocketReceiveResult result;
-                do
-                {
+                do{
                     ct.ThrowIfCancellationRequested();
 
                     result = await socket.ReceiveAsync(buffer, ct);
@@ -106,27 +133,19 @@ namespace BookBarn.ChatRoom
                 while (!result.EndOfMessage);
 
                 ms.Seek(0, SeekOrigin.Begin);
-                if (result.MessageType != WebSocketMessageType.Text)
-                {
+                if (result.MessageType != WebSocketMessageType.Text){
                     return null;
                 }
 
-                using (var reader = new StreamReader(ms, Encoding.UTF8))
-                {
+                using (var reader = new StreamReader(ms, Encoding.UTF8)){
                     return await reader.ReadToEndAsync();
                 }
             }
         }
 
-        static object lockSaveMsg = new object();
-        public static void SaveHistoricalMessage(string data)
-        {
-            
-            //var chatData = new ChatData(){data=data};
-
-            //var position = historicalMessage.Length;
-            historicalMessage.Add(data);
-            
+        //static object lockSaveMsg = new object();
+        public static void SaveHistoricalMessage(string data){
+            historicalMessage.Add(data);   
         }
     }
 }

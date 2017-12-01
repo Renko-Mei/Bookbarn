@@ -73,15 +73,12 @@
         var socket = new WebSocket(wsUri);
 
         socket.onopen = e => {
-            var welcomeMessage = `[ ${userName} ] has entered into the chatroom`
+            var welcomeMessage = `[SYSTEM]: Welcome ${userName}!`
             socket.send(welcomeMessage);
             console.log("socket opened", e);
         };
 
         socket.onclose = function (e) {
-            document.getElementById("test").innerHTML="test";
-            var ByeMessage = `[ ${userName} ] has left the chatroom`
-            socket.send(welcomeMessage);
             console.log("socket closed", e);
         };
 
@@ -114,6 +111,10 @@
             str = str.replace(/\n/g,'<br/>');
             str = str.replace(/\[em_([0-9]*)\]/g,'<img src="arclist/$1.gif" border="0" />');
             return str;
+        }
+
+        function dbClose(){
+            socket.close();
         }
 
 
