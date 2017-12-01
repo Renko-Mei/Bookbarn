@@ -82,7 +82,7 @@ namespace BookBarn
             });
 
             // Register custom username / password combination validator
-            services.AddTransient<IPasswordValidator<User>, PwInNameValidator>();
+            services.AddTransient<IPasswordValidator<User>, PwConstraintValidator>();
 
             // Register a custom user email validator
             services.AddTransient<IUserValidator<User>, UserEmailValidator>();
