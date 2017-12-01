@@ -89,7 +89,11 @@ namespace BookBarn.Controllers
                         $"    {string.Join(Environment.NewLine, result.Errors.Select(o => o.ToString()).ToArray())}");
                     result.Errors.Select(x => x.Description)
                         .AsParallel()
-                        .ForAll(x => ModelState.AddModelError(string.Empty, x));
+                        .ForAll(x => 
+                        {
+                            ModelState.AddModelError(string.Empty, x);
+                            logger.LogError(x);
+                        });
                     return View(model);
                 }
             }
