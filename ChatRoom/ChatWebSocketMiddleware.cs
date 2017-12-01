@@ -30,53 +30,55 @@ namespace BookBarn.ChatRoom
 
         public async Task Invoke(HttpContext context)
         {
-            if (!context.WebSockets.IsWebSocketRequest)
+            if (context.WebSockets.IsWebSocketRequest)
             {
-                await _next.Invoke(context);
-                return;
-            }
+                CancellationToken ct = context.RequestAborted;
+                WebSocket currentSocket = await context.WebSockets.AcceptWebSocketAsync();
+                var socketId = Guid.NewGuid().ToString();
 
-            CancellationToken ct = context.RequestAborted;
-            WebSocket currentSocket = await context.WebSockets.AcceptWebSocketAsync();
-            var socketId = Guid.NewGuid().ToString();
+                _sockets.TryAdd(socketId, currentSocket);
 
-            _sockets.TryAdd(socketId, currentSocket);
-
-            
-            while (true)
-            {
-                if (ct.IsCancellationRequested)
+                
+                while (true)
                 {
-                    break;
-                }
-
-                var response = await ReceiveStringAsync(currentSocket, ct);
-                if(string.IsNullOrEmpty(response))
-                {
-                    if(currentSocket.State != WebSocketState.Open)
+                    if (ct.IsCancellationRequested)
                     {
                         break;
                     }
 
-                    continue;
-                }
-
-                foreach (var socket in _sockets)
-                {
-                    if(socket.Value.State != WebSocketState.Open)
+                    var response = await ReceiveStringAsync(currentSocket, ct);
+                    if(string.IsNullOrEmpty(response))
                     {
+                        if(currentSocket.State != WebSocketState.Open)
+                        {
+                            break;
+                        }
+
                         continue;
                     }
 
-                    await SendStringAsync(socket.Value, response, ct);
+                    foreach (var socket in _sockets)
+                    {
+                        if(socket.Value.State != WebSocketState.Open)
+                        {
+                            continue;
+                        }
+
+                        await SendStringAsync(socket.Value, response, ct);
+                    }
                 }
+
+                WebSocket dummy;
+                _sockets.TryRemove(socketId, out dummy);
+                await currentSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
+                currentSocket.Dispose();
+                
             }
-
-            WebSocket dummy;
-            _sockets.TryRemove(socketId, out dummy);
-
-            await currentSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
-            currentSocket.Dispose();
+            else
+            {
+                await _next.Invoke(context);
+                return;
+            } 
         }
 
         private static Task SendStringAsync(WebSocket socket, string data, CancellationToken ct = default(CancellationToken))

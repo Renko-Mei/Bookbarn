@@ -2,20 +2,6 @@
 @{
     ViewData["Title"] = "Chat";
 }
-<!-- <style>
-    body {margin:50px; padding:50px;}
-    .msg {
-        position: absolute;
-        top: 0;
-        bottom: 80px;
-        border: 1px solid green;
-        margin-bottom: auto;
-        display:block;
-        overflow: scroll;
-        width:100%;
-        white-space:nowrap;
-    }
-</style> -->
 <style>
     .input { width: 99%; height: 30px; border: 1px solid #ccc }
     span.emotion { width: 42px; height: 20px; padding-left: 20px; cursor: pointer }
@@ -25,82 +11,102 @@
     .qqFace table td img { cursor: pointer; border: 1px #fff solid; }
     .qqFace table td img:hover { border: 1px #0066cc solid; }
 </style>
+
+
+
+
+
+
 <div class="msg" style="margin-top:65%">
     <div style="position:absolute; bottom:1mm;" id="msgs"</div>
 </div>
 
 <div >
     <div >
+        
         <p>
+            
             <input class="input"  type="text" style="width:50%" id="MessageField" name="MessageField" placeholder="type message and press enter" />
             <span class="emotion">emoji</span>  
         </p>
     </div>
+    <button onclick="dbClose()">Close</button>
+    <p id="test"></p>
 </div>
+
+
+
+
+
+
 
 
 @section Scripts {
     <script  src="~/js/jquery.min.js"></script>
     <script type="text/javascript" src="~/js/jquery.qqFace.js"></script>
     <script> 
-        $(function () {
-            window.onload=function()
-            { 
-                if(document.readyState=="complete")
-                {
-                    document.getElementById("MessageField").focus(); 
-                }
+        window.onload=function()
+        { 
+            if(document.readyState=="complete")
+            {
+                document.getElementById("MessageField").focus(); 
             }
-            
+        }
 
-            $('.emotion').qqFace({
-                id : 'facebox', 
-                assign: 'MessageField', 
-                path:'arclist/'	
-            });
-            
-
-            var userName = "@ViewData["UserName"]";
-            var historicalMessage = @Html.Raw(@ViewBag.historicalMessage)
-            for (var i = 0; i < historicalMessage.length; i++) {
-                $('#msgs').append(replace_em(historicalMessage[i]) + '<br />');
-            }
-        // var protocol = location.protocol === "https:" ? "wss:" : "ws:";
-            var wsUri = `ws://${window.location.host}`;
-            var socket = new WebSocket(wsUri);
-            socket.onopen = e => {
-                console.log("socket opened", e);
-            };
-
-            socket.onclose = function (e) {
-                console.log("socket closed", e);
-            };
-
-            socket.onmessage = function (e) {
-                console.log(e);
-                $('#msgs').append(replace_em(e.data) + '<br />');
-            };
-
-            socket.onerror = function (e) {
-                console.error(e.data);
-            };
-
-            $('#MessageField').keypress(function (e) {
-                if (e.which != 13) {
-                    return;
-                }
-
-                e.preventDefault();
-                var str = $('#MessageField').val();
-
-
-                var message = `${userName}: ${str}`;
-                socket.send(message);
-                $('#MessageField').val('');
-                document.getElementById("MessageField").focus();
-            });
+        $('.emotion').qqFace({
+            id : 'facebox', 
+            assign: 'MessageField', 
+            path:'arclist/'	
         });
 
+        var userName = "@ViewData["UserName"]";
+        var historicalMessage = @Html.Raw(@ViewBag.historicalMessage);
+        var historicalBar = "--------------------------history-------------------------";
+        if (historicalMessage.length != 0){
+            for (var i = 0; i < historicalMessage.length; i++) {
+                $('#msgs').append(replace_em(historicalMessage[i]) + '<br />');
+            };
+            $('#msgs').append(historicalBar + '<br />');
+        }
+
+        var wsUri = `ws://${window.location.host}`;
+        var socket = new WebSocket(wsUri);
+
+        socket.onopen = e => {
+            var welcomeMessage = `[ ${userName} ] has entered into the chatroom`
+            socket.send(welcomeMessage);
+            console.log("socket opened", e);
+        };
+
+        socket.onclose = function (e) {
+            document.getElementById("test").innerHTML="test";
+            var ByeMessage = `[ ${userName} ] has left the chatroom`
+            socket.send(welcomeMessage);
+            console.log("socket closed", e);
+        };
+
+        socket.onmessage = function (e) {
+            console.log(e);
+            $('#msgs').append(replace_em(e.data) + '<br />');
+        };
+
+        socket.onerror = function (e) {
+            console.error(e.data);
+        };
+
+        $('#MessageField').keypress(function (e) {
+
+            if (e.which != 13) {
+                return;
+            }
+
+            e.preventDefault();
+            var str = $('#MessageField').val();
+            var message = `${userName}: ${str}`;
+            socket.send(message);
+            $('#MessageField').val('');
+            document.getElementById("MessageField").focus();
+        });
 
         function replace_em(str){
             str = str.replace(/\</g,'&lt;');
@@ -109,6 +115,7 @@
             str = str.replace(/\[em_([0-9]*)\]/g,'<img src="arclist/$1.gif" border="0" />');
             return str;
         }
+
 
     </script>
 }
