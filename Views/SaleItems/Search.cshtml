@@ -4,7 +4,7 @@
 }
 <link rel="stylesheet" href="~/css/Search.css" />
 
-<div style="margin-top:60px">
+<div class="add-margin">
 	<h1>Search</h1>
 
 	<p>Search for books.</p>
@@ -64,7 +64,7 @@
 						<img src="@Html.DisplayFor(model => resultItem.ImageLinks)">
 					}
 				</td>
-				<td>					
+				<td>
 					@Html.DisplayFor(model => resultItem.Title)
 				</td>
 				<td>
@@ -103,5 +103,3 @@
 		}
 	</tbody>
 </table>
-
-    
