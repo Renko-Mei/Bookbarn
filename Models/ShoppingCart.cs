@@ -60,7 +60,7 @@ namespace BookBarn.Models
           s => s.SaleItem.SaleItemId == item.SaleItemId && s.ShoppingCartId == ShoppingCartId
         );
       var localAmount = 0;
-      if(shoppingCartItem == null)
+      if(shoppingCartItem != null)
       {
         if(shoppingCartItem.Amount > 1)
         {

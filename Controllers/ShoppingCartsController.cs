@@ -24,7 +24,6 @@ namespace BookBarn.Controllers
         }
 
         // // GET: ShoppingCarts
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             var items = _shoppingCart.GetShoppingCartItems();
