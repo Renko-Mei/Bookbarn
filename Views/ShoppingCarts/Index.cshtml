@@ -23,7 +23,7 @@
                     <td class="text-right">
                         @((line.Amount * line.SaleItem.Price).ToString("c"))
                     </td>
-    
+                    <td class="text-center"><a class="glyphicon glyphicon-remove text-danger remove" asp-controller="ShoppingCarts" asp-action="RemoveFromShoppingCart" asp-route-saleItemId="@line.SaleItem.SaleItemId"></a></td>
                 </tr>
             }
         </tbody>

@@ -24,6 +24,7 @@ namespace BookBarn.Controllers
         }
 
         // // GET: ShoppingCarts
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var items = _shoppingCart.GetShoppingCartItems();
@@ -36,7 +37,7 @@ namespace BookBarn.Controllers
             return View(shoppingCartView);
             //return View(await _context.ShoppingCart.ToListAsync());
         }
-
+  
         public RedirectToActionResult AddToShoppingCart(int saleItemId)
         {
             var selectedItem = _context.SaleItem.FirstOrDefault(p => p.SaleItemId == saleItemId);
