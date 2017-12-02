@@ -144,7 +144,6 @@ namespace BookBarn.Controllers
             return RedirectToAction(nameof(ChangePassword));
         }
 
-<<<<<<< HEAD
         // [HttpGet]
         // public async Task<IActionResult> ChangeAddress()
         // {
@@ -154,7 +153,6 @@ namespace BookBarn.Controllers
         //         Response.StatusCode = 401;
         //         return View("NotLoggedIn");
         //     }
-=======
         [HttpGet]
         public async Task<IActionResult> OrderHistory()
         {
@@ -173,7 +171,6 @@ namespace BookBarn.Controllers
             return View(orders);
         }
 
->>>>>>> master
 
         [HttpGet]
         public async Task<IActionResult> SalesVisualization()
@@ -184,7 +181,6 @@ namespace BookBarn.Controllers
                 return View("NotLoggedIn");
             }
 
-<<<<<<< HEAD
         // [HttpPost]
         // [ValidateAntiForgeryToken]
         // public async Task<IActionResult> ChangeAddress(ChangeAddressViewModel model)
@@ -214,9 +210,7 @@ namespace BookBarn.Controllers
         // }
 
 
-=======
             
->>>>>>> master
 
             Chart chart = new Chart();
             chart.Type = "line";
