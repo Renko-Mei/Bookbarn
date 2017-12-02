@@ -13,24 +13,29 @@ body {
     padding-bottom: 20px;
 }
 
+/*Push elements on the page further down so they don't conflict with navbar*/
 .add-margin {
   margin-top: 80px;
 }
 
+/* Make navbar wider to accomodate logo */
 .navbar {
   min-height: 80px;
 }
+/* Change navbar background colour */
 .navbar-inverse {
-    background-color: #f4d58d;
+    background-color: #839788;
     border-color: transparent;
 }
 
+/* navbar link colours */
 .navbar-inverse .navbar-nav li a {
   color: #0d0a0a;
   padding-top: 30px;
 }
 
-.navbar-link {
+/* specifically change the Logout button, since it is a button other rules don't seem to apply*/
+.navbar-inverse .btn-link {
   color: #0d0a0a;
   font-size: 20px;
   padding-top: 20px;
@@ -38,10 +43,12 @@ body {
 
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
-/*.body-content {
+.body-content {
     padding-left: 15px;
     padding-right: 15px;
-}*/
+}
+
+
 
 /* Carousel */
 .carousel-caption p {
