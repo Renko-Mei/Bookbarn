@@ -40,11 +40,14 @@ namespace BookBarn.Controllers
         {
             var user = await userManager.GetUserAsync(User);
             if(user ==null){
-                Response.StatusCode = 401;
-                return View("NotLoggedIn");
+                var customer = "Guest";
+                ViewData["UserName"] = customer;
             }
-            var name = user.UserName;
-            ViewData["UserName"] = name;
+            else{
+                var name = user.UserName;
+                ViewData["UserName"] = name;
+            }
+            
             ViewBag.historicalMessage = JsonConvert.SerializeObject(BookBarn.ChatRoom.ChatWebSocketMiddleware.historicalMessage);
             return View();
         }
