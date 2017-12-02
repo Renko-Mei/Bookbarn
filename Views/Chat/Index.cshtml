@@ -3,37 +3,89 @@
     ViewData["Title"] = "Chat";
 }
 <style>
-    .input { width: 99%; height: 30px; border: 1px solid #ccc }
+
     span.emotion { width: 42px; height: 20px; padding-left: 20px; cursor: pointer }
     span.emotion:hover { background-position: 2px -28px }
     .qqFace { margin-top: 4px; background: #fff; padding: 2px; border: 1px #dfe6f6 solid; }
     .qqFace table td { padding: 0px; }
     .qqFace table td img { cursor: pointer; border: 1px #fff solid; }
     .qqFace table td img:hover { border: 1px #0066cc solid; }
+    .msg {
+        position: absolute;
+        top: 0;
+        bottom: 30px;
+        height: 80%;
+        border: 1px solid black;
+        margin-bottom: auto;
+        display:block;
+        overflow: scroll;
+        width:100%;
+        white-space:nowrap;
+    }
+    .col-md-8{
+        height: 500px;
+    }
+    .col-md-4{
+        height: 500px;
+    }
+    .input{
+        margin-top: 400px;
+        margin-right: 0px;
+        width: 100%;
+    }
+    .text{
+        max-width:unset;
+        width:384px;
+        padding: 10px;
+        margin-left: 0px;
+        
+    }
+    .emotion{
+        
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+
+
+    
 </style>
 
-
-
-
-
-
-<div class="msg" style="margin-top:65%">
-    <div style="position:absolute; bottom:1mm;" id="msgs"</div>
-</div>
-
-<div >
-    <div >
-        
-        <p>
+<h2 style="margin-top:60px">Chat Room</h2>
+<hr>
+<div class="row">
+     <div class="col-md-4">
+         <p>whatever</p>
+     </div>
+     <div class="col-md-8">
+        <div class="msg" >
+             <div style="position:absolute; bottom:0;" id="msgs"></div>
+        </div>
+        <div class="input"> 
+            <table>
+                <tr>
+                    <td >
+                        <input type="text" class="text" id="MessageField" name="MessageField" placeholder="type message and press enter" />
+                        
+                    </td>
+                    <td>
+                        <span class="emotion">emoji</span>
+                    </td>
+                </tr>
+            </table> 
+             
             
-            <input class="input"  type="text" style="width:50%" id="MessageField" name="MessageField" placeholder="type message and press enter" />
-            <span class="emotion">emoji</span>  
-        </p>
-    </div>
-    <button onclick="dbClose()">Close</button>
-    <!-- <button onclick="dbOpen()">Open</button> -->
-    <p id="test"></p>
+           
+              
+
+        </div>
+        
+     </div>
+
 </div>
+
+
+
+
 
 
 

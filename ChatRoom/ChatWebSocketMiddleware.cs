@@ -136,11 +136,6 @@ namespace BookBarn.ChatRoom
                 {
                     ct.ThrowIfCancellationRequested();
                     result = await socket.ReceiveAsync(buffer, ct);
-                    // if(result.MessageType == WebSocketMessageType.Close){
-                    //     TotalUser -=1;
-                    //     var leftMessage = "[SYSTEM]: " + tempUserName +" left the chatroom. Now remains " + TotalUser + " people";
-                    //     await SendStringAsync(_sockets, leftMessage);
-                    // }
                     ms.Write(buffer.Array, buffer.Offset, result.Count);
                 }
                 while (!result.EndOfMessage);
@@ -155,8 +150,6 @@ namespace BookBarn.ChatRoom
                 }
             }
         }
-
-        //static object lockSaveMsg = new object();
         public static void SaveHistoricalMessage(string data){
             historicalMessage.Add(data);   
         }
