@@ -58,7 +58,7 @@
 		@foreach (var resultItem in Model.SearchResults)
 		{
 			<tr>
-				<td>
+				<td class="thumbnail">
 					@if (resultItem.ImageLinks != null)
 					{
 						<img src="@Html.DisplayFor(model => resultItem.ImageLinks)">
