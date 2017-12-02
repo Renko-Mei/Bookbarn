@@ -30,12 +30,6 @@
             @Html.DisplayFor(model => model.ShippedDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.IsSold)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IsSold)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.BuyerId)
         </dt>
         <dd>
@@ -48,7 +42,7 @@
             @Html.DisplayFor(model => model.SellerId)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="OrderId" />
         <input type="submit" value="Delete" class="btn btn-default" /> |

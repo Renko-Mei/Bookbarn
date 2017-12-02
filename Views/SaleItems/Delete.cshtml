@@ -46,7 +46,7 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Description)
-        </dd>     
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Price)
         </dt>
@@ -58,12 +58,6 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Quality)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IsSold)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IsSold)
         </dd>
         <dt id="IsbnName_1">
         </dt>
@@ -84,8 +78,8 @@
 
 
 		<dt>
-			@Html.DisplayNameFor(model => model.Image)	
-		</dt>	
+			@Html.DisplayNameFor(model => model.Image)
+		</dt>
 		<dd>
 			<div class="image">
 				@if (Model.Image != null && Model.Image.Length > 0)
@@ -95,7 +89,7 @@
 			</div>
 		</dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="SaleItemId" />
         <input type="submit" value="Delete" class="btn btn-default" /> |
