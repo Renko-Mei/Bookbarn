@@ -31,6 +31,7 @@
         </p>
     </div>
     <button onclick="dbClose()">Close</button>
+    <!-- <button onclick="dbOpen()">Open</button> -->
     <p id="test"></p>
 </div>
 
@@ -69,8 +70,10 @@
             $('#msgs').append(historicalBar + '<br />');
         }
 
-        var wsUri = `ws://${window.location.host}`;
+    var wsUri = `ws://${window.location.host}/ws`;
         var socket = new WebSocket(wsUri);
+
+        
 
         socket.onopen = e => {
             var welcomeMessage = `[SYSTEM]: Welcome ${userName}!`

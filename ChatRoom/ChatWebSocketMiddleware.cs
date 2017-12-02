@@ -16,19 +16,22 @@ namespace BookBarn.ChatRoom
 {
     public class ChatWebSocketMiddleware
     {
-        //public static object objLock = new object();
+        private static List<string> duplicate = new List<string>();
+        public static List<string> historicalMessage = new List<string>();
         private static ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
         private static ConcurrentDictionary<string, string> _nameCompare = new ConcurrentDictionary<string, string>();
-        public static List<string> historicalMessage = new List<string>();
         private readonly RequestDelegate _next;
+
+        
         public ChatWebSocketMiddleware(RequestDelegate next)
         {
             _next = next;
         }
+        int TotalUser = 0;
 
         public async Task Invoke(HttpContext context){
-            int TotalUser = 0;
-            string tempUserName = "unknown";
+            
+            string tempUserName = "Guest";
             
             if (context.WebSockets.IsWebSocketRequest){
                 
@@ -37,49 +40,34 @@ namespace BookBarn.ChatRoom
                 var socketId = Guid.NewGuid().ToString();
                 var addSuccess = _sockets.TryAdd(socketId, currentSocket);
                 TotalUser +=1;
-                
-                // if(addSuccess){
-                //     var currentUser = _sockets.Count;
-                //     var available =  "[SYSTEM]: Currently, " + currentUser +" people in this chatroom";
-                //     await SendStringAsync( _sockets, available);
-                // }
 
                 while (true){
                     if (ct.IsCancellationRequested){
                         break;
                     }
-                    var buffer = new ArraySegment<byte>(new byte[4096]);
-                    var receive = await currentSocket.ReceiveAsync(buffer, ct);
-                    // if(receive.MessageType == WebSocketMessageType.Close){
-                    //     var leftSuccess = _sockets.TryRemove(socketId, out currentSocket);
-                    //     TotalUser -=1;
-                    //     if(leftSuccess){
-                    //         foreach(var t in _nameCompare){
-                    //             if(t.Key == socketId){
-                    //                 tempUserName = t.Value;  
-                    //             }
-                    //         }
-                    //         var leftMessage = "[SYSTEM]: " + tempUserName +" left the chatroom. Now remains " + TotalUser + " people";
-                    //         await SendStringAsync( _sockets, leftMessage);
-                    //         break;
-                                    
-                    //     } 
-                    // }
 
+                    foreach(var t in _nameCompare){
+                            if(t.Key == socketId){
+                                tempUserName = t.Value;  
+                        }       
+                    }
 
-                    var response = await ReceiveStringAsync(currentSocket, CancellationToken.None);
+                    var response = await ReceiveStringAsync(currentSocket,TotalUser, tempUserName,ct);
 
                     if(response.Contains("[SYSTEM]: Welcome")){
                         var WelcomeIndex = response.LastIndexOf("Welcome");
                         int tempS = WelcomeIndex +8;
-                        int tempL = response.Length-tempS;
+                        int tempL = response.Length-tempS-1;
                         var userName = response.Substring(tempS, tempL);
+                        foreach(var m in _nameCompare){
+                                if(m.Value ==userName){
+                                    TotalUser -=1;
+                                    break;
+                                }
+                            }    
                         var isCompared = _nameCompare.TryAdd(socketId, userName);
-                        if(isCompared){
-                            //var currentUser = _sockets.Count;
+                        if(isCompared){   
                             response = response + " Currently " + TotalUser + " people online";
-                            //var available =  "[SYSTEM]: Currently, " + TotalUser.ToString() +" people in this chatroom";
-                            //await SendStringAsync( _sockets, available);
                         } 
                     }
 
@@ -90,10 +78,7 @@ namespace BookBarn.ChatRoom
                     }
                     else{
                         await SendStringAsync(_sockets, response);
-                    }
-                        
-                    
-                    
+                    } 
                 }
 
                // WebSocket dummy;
@@ -101,9 +86,11 @@ namespace BookBarn.ChatRoom
                 await currentSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
                 currentSocket.Dispose();
                 
-            }else{
+            }
+            else{
                 await _next.Invoke(context);
                 return;
+                //context.Response.StatusCode = 404;
             } 
         }
 
@@ -119,25 +106,32 @@ namespace BookBarn.ChatRoom
             }
         }
 
-        private static async Task<string> ReceiveStringAsync(WebSocket socket, CancellationToken ct = default(CancellationToken)){
+        private static async Task<string> ReceiveStringAsync(WebSocket socket, int TotalUser, string tempUserName, CancellationToken ct = default(CancellationToken))
+        {
             
             var buffer = new ArraySegment<byte>(new byte[8192]);
-            using (var ms = new MemoryStream()){
+            using (var ms = new MemoryStream())
+            {
                 WebSocketReceiveResult result;
-                do{
+                do
+                {
                     ct.ThrowIfCancellationRequested();
-
                     result = await socket.ReceiveAsync(buffer, ct);
+                    if(result.MessageType == WebSocketMessageType.Close){
+                        TotalUser -=1;
+                        var leftMessage = "[SYSTEM]: " + tempUserName +" left the chatroom. Now remains " + TotalUser + " people";
+                        await SendStringAsync(_sockets, leftMessage);
+                    }
                     ms.Write(buffer.Array, buffer.Offset, result.Count);
                 }
                 while (!result.EndOfMessage);
-
                 ms.Seek(0, SeekOrigin.Begin);
-                if (result.MessageType != WebSocketMessageType.Text){
+                if (result.MessageType != WebSocketMessageType.Text)
+                {
                     return null;
                 }
-
-                using (var reader = new StreamReader(ms, Encoding.UTF8)){
+                using (var reader = new StreamReader(ms, Encoding.UTF8))
+                {
                     return await reader.ReadToEndAsync();
                 }
             }

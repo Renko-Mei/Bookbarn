@@ -128,6 +128,9 @@ namespace BookBarn
 
             app.UseAuthentication();
 
+            
+
+
             app.UseWebSockets();
 
             app.UseStaticFiles();
@@ -135,7 +138,7 @@ namespace BookBarn
             app.UseAuthentication();
 
             app.UseMiddleware<BookBarn.ChatRoom.ChatWebSocketMiddleware>();
-
+            
 
             app.UseMvc(routes =>
             {
