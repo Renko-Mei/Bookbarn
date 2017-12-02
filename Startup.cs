@@ -44,14 +44,8 @@ namespace BookBarn
         {
             //for confirmation email
             services.AddTransient<IEmailSender, EmailSender>();
-
-            //for the shopping cart 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped(sp => ShoppingCart.GetCart(sp)); // object associated with the control
-
             services.AddMvc();
-            services.AddMemoryCache(); //for the shopping cart 
-            services.AddSession(); //for the shopping cart 
+
             // Configure database model
             services
                 .AddDbContext<InitialModelsContext>(options => options
@@ -139,7 +133,7 @@ namespace BookBarn
             app.UseStaticFiles();
 
             app.UseAuthentication();
-            app.UseSession(); // shopping cart 
+
             app.UseMiddleware<BookBarn.ChatRoom.ChatWebSocketMiddleware>();
 
 
