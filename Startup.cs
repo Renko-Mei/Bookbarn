@@ -44,8 +44,14 @@ namespace BookBarn
         {
             //for confirmation email
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddMvc();
 
+            //for the shopping cart 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped(sp => ShoppingCart.GetCart(sp)); // object associated with the control
+
+            services.AddMvc();
+            services.AddMemoryCache(); //for the shopping cart 
+            services.AddSession(); //for the shopping cart 
             // Configure database model
             services
                 .AddDbContext<InitialModelsContext>(options => options
@@ -82,7 +88,7 @@ namespace BookBarn
             });
 
             // Register custom username / password combination validator
-            services.AddTransient<IPasswordValidator<User>, PwInNameValidator>();
+            services.AddTransient<IPasswordValidator<User>, PwConstraintValidator>();
 
             // Register a custom user email validator
             services.AddTransient<IUserValidator<User>, UserEmailValidator>();
@@ -136,7 +142,7 @@ namespace BookBarn
             app.UseStaticFiles();
 
             app.UseAuthentication();
-
+            app.UseSession(); // shopping cart 
             app.UseMiddleware<BookBarn.ChatRoom.ChatWebSocketMiddleware>();
             
 
