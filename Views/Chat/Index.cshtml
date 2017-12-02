@@ -22,10 +22,10 @@
         width:100%;
         white-space:nowrap;
     }
-    .col-md-8{
+    .col-md-9{
         height: 500px;
     }
-    .col-md-4{
+    .col-md-3{
         height: 500px;
     }
     .input{
@@ -35,7 +35,7 @@
     }
     .text{
         max-width:unset;
-        width:384px;
+        width:460px;
         padding: 10px;
         margin-left: 0px;
         
@@ -53,10 +53,12 @@
 <h2 style="margin-top:60px">Chat Room</h2>
 <hr>
 <div class="row">
-     <div class="col-md-4">
-         <p>whatever</p>
+     <div class="col-md-3">
+         <p id="test"></p>
+         <p>Currently Online: </p>
+         <div id="availableUser"></div>
      </div>
-     <div class="col-md-8">
+     <div class="col-md-9">
         <div class="msg" >
              <div style="position:absolute; bottom:0;" id="msgs"></div>
         </div>
@@ -64,23 +66,15 @@
             <table>
                 <tr>
                     <td >
-                        <input type="text" class="text" id="MessageField" name="MessageField" placeholder="type message and press enter" />
-                        
+                        <input type="text" class="text" id="MessageField" name="MessageField" placeholder="type message and press enter" />   
                     </td>
                     <td>
                         <span class="emotion">emoji</span>
                     </td>
                 </tr>
-            </table> 
-             
-            
-           
-              
-
-        </div>
-        
+            </table>     
+        </div>     
      </div>
-
 </div>
 
 
@@ -114,15 +108,50 @@
 
         var userName = "@ViewData["UserName"]";
         var historicalMessage = @Html.Raw(@ViewBag.historicalMessage);
-        var historicalBar = "--------------------------history-------------------------";
+        var historicalBar = "--------------------------History-------------------------";
+        var onlineName=[];
+        var test;
+
         if (historicalMessage.length != 0){
             for (var i = 0; i < historicalMessage.length; i++) {
+                var temp = historicalMessage[i];
+                var isOnline = temp.search(": Welcome");
+                var isOnline_Second = temp.search("SYSTEM");
+                var isOffline = temp.search("left the chatroom. Now remains");
+                var tempE =0;
+                var tempName='';
+                
+               
+                if(isOnline != -1 && isOnline_Second != -1){
+                    tempE = temp.search("!");
+                    tempName = temp.substring(18, tempE);
+                    onlineName.push(tempName);
+                }
+                 if(isOffline != -1){
+                    tempE = isOffline-1;
+                    tempName = temp.substring(10, tempE);
+                    var a = onlineName.indexOf(tempName);
+                    test=tempName;
+                    onlineName.splice(a, 1);
+                }
+
+
                 $('#msgs').append(replace_em(historicalMessage[i]) + '<br />');
             };
             $('#msgs').append(historicalBar + '<br />');
+             document.getElementById("test").innerHTML = test;
+            if(onlineName.length !=0){
+                var uniqueArr = onlineName.filter(function(elem, index, self){
+                    return index ===self.indexOf(elem);
+                })
+                for(var j=0; j<uniqueArr.length; j++){
+                    $('#availableUser').append(replace_em(uniqueArr[j]) +'<br />');
+                }  
+            }  
         }
 
-    var wsUri = `ws://${window.location.host}/ws`;
+
+        var wsUri = `ws://${window.location.host}/ws`;
         var socket = new WebSocket(wsUri);
 
         
