@@ -40,9 +40,11 @@ namespace BookBarn.ChatRoom
                 var socketId = Guid.NewGuid().ToString();
                 var addSuccess = _sockets.TryAdd(socketId, currentSocket);
                 TotalUser +=1;
+                int check = 0;
 
                 while (true){
-                    if (ct.IsCancellationRequested){
+                    try{
+                        if (ct.IsCancellationRequested){
                         break;
                     }
 
@@ -59,12 +61,12 @@ namespace BookBarn.ChatRoom
                         int tempS = WelcomeIndex +8;
                         int tempL = response.Length-tempS-1;
                         var userName = response.Substring(tempS, tempL);
-                        foreach(var m in _nameCompare){
-                                if(m.Value ==userName){
-                                    TotalUser -=1;
-                                    break;
-                                }
-                            }    
+                        // foreach(var m in _nameCompare){
+                        //         if(m.Value ==userName){
+                        //             TotalUser -=1;
+                        //             break;
+                        //         }
+                        //     }    
                         var isCompared = _nameCompare.TryAdd(socketId, userName);
                         if(isCompared){   
                             response = response + " Currently " + TotalUser + " people online";
@@ -79,10 +81,27 @@ namespace BookBarn.ChatRoom
                     else{
                         await SendStringAsync(_sockets, response);
                     } 
+                    }
+                    catch(Exception ex){
+                        if(check ==0){
+                            TotalUser -=1;
+                            //var afterLeft = TotalUser-1;
+                            var CloseWindow = "[SYSTEM]: " + tempUserName +" left the chatroom. Now remains " + TotalUser + " people";
+                        
+                            await SendStringAsync(_sockets, CloseWindow);
+                            check =1;
+                        }
+                        
+                    }
+                    
                 }
 
                // WebSocket dummy;
                 _sockets.TryRemove(socketId, out currentSocket);
+                if(check ==0){
+                    await SendStringAsync(_sockets, "test");
+                }
+                
                 await currentSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
                 currentSocket.Dispose();
                 
@@ -117,11 +136,11 @@ namespace BookBarn.ChatRoom
                 {
                     ct.ThrowIfCancellationRequested();
                     result = await socket.ReceiveAsync(buffer, ct);
-                    if(result.MessageType == WebSocketMessageType.Close){
-                        TotalUser -=1;
-                        var leftMessage = "[SYSTEM]: " + tempUserName +" left the chatroom. Now remains " + TotalUser + " people";
-                        await SendStringAsync(_sockets, leftMessage);
-                    }
+                    // if(result.MessageType == WebSocketMessageType.Close){
+                    //     TotalUser -=1;
+                    //     var leftMessage = "[SYSTEM]: " + tempUserName +" left the chatroom. Now remains " + TotalUser + " people";
+                    //     await SendStringAsync(_sockets, leftMessage);
+                    // }
                     ms.Write(buffer.Array, buffer.Offset, result.Count);
                 }
                 while (!result.EndOfMessage);
