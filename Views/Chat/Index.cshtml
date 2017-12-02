@@ -45,6 +45,23 @@
         margin-left: 0px;
         margin-top: 0px;
     }
+    .system{
+        margin-left: 5px;
+        font: italic;
+        padding-top: 8px;
+        color: red;
+    }
+    .chatText{
+        padding-top: 4px;
+    }
+    .userName{
+        margin-left: 5px;
+        font-weight: bold;
+        color: rgb(9, 120, 218);
+    }
+    .history{
+        font-weight: bold;
+    }
 
 
     
@@ -108,7 +125,7 @@
 
         var userName = "@ViewData["UserName"]";
         var historicalMessage = @Html.Raw(@ViewBag.historicalMessage);
-        var historicalBar = "--------------------------History-------------------------";
+        var historicalBar = "--------------------------------History---------------------------------";
         var onlineName=[];
         var uniqueArr=[];
         //var test;
@@ -136,9 +153,22 @@
                     onlineName.splice(a, 1);
                 }
 
-                $('#msgs').append(replace_em(historicalMessage[i]) + '<br />');
+                if(historicalMessage[i].indexOf("SYSTEM") != -1){
+                    $('#msgs').append("<div class='system'>" + replace_em(historicalMessage[i]) + "</div>");
+                }
+                else{
+                    var tempQ = historicalMessage[i].indexOf(":");
+                    var tmdA = tempQ+1;
+                    var tempNameA = historicalMessage[i].substring(0,tmdA);
+
+                    var tempW = tempQ +1;
+                    var contextB = historicalMessage[i].substring(tempW);
+                    $('#msgs').append("<div class='chatText'><span class='userName'>" + tempNameA +"</span><span>" +replace_em(contextB) + "</span></div>");
+                }
+
+                //$('#msgs').append("<div>" + replace_em(historicalMessage[i]) + "</div>");
             };
-            $('#msgs').append(historicalBar + '<br />');
+            $('#msgs').append("<div class='history'>" + historicalBar + "</div>");
              //document.getElementById("test").innerHTML = test;
             if(onlineName.length !=0){
                 uniqueArr = onlineName.filter(function(elem, index, self){
@@ -197,8 +227,19 @@
                 }  
             }
             
+            if(e.data.indexOf("SYSTEM") != -1){
+                $('#msgs').append("<div class='system'>" + replace_em(e.data) + "</div>");
+            }
+            else{
+                var tempP = e.data.indexOf(":");
+                var tmd = tempP+1;
+                var tempName = e.data.substring(0,tmd);
 
-            $('#msgs').append(replace_em(e.data) + '<br />');
+                var tempS = tempP +1;
+                var context = e.data.substring(tempS);
+                $('#msgs').append("<div class='chatText'><span class='userName'>" + tempName +"</span><span>" +replace_em(context) + "</span></div>");
+            }
+            
         };
 
         socket.onerror = function (e) {
