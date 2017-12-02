@@ -22,21 +22,24 @@ body {
 .navbar {
   min-height: 80px;
 }
-/* Change navbar background colour */
+/* Change navbar background colour -- navy */
 .navbar-inverse {
-    background-color: #839788;
+    background-color: #042038;
+    /*background-color: #02182b;*/
     border-color: transparent;
 }
 
 /* navbar link colours */
 .navbar-inverse .navbar-nav li a {
-  color: #0d0a0a;
+  /*color: #0d0a0a;*/
+  color: white;
   padding-top: 30px;
 }
 
 /* specifically change the Logout button, since it is a button other rules don't seem to apply*/
 .navbar-inverse .btn-link {
-  color: #0d0a0a;
+  /*color: #0d0a0a;*/
+  color: white;
   font-size: 20px;
   padding-top: 20px;
 }
