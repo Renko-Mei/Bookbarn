@@ -110,7 +110,8 @@
         var historicalMessage = @Html.Raw(@ViewBag.historicalMessage);
         var historicalBar = "--------------------------History-------------------------";
         var onlineName=[];
-        var test;
+        var uniqueArr=[];
+        //var test;
 
         if (historicalMessage.length != 0){
             for (var i = 0; i < historicalMessage.length; i++) {
@@ -131,17 +132,16 @@
                     tempE = isOffline-1;
                     tempName = temp.substring(10, tempE);
                     var a = onlineName.indexOf(tempName);
-                    test=tempName;
+                    //test=tempName;
                     onlineName.splice(a, 1);
                 }
-
 
                 $('#msgs').append(replace_em(historicalMessage[i]) + '<br />');
             };
             $('#msgs').append(historicalBar + '<br />');
-             document.getElementById("test").innerHTML = test;
+             //document.getElementById("test").innerHTML = test;
             if(onlineName.length !=0){
-                var uniqueArr = onlineName.filter(function(elem, index, self){
+                uniqueArr = onlineName.filter(function(elem, index, self){
                     return index ===self.indexOf(elem);
                 })
                 for(var j=0; j<uniqueArr.length; j++){
@@ -168,6 +168,36 @@
 
         socket.onmessage = function (e) {
             console.log(e);
+            var checkWelcome = e.data.search(": Welcome");
+            var checkWelcome_second = e.data.search("SYSTEM");
+            var checkLeave = e.data.search("left the chatroom. Now remains");
+            var end =0;
+            var userName = '';
+            var checkDuplicate;
+            if(checkWelcome != -1 && checkWelcome_second !=-1){
+                end = e.data.search("!");
+                userName = e.data.substring(18, end);
+                checkDuplicate = uniqueArr.indexOf(userName);
+                if(checkDuplicate == -1){
+                    uniqueArr.push(userName);
+                }
+                $('#availableUser').empty();
+                for(var j=0; j<uniqueArr.length; j++){
+                    $('#availableUser').append(replace_em(uniqueArr[j]) +'<br />');
+                }  
+            }
+            else if(checkLeave != -1){
+                end = checkLeave -1;
+                userName = e.data.substring(10, end);
+                var b = uniqueArr.indexOf(userName);
+                uniqueArr.splice(b, 1);
+                $('#availableUser').empty();
+                for(var j=0; j<uniqueArr.length; j++){
+                    $('#availableUser').append(replace_em(uniqueArr[j]) +'<br />');
+                }  
+            }
+            
+
             $('#msgs').append(replace_em(e.data) + '<br />');
         };
 
