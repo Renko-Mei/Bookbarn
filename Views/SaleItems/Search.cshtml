@@ -2,9 +2,9 @@
 @{
     ViewData["Title"] = "Search";
 }
+<link rel="stylesheet" href="~/css/Search.css" />
 
-
-<div style="margin-top:50px">
+<div style="margin-top:60px">
 	<h1>Search</h1>
 
 	<p>Search for books.</p>
@@ -59,10 +59,9 @@
 		{
 			<tr>
 				<td>
-					@if (resultItem.Image != null && resultItem.Image.Length > 0)
+					@if (resultItem.ImageLinks != null)
 					{
-						<img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(resultItem.Image))" height="70" width="70"/>
-
+						<img src="@Html.DisplayFor(model => resultItem.ImageLinks)">
 					}
 				</td>
 				<td>					
@@ -72,13 +71,33 @@
 					@Html.DisplayFor(model => resultItem.Author)
 				</td>
 				<td>
+					@if (resultItem.Quality.Equals("NEW"))
+					{
+						resultItem.Quality = "New";
+					}
+					else if (resultItem.Quality.Equals("USED_LIKE_NEW"))
+					{
+						resultItem.Quality = "Used - Like new";
+					}
+					else if (resultItem.Quality.Equals("USED_OLD"))
+					{
+						resultItem.Quality = "Used - Old";
+					}
+					else if (resultItem.Quality.Equals("USED_VERY_OLD"))
+					{
+						resultItem.Quality = "Used - Very old";
+					}
+
 					@Html.DisplayFor(model => resultItem.Quality)
 				</td>
 				<td>
 					@Html.DisplayFor(model => resultItem.Price)
 				</td>
 				<td>
-					<a asp-action="Details" asp-route-id="@resultItem.SaleItemID">Details</a>
+					<a asp-action="SearchDetails" asp-route-id="@resultItem.SaleItemID">Details</a>
+				</td>
+				<td>
+					<a asp-action="AddToShoppingCart" asp-controller="ShoppingCarts" asp-route-saleItemid="@resultItem.SaleItemID">Add To Cart</a>
 				</td>
 			</tr>
 		}

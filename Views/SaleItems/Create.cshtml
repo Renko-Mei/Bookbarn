@@ -4,53 +4,207 @@
     ViewData["Title"] = "Create";
 }
 
-<h2 style="margin-top:60px">Create</h2>
+<h2 style="margin-top:60px">Add details</h2>
 
-<h4>SaleItem</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form method="post" enctype="multipart/form-data" form asp-action="Create">
+    <form method="post" enctype="multipart/form-data" form asp-action="Create">
+        <div class="col-md-4">
+       
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <table>
+                    <tr>
+                        <td>
+                            <label asp-for="Isbn" class="control-label">ISBN</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>    
+                            <input asp-for="Isbn" class="form-control" id="ISBN"/>
+                        </td>
+                        <td style="padding: 15px"></td>
+                        <td>
+                            <button type="button" class="btn btn-default" id="checkISBN">Check ISBN</button>
+                        </td>
+                    </tr>
+                </table>
+                <span asp-validation-for="Isbn" class="text-danger" id="IsbnAlert"></span>  
+            </div>
+
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Quality" class="control-label"></label>
-                <input asp-for="Quality" class="form-control" />
-                <span asp-validation-for="Quality" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="IsSold" /> @Html.DisplayNameFor(model => model.IsSold)
-                    </label>
+                <div>
+                    <select asp-for="Quality" >
+                        <option value="NEW">New</option>
+                        <option value="USED_LIKE_NEW">Used - Like new</option>
+                        <option value="USED_OLD">Used - Old</option>
+                        <option value="USED_VERY_OLD">Used - Very old/Poor</option>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="BookId" class="control-label"></label>
-                <input asp-for="BookId" class="form-control" />
-                <span asp-validation-for="BookId" class="text-danger"></span>
-            </div>
 
-			<div class="form-group">
-				<label asp-for="Image" class="control-label"></label>
+             <div style="display: none" id="ImageDiv">
+                <img src='' id="RealImage">
+            </div>
+			<div class="form-group" style="display: none" id="selfUpload">
+				<label asp-for="Image" class="control-label">Want to add another real Image?</label>
 				<input type="file" name="files" multiple />
 			</div>
+           
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default" id="Button" disabled/>
             </div>
-        </form>
-    </div>
+        
+        </div>
+        <div class="col-md-4" style="display: none" id="2">
+            <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" id="Title"/>
+                    <span asp-validation-for="Title" class="text-danger" ></span>
+            </div>
+            <div class="form-group">
+                    <label asp-for="Subtitle" class="control-label"></label>
+                    <input asp-for="Subtitle" class="form-control" id="Subtitle"/>
+                    <span asp-validation-for="Subtitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                    <label asp-for="Authors" class="control-label"></label>
+                    <input asp-for="Authors" class="form-control" id="Authors"/>
+                    <span asp-validation-for="Authors" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                    <label asp-for="Publisher" class="control-label"></label>
+                    <input asp-for="Publisher" class="form-control" id="Publisher"/>
+                    <span asp-validation-for="Publisher" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="col-md-4" style="display: none" id="3">
+            <div class="form-group">
+                    <label asp-for="PublishedData" class="control-label">Published Date</label>
+                    <input asp-for="PublishedData" class="form-control" id="PublishedData"/>
+                    <span asp-validation-for="PublishedData" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" id="Description"/>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group" style="display: none">
+                    <label asp-for="Isbn10Or13" class="control-label"></label>
+                    <input asp-for="Isbn10Or13" class="form-control" id="Isbn10Or13"/>
+                    <span asp-validation-for="Isbn10Or13" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display: none">
+                    <label asp-for="ImageLinks" class="control-label"></label>
+                    <input asp-for="ImageLinks" class="form-control" id="ImageLinks"/>
+                    <span asp-validation-for="ImageLinks" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Check All Your Sale Items</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function checkISBN(){
+            var isbn = document.getElementById("ISBN").value;
+            document.getElementById("Button").disabled = false;
+            document.getElementById("2").style.display = "block";
+            document.getElementById("3").style.display = "block";
+             document.getElementById("selfUpload").style.display = "block";
+            var isbnLength = isbn.length;
+            var url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`;
+            //document.getElementById("title").value = url;
+            $.ajax({
+                url: url,
+                dataType: "json",
+                success: function(data){
+                    var totalItems = data.totalItems;
+                    if(totalItems != 0){
+                        var title = data.items[0].volumeInfo.title;
+                        var author = data.items[0].volumeInfo.authors;
+                        var subtitle = data.items[0].volumeInfo.subtitle;
+                        var publisher = data.items[0].volumeInfo.publisher;
+                        var publishedDate = data.items[0].volumeInfo.publishedDate;
+                        var description = data.items[0].volumeInfo.description;
+                        var ISBN10Type = data.items[0].volumeInfo.industryIdentifiers[0].type;
+                        var ISBN13Type = data.items[0].volumeInfo.industryIdentifiers[1].type;
+                        var sImageLink = data.items[0].volumeInfo.imageLinks.smallThumbnail;
+                        var ImageLink = data.items[0].volumeInfo.imageLinks.thumbnail;
+                        var substituteISBN;
+                        if(String(title) =="undefinied"){
+                            title = "unknown";
+                        }
+                        if(String(subtitle) == "undefined"){
+                            subtitle = "no subtitle";
+                        };
+                        if(String(author) == "undefined"){
+                            author = "unknown";
+                        };
+                        if(String(publisher) == "undefined"){
+                            publisher = "unknown";
+                        };
+                        if(String(publishedDate) == "undefined"){
+                            publishedDate = "unknown";
+                        };
+                        if(String(description) == "undefined"){
+                            description = "";
+                        };
+                        if(isbnLength ==10){
+                            if(ISBN13Type ="ISBN_13"){
+                                substituteISBN = data.items[0].volumeInfo.industryIdentifiers[1].identifier;
+                            }else{
+                                substituteISBN = '';
+                            }
+                        }else{
+                            if(String(ISBN10Type) == "ISBN_10"){
+                                substituteISBN = items[0].volumeInfo.industryIdentifiers[0].identifier;
+                            }else{
+                                substituteISBN='';
+                            }
+                        }
+                        if(String(ImageLink) =="undefined"){
+                            if(String(sImageLink)=="undefined"){
+                                ImageLink = "";
+                            }
+                            ImageLink = sImageLink;
+                        }
+
+                        document.getElementById("Title").value = title;
+                        document.getElementById("Subtitle").value = subtitle;
+                        document.getElementById("Authors").value = author;
+                        document.getElementById("Publisher").value = publisher;
+                        document.getElementById("PublishedData").value = publishedDate;
+                        document.getElementById("Description").value = description;
+                        document.getElementById("Isbn10Or13").value = substituteISBN;
+                        document.getElementById('ImageLinks').value = ImageLink;
+                        if(ImageLink !=''){
+                            document.getElementById('RealImage').src = ImageLink;
+                            document.getElementById('ImageDiv').style.display = 'block';
+                        }  
+                    }
+                    else{
+                        document.getElementById("IsbnAlert").innerHTML = "Seems like we cannot recognize this ISBN number, please try another one or type in book information manually"
+                    }
+                    
+                },
+                type: 'GET'
+            });
+        }
+       document.getElementById("checkISBN").addEventListener('click', checkISBN);
+    </script>
 }

@@ -39,7 +39,17 @@
 			<input asp-for="maxPrice" class="form-control"  value="9999.99"/>
 			<span asp-validation-for="maxPrice" class="text-danger"></span>
 		</div>
-
+		
+		<div>
+			Quality:
+			<select asp-for="quality">
+				<option value="">Any</option>
+				<option value="NEW">New</option>
+				<option value="USED_LIKE_NEW">Used - Like new</option>
+				<option value="USED_OLD">Used - Old</option>
+				<option value="USED_VERY_OLD">Used - Very old/Poor</option>
+			</select>
+		</div>
 
 		<div>
 			Sort by:

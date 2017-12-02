@@ -14,22 +14,22 @@ namespace BookBarn.Controllers
     public class EmailController : Controller
     {
 
-        private readonly AuthenticationContext _context;
+        private readonly AuthenticationContext _Acontext;
 
         public EmailController(AuthenticationContext context)
         {
-            _context = context;
+            _Acontext = context;
         }
 
         public string EmailInfo()
         {
-            string userEmail = _context.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Email;                         
+            string userEmail = _Acontext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Email;                         
             return userEmail;
         }
 
         public string NameInfo()
         {
-            return _context.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).UserName;
+            return _Acontext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).UserName;
         }
 
         [HttpGet]
@@ -52,7 +52,7 @@ namespace BookBarn.Controllers
             message.To.Add(new MailboxAddress("mark", customerEmail));//this should be changed to seller email
             message.Subject = "test mail in asp.net core";
             var builder = new BodyBuilder();
-            builder.TextBody = @"Dear seller,";
+            builder.TextBody = @"Dear seller, you have received an email request from your customer";
             if(customerPhoneNumber ==null){
                 customerPhoneNumber = "not provided";
             }

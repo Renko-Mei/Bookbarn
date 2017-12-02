@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using BookBarn.Models.IdentityViewModels;
 using Microsoft.AspNetCore.Authentication;
+
 using Microsoft.Extensions.Options;
 using BookBarn.Services;
 using BookBarn.Data;
@@ -26,6 +27,7 @@ namespace BookBarn.Controllers
         private readonly IEmailSender emailSender;
 
         private readonly AuthenticationContext context;
+
 
 
         public UserController(UserManager<User> userManager,
@@ -69,7 +71,6 @@ namespace BookBarn.Controllers
 
                 IdentityResult result = await userManager.CreateAsync(user, model.Password);
 
-
                 if (result.Succeeded)
                 {
                     logger.LogInformation("User created a new account with password.");
@@ -86,7 +87,9 @@ namespace BookBarn.Controllers
                 {
                     logger.LogError($"User {user.UserName} register failed {Environment.NewLine}" +
                         $"    {string.Join(Environment.NewLine, result.Errors.Select(o => o.ToString()).ToArray())}");
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    result.Errors.Select(x => x.Description)
+                        .AsParallel()
+                        .ForAll(x => ModelState.AddModelError(string.Empty, x));
                     return View(model);
                 }
             }
@@ -181,6 +184,13 @@ namespace BookBarn.Controllers
             }
         }
 
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (IdentityError error in result.Errors)
+            {
+                ModelState.TryAddModelError("", error.Description);
+            }
+        }
         
        //send confirmation Email
         [HttpGet]
@@ -285,7 +295,6 @@ namespace BookBarn.Controllers
         {
             return View();
         }
- 
     }
 }
 
