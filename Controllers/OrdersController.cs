@@ -16,10 +16,11 @@ namespace BookBarn.Controllers
         private readonly ShoppingCart _shoppingCart;
 
         private Order _order;
-        public OrdersController(InitialModelsContext context, ShoppingCart shoppingCart)
+        public OrdersController(InitialModelsContext context, ShoppingCart shoppingCart, Order order)
         {
             _context = context;
             _shoppingCart = shoppingCart;
+            _order = order;
         }
 
         public IActionResult Checkout()
@@ -39,7 +40,7 @@ namespace BookBarn.Controllers
             }
             if(ModelState.IsValid)
             {
-                _context.Order.
+                _order.CreateOrder(order);
                 return RedirectToAction("CheckoutComplete");
             }
             return View(order);
