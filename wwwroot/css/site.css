@@ -63,9 +63,9 @@ body {
    background: transparent;
    width: 110%;
    font-size: 16px;
+   text-align: center;
    line-height: 1;
    border: 0;
-   border-radius: 0;
    height: 100%;
    -webkit-appearance: none;
 }
@@ -74,6 +74,7 @@ body {
    height: 100%;
    overflow: hidden;
    background: url('../images/new_arrow.jpg') no-repeat right #ddd;
+   border-radius: 5px;
 }
 
 .width-100p {
