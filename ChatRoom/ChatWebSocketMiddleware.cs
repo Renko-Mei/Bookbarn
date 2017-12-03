@@ -175,7 +175,11 @@ namespace BookBarn.ChatRoom
         }
         public static void SaveHistoricalMessage(string data)
         {
-            historicalMessage.Add(data);   
+            historicalMessage.Add(data);  
+            var maxLength = 100;
+            if(historicalMessage.Count >maxLength){
+                historicalMessage.RemoveRange(0,40);
+            } 
         }
     }
 }

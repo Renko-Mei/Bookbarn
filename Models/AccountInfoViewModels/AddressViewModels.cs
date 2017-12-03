@@ -1,34 +1,36 @@
-using System.ComponentModel.DataAnnotations;
+// using System.ComponentModel.DataAnnotations;
 
-namespace BookBarn.Models.AccountInfoViewModels
-{
-    public class AddressViewModel
-    {
-        [Required]
-        [Display(Name = "Legal Name")]
-        public string LegalName {get; set;}
+// namespace BookBarn.Models.AccountInfoViewModels
+// {
+//     public class AddressViewModel
+//     {
+//         public int AddressId { get; set; }
 
-        [Required]
-        public string Address { get; set; }
+//         [Required]
+//         [Display(Name = "Legal Name")]
+//         public string LegalName {get; set;}
 
-        [Required]
-        public string City { get; set; }
+//         [Required]
+//         public string Address { get; set; }
 
-        [Required]
-        [Display(Name = "Province/Territory")]
-        public string Province { get; set; }
+//         [Required]
+//         public string City { get; set; }
 
-        [Required]
-        public string Country { get; set; }
+//         [Required]
+//         [Display(Name = "Province/Territory")]
+//         public string Province { get; set; }
 
-        [Required]
-        [Display(Name = "Postal code")]
-        public string PostalCode { get; set; }
+//         [Required]
+//         public string Country { get; set; }
 
-        [Phone]
-        [Display(Name = "Phone number")]
-        public string PhoneNumber { get; set; }
+//         [Required]
+//         [Display(Name = "Postal code")]
+//         public string PostalCode { get; set; }
 
-        public string StatusMessage { get; set; }
-    }
-}
+//         [Phone]
+//         [Display(Name = "Phone number")]
+//         public string PhoneNumber { get; set; }
+
+//         public string UserKey { get; set; }
+//     }
+// }

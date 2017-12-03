@@ -14,14 +14,17 @@
         position: absolute;
         top: 0;
         bottom: 30px;
-        height: 80%;
+        height: 400px;
         border: 1px solid black;
         margin-bottom: auto;
         display:block;
-        overflow: scroll;
         width:100%;
         white-space:nowrap;
     }
+
+
+
+
     .col-md-9{
         height: 500px;
     }
@@ -63,6 +66,12 @@
         font-weight: bold;
     }
 
+    #msgs{
+        bottom:0; 
+        height: 400px;
+        overflow-y: scroll;
+    }
+
 
     
 </style>
@@ -77,7 +86,7 @@
      </div>
      <div class="col-md-9">
         <div class="msg" >
-             <div style="position:absolute; bottom:0;" id="msgs"></div>
+             <div id="msgs"></div>
         </div>
         <div class="input"> 
             <table>
@@ -90,7 +99,7 @@
                     </td>
                 </tr>
             </table>     
-        </div>     
+        </div>    
      </div>
 </div>
 
@@ -155,6 +164,7 @@
 
                 if(historicalMessage[i].indexOf("SYSTEM") != -1){
                     $('#msgs').append("<div class='system'>" + replace_em(historicalMessage[i]) + "</div>");
+                    
                 }
                 else{
                     var tempQ = historicalMessage[i].indexOf(":");
@@ -164,11 +174,13 @@
                     var tempW = tempQ +1;
                     var contextB = historicalMessage[i].substring(tempW);
                     $('#msgs').append("<div class='chatText'><span class='userName'>" + tempNameA +"</span><span>" +replace_em(contextB) + "</span></div>");
+                    
                 }
 
                 //$('#msgs').append("<div>" + replace_em(historicalMessage[i]) + "</div>");
             };
             $('#msgs').append("<div class='history'>" + historicalBar + "</div>");
+           
              //document.getElementById("test").innerHTML = test;
             if(onlineName.length !=0){
                 uniqueArr = onlineName.filter(function(elem, index, self){
@@ -224,11 +236,16 @@
                 $('#availableUser').empty();
                 for(var j=0; j<uniqueArr.length; j++){
                     $('#availableUser').append(replace_em(uniqueArr[j]) +'<br />');
+                    
                 }  
             }
             
             if(e.data.indexOf("SYSTEM") != -1){
                 $('#msgs').append("<div class='system'>" + replace_em(e.data) + "</div>");
+                 $('#msgs').scrollTop($('#msgs')[0].scrollHeight);
+                
+                
+                
             }
             else{
                 var tempP = e.data.indexOf(":");
@@ -238,6 +255,10 @@
                 var tempS = tempP +1;
                 var context = e.data.substring(tempS);
                 $('#msgs').append("<div class='chatText'><span class='userName'>" + tempName +"</span><span>" +replace_em(context) + "</span></div>");
+                 $('#msgs').scrollTop($('#msgs')[0].scrollHeight);
+                 document.getElementById("test").innerHTML = $('#msgs')[0].scrollHeight;
+  
+                
             }
             
         };
