@@ -16,9 +16,14 @@ namespace BookBarn.Views.AccountInfo
         public static string SalesVisualization => "SalesVisualization";
 
         public static string OrderHistory => "OrderHistory";
+
+        public static string ChangeAddress => "ChangeAddress";
+
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);
+
+        public static string CHangeAddressNavClass(ViewContext viewContext)=> PageNavClass(viewContext, ChangeAddress);
         public static string SeeSaleHistoryNavClass(ViewContext viewContext) => PageNavClass(viewContext, SalesVisualization);   
 
         public static string OrderHistoryNavClass(ViewContext viewContext) => PageNavClass(viewContext, OrderHistory);

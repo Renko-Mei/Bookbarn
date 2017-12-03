@@ -144,42 +144,25 @@ namespace BookBarn.Controllers
             return RedirectToAction(nameof(ChangePassword));
         }
 
+
         // [HttpGet]
         // public async Task<IActionResult> ChangeAddress()
         // {
         //     var user = await userManager.GetUserAsync(User);
+           
 
         //     if(user ==null){
         //         Response.StatusCode = 401;
         //         return View("NotLoggedIn");
         //     }
-        [HttpGet]
-        public async Task<IActionResult> OrderHistory()
-        {
-             var user = await userManager.GetUserAsync(User);
-            if(user == null){
-                Response.StatusCode = 401;
-                return View("NotLoggedIn");
-            }           
-            var orders = this.context.Order
-            .Where(x =>  x.BuyerId == user.Id)
-            .OrderByDescending(x => x.OrderDate)
-            .ToList();
-                            
-
-            //ViewData["orders"] = orders;
-            return View(orders);
-        }
+        //     var model = new ChangeAddressViewModel{
+        //         UserKey = user.Id,
+               
+        //     };
 
 
-        [HttpGet]
-        public async Task<IActionResult> SalesVisualization()
-        {   
-            var user = await userManager.GetUserAsync(User);
-            if(user == null){
-                Response.StatusCode = 401;
-                return View("NotLoggedIn");
-            }
+        //     return View(model);
+        // }
 
         // [HttpPost]
         // [ValidateAntiForgeryToken]
@@ -210,7 +193,39 @@ namespace BookBarn.Controllers
         // }
 
 
-            
+
+
+
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> OrderHistory()
+        {
+             var user = await userManager.GetUserAsync(User);
+            if(user == null){
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
+            }           
+            var orders = this.context.Order
+            .Where(x =>  x.BuyerId == user.Id)
+            .OrderByDescending(x => x.OrderDate)
+            .ToList();
+                            
+
+            //ViewData["orders"] = orders;
+            return View(orders);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> SalesVisualization()
+        {   
+            var user = await userManager.GetUserAsync(User);
+            if(user == null){
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
+            }
 
             Chart chart = new Chart();
             chart.Type = "line";

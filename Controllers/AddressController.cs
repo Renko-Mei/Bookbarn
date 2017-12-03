@@ -56,7 +56,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AddressId,Unit,StreetNumber,StreetName,PostalCode")] Address address)
+        public async Task<IActionResult> Create([Bind("AddressId,LegalName,StreetAddress,City,Province,Country,PostalCode,PhoneNumber,UserKey")] Address address)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AddressId,Unit,StreetNumber,StreetName,PostalCode")] Address address)
+        public async Task<IActionResult> Edit(int id, [Bind("AddressId,LegalName,StreetAddress,City,Province,Country,PostalCode,PhoneNumber,UserKey")] Address address)
         {
             if (id != address.AddressId)
             {
