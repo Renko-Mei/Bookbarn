@@ -1,9 +1,10 @@
 using System;
-
-namespace BookBarn.Models.CheckoutViewModels
+//not used 
+namespace BookBarn.Models.CheckoutViewModel
 {
-    public class CheckoutViewModels
+    public class CheckoutViewModel
     {
-        public Address BuyerAddress {get; set;}
+        public Address BuyerAddress {get;set;}
+        // public Order BuyerOrder {get;set;}
     }
 }

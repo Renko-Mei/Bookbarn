@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookBarn.Models;
 using BookBarn.Data;
+using BookBarn.Models.CheckoutViewModel;
 
 namespace BookBarn.Controllers
 {
@@ -14,13 +15,14 @@ namespace BookBarn.Controllers
     {
         private readonly InitialModelsContext _context;
         private readonly ShoppingCart _shoppingCart;
-
-        private Order _order;
-        public OrdersController(InitialModelsContext context, ShoppingCart shoppingCart, Order order)
+        private readonly AuthenticationContext _aContext;
+        //private Order _order;
+        public OrdersController(InitialModelsContext context, ShoppingCart shoppingCart, AuthenticationContext aContext)
         {
+            _aContext = aContext;
             _context = context;
             _shoppingCart = shoppingCart;
-            _order = order;
+            //_order = order;
         }
 
         public IActionResult Checkout()
@@ -29,7 +31,7 @@ namespace BookBarn.Controllers
         }
 
         [HttpPost]
-        public IActionResult Checkout(Order order)
+        public IActionResult Checkout(Address address)
         {
             var items = _shoppingCart.GetShoppingCartItems();
             _shoppingCart.ShoppingCartItems = items;
@@ -39,11 +41,42 @@ namespace BookBarn.Controllers
                 ModelState.AddModelError("", "Your cart is empty, please add some books first");
             }
             if(ModelState.IsValid)
-            {
-                _order.CreateOrder(order);
+            {   
+                var name = _aContext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Id;
+                // The address model has to save the above name
+                address.UserKey = name;
+
+                var shoppingCartItems =  _shoppingCart.ShoppingCartItems;
+                 // For each seller in the shopping cart, create new order 
+                var sellers = shoppingCartItems.GroupBy(x => x.SaleItem.UserKey);
+                foreach(var seller in sellers)
+                {
+                    string sellerId = seller.Key;
+                    
+                    var newOrder = new Order()
+                    {
+                        OrderDate = DateTime.Now,
+                        IsSold = true,
+                        BuyerId = name,
+                        SellerId = sellerId,
+                        SaleItems = new List<SaleItem>()
+                    };
+
+                    foreach(var saleItems in seller)
+                    {
+                        var newSaleItem = saleItems.SaleItem;
+                        if(newSaleItem != null)
+                        {
+                            newOrder.SaleItems.Add(newSaleItem);
+                        }
+                    }
+                    _context.Order.Add(newOrder);
+                }
+                _context.Address.Add(address);
+                _context.SaveChanges();
                 return RedirectToAction("CheckoutComplete");
             }
-            return View(order);
+            return View();
         }
 
         public IActionResult CheckoutComplete()

@@ -25,24 +25,27 @@ namespace BookBarn.Data
                            Isbn = "0495012408",
                            Quality = SaleItem.BookQuality.NEW,
                            Price = 10.6f,
-                           Authors ="asdasfafgs",
-                           Title = "seed1"
+                           Authors ="JK Rowling",
+                           Title = "Harry P and Philosopher Stone",
+                           UserKey = "abc"
                        },
                        new SaleItem
                        {
                            Isbn = "9783319669663",
                            Quality = SaleItem.BookQuality.USED_LIKE_NEW,
                            Price = 5.25f,
-                           Authors = "shdgh",
-                           Title = "seed2"
+                           Authors ="JK Rowling",
+                           Title = "Harry P and Chamber of Secret",
+                           UserKey = "efg"
                        },
                        new SaleItem
                        {
                            Isbn = "9781941222126",
                            Quality = SaleItem.BookQuality.USED_OLD,
                            Price = 6.66f,
-                           Authors = "sfgsdhwrt",
-                           Title = "seed3"
+                           Authors ="JK Rowling",
+                           Title = "Harry P and Prisoners of Azkaban",
+                           UserKey = "abc"
                        }
                     );
                     context.SaveChanges();
