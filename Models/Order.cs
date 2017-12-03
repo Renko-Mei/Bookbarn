@@ -15,6 +15,7 @@ namespace BookBarn.Models
         _shoppingCart = shoppingCart;
     }
 
+    
     public void CreateOrder(Order order){
       //var shoppingCartItems = _shoppingCart.ShoppingCartItems;
       order.OrderDate = DateTime.Now;
@@ -39,5 +40,3 @@ namespace BookBarn.Models
     public String SellerId { get; set; }
   }
 }
-
-//dotnet aspnet-codegenerator controller -name OrdersController -m Order -dc InitialModelsContext --relativeFolderPath Controllers --useDefaultLayout --referenceScriptLibraries
