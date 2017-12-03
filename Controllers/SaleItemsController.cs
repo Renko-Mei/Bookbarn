@@ -64,8 +64,8 @@ namespace BookBarn.Controllers
             {
                 if (id == null)
                 {
-                Response.StatusCode = 404;
-                return View("NotFound");
+                    Response.StatusCode = 404;
+                    return View("NotFound");
                 }
                 var saleItem = await _context.SaleItem
                     .SingleOrDefaultAsync(m => m.SaleItemId == id);
