@@ -14,6 +14,8 @@ namespace BookBarn.Controllers
     {
         private readonly InitialModelsContext _context;
         private readonly ShoppingCart _shoppingCart;
+
+        private Order _order;
         public OrdersController(InitialModelsContext context, ShoppingCart shoppingCart)
         {
             _context = context;
@@ -22,6 +24,30 @@ namespace BookBarn.Controllers
 
         public IActionResult Checkout()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Checkout(Order order)
+        {
+            var items = _shoppingCart.GetShoppingCartItems();
+            _shoppingCart.ShoppingCartItems = items;
+
+            if(_shoppingCart.ShoppingCartItems.Count == 0)
+            {
+                ModelState.AddModelError("", "Your cart is empty, please add some books first");
+            }
+            if(ModelState.IsValid)
+            {
+                _context.Order.
+                return RedirectToAction("CheckoutComplete");
+            }
+            return View(order);
+        }
+
+        public IActionResult CheckoutComplete()
+        {
+            ViewBag.CheckoutComplete = "Thank you for ordering from BookBarn!";
             return View();
         }
 
