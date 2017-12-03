@@ -11,7 +11,7 @@ namespace BookBarn.Models.AccountInfoViewModels
         public string LegalName {get; set;}
 
         [Required]
-        public string Address { get; set; }
+        public string StreetAddress { get; set; }
 
         [Required]
         public string City { get; set; }

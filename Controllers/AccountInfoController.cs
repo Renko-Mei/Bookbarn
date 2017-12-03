@@ -30,19 +30,27 @@ namespace BookBarn.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly ILogger logger;
         private readonly InitialModelsContext context;
+        private readonly AuthenticationContext Acontext;
 
         public AccountInfoController(
             UserManager<User> userManager, 
             SignInManager<User> signInManager, 
             RoleManager<IdentityRole> roleManager, 
             ILogger<AccountInfoController> logger,
-            InitialModelsContext context)
+            InitialModelsContext context,
+            AuthenticationContext Acontext)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
             this.logger = logger;
             this.context = context;
+            this.Acontext = Acontext;
+        }
+
+        public string UserID()
+        {
+            return Acontext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Id;
         }
 
         [TempData]
@@ -145,52 +153,83 @@ namespace BookBarn.Controllers
         }
 
 
-        // [HttpGet]
-        // public async Task<IActionResult> ChangeAddress()
-        // {
-        //     var user = await userManager.GetUserAsync(User);
+        [HttpGet]
+        public async Task<IActionResult> ChangeAddress()
+        {
+            var user = await userManager.GetUserAsync(User);
+            var temp = await context.Address.ToListAsync();
+            var viewList = from a in temp 
+                        where a.UserKey == UserID() 
+                        select a;
            
+            if(viewList.Count() !=0)
+            {
+                var _AddressId = viewList.FirstOrDefault(c => c.UserKey == UserID()).AddressId;
+                var _LegalName = viewList.FirstOrDefault(c => c.UserKey == UserID()).LegalName;
+                var _StreetAddress = viewList.FirstOrDefault(c => c.UserKey == UserID()).StreetAddress;
+                var _City = viewList.FirstOrDefault(c => c.UserKey == UserID()).City;
+                var _Province = viewList.FirstOrDefault(c => c.UserKey == UserID()).Province;
+                var _Country = viewList.FirstOrDefault(c => c.UserKey == UserID()).Country;
+                var _PostalCode = viewList.FirstOrDefault(c => c.UserKey == UserID()).PostalCode;
+                var _PhoneNumber = viewList.FirstOrDefault(c => c.UserKey == UserID()).PhoneNumber;
+                var _UserKey = viewList.FirstOrDefault(c => c.UserKey == UserID()).UserKey;
+                if(user ==null){
+                    Response.StatusCode = 401;
+                    return View("NotLoggedIn");
+                }
 
-        //     if(user ==null){
-        //         Response.StatusCode = 401;
-        //         return View("NotLoggedIn");
-        //     }
-        //     var model = new ChangeAddressViewModel{
-        //         UserKey = user.Id,
-               
-        //     };
+                var model = new ChangeAddressViewModel{
+                    AddressId = _AddressId,
+                    LegalName = _LegalName,
+                    StreetAddress = _StreetAddress,
+                    City = _City,
+                    Province = _Province,
+                    Country = _Country,
+                    PostalCode = _PostalCode,
+                    PhoneNumber = _PhoneNumber,
+                    UserKey = _UserKey
+                };
 
+                return View(model);
 
-        //     return View(model);
-        // }
+            }
+            else
+            {
+                return View("NoAvailableAddress");
+            }
+             
+            
+        }
 
-        // [HttpPost]
-        // [ValidateAntiForgeryToken]
-        // public async Task<IActionResult> ChangeAddress(ChangeAddressViewModel model)
-        // {
-        //     if (!ModelState.IsValid)
-        //     {
-        //         return View(model);
-        //     }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeAddress(ChangeAddressViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-        //     var user = await userManager.GetUserAsync(User);
-        //     if (user == null)
-        //     {
-        //         throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
-        //     }
-
-        //     var changeAddressResult = await userManager
-        //     //ChangeStreetAddressAsync(user, model.OldPassword, model.NewPassword);
-        //     if (!changeAddressResult.Succeeded)
-        //     {
-        //         return View(model);
-        //     }
-
-        //     await signInManager.SignInAsync(user, isPersistent: false);
-        //     logger.LogInformation("User changed their password successfully.");
-        //     StatusMessage = "Your address has been changed.";
-        //     return RedirectToAction(nameof(ChangePassword));
-        // }
+            try
+            {
+                model.AddressId = context.Address.FirstOrDefault(c => c.UserKey == UserID()).AddressId;
+                model.UserKey = UserID();
+                context.Update(model);
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            if (model.UserKey ==UserID())
+            {
+                return View(model);
+            }
+            else
+            {
+                return View("NoAccess");
+            }
+        }
 
 
 

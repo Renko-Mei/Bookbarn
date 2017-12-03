@@ -23,7 +23,7 @@ namespace BookBarn.Views.AccountInfo
 
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);
 
-        public static string CHangeAddressNavClass(ViewContext viewContext)=> PageNavClass(viewContext, ChangeAddress);
+        public static string ChangeAddressNavClass(ViewContext viewContext)=> PageNavClass(viewContext, ChangeAddress);
         public static string SeeSaleHistoryNavClass(ViewContext viewContext) => PageNavClass(viewContext, SalesVisualization);   
 
         public static string OrderHistoryNavClass(ViewContext viewContext) => PageNavClass(viewContext, OrderHistory);

@@ -84,16 +84,28 @@ namespace BookBarn.Controllers
 
         // GET: Address/Create
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             if (User.Identity.IsAuthenticated)
             {
-              return View();
+                var temp = await _context.Address.ToListAsync();
+
+                var viewList = from a in temp 
+                        where a.UserKey == UserID() 
+                        select a;
+                if(viewList.Count() ==1){
+                    return View("AddressLimit");
+                }
+                else{
+                    return View();
+                }
+
+                
             }
             else
             {
-              Response.StatusCode = 401;
-              return View("NotLoggedIn");
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
             }
         }
 
@@ -106,7 +118,7 @@ namespace BookBarn.Controllers
                 address.UserKey = UserID();
                 _context.Add(address);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View("AddressCreateSuccess");
             }
             return View(address);
         }
