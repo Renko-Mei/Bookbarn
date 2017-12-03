@@ -4,7 +4,7 @@
 }
 <link rel="stylesheet" href="~/css/Search.css" />
 
-<div style="margin-top:50px">
+<div style="margin-top:60px">
 	<h1>Search</h1>
 
 	<p>Search for books.</p>
@@ -59,9 +59,9 @@
 		{
 			<tr>
 				<td>
-					@if (resultItem.Image != null && resultItem.Image.Length > 0)
+					@if (resultItem.ImageLinks != null)
 					{
-						<img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(resultItem.Image))"/>
+						<img src="@Html.DisplayFor(model => resultItem.ImageLinks)">
 					}
 				</td>
 				<td>					
@@ -94,7 +94,10 @@
 					@Html.DisplayFor(model => resultItem.Price)
 				</td>
 				<td>
-					<a asp-action="Details" asp-route-id="@resultItem.SaleItemID">Details</a>
+					<a asp-action="SearchDetails" asp-route-id="@resultItem.SaleItemID">Details</a>
+				</td>
+				<td>
+					<a asp-action="AddToShoppingCart" asp-controller="ShoppingCarts" asp-route-saleItemid="@resultItem.SaleItemID">Add To Cart</a>
 				</td>
 			</tr>
 		}

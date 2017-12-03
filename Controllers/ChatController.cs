@@ -43,8 +43,10 @@ namespace BookBarn.Controllers
                 Response.StatusCode = 401;
                 return View("NotLoggedIn");
             }
+         
             var name = user.UserName;
             ViewData["UserName"] = name;
+            
             ViewBag.historicalMessage = JsonConvert.SerializeObject(BookBarn.ChatRoom.ChatWebSocketMiddleware.historicalMessage);
             return View();
         }

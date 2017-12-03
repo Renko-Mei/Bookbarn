@@ -13,45 +13,83 @@ using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using BookBarn.Utilities;
+using MailKit.Net.Smtp;
+using MimeKit;
+
 
 namespace BookBarn.Controllers
 {
     public class SaleItemsController : Controller
     {
         private readonly InitialModelsContext _context;
+        private readonly AuthenticationContext _Acontext;
 
-        public SaleItemsController(InitialModelsContext context)
+        public SaleItemsController(InitialModelsContext context, AuthenticationContext Acontext)
         {
             _context = context;
+            _Acontext = Acontext;
         }
+
+        public string UserID()
+        {
+            return _Acontext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Id;
+        }
+
 
         // GET: SaleItems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SaleItem.ToListAsync());
+
+            var temp = await _context.SaleItem.ToListAsync();
+            var viewList = from a in temp
+                        where a.UserKey == UserID()
+                        select a;
+           
+            if (User.Identity.IsAuthenticated)
+            {
+              return View(viewList);
+            }
+            else
+            {
+              Response.StatusCode = 401;
+              return View("NotLoggedIn");
+            }
         }
 
         // GET: SaleItems/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
 
-            var saleItem = await _context.SaleItem
-                .SingleOrDefaultAsync(m => m.SaleItemId == id);
-            if (saleItem == null)
+            if (User.Identity.IsAuthenticated)
             {
-              Response.StatusCode = 404;
-              return View("NotFound");
+                if (id == null)
+                {
+                Response.StatusCode = 404;
+                return View("NotFound");
+                }
+                var saleItem = await _context.SaleItem
+                    .SingleOrDefaultAsync(m => m.SaleItemId == id);
+                if (saleItem == null)
+                {
+                Response.StatusCode = 404;
+                return View("NotFound");
+                }
+                if(saleItem.UserKey==UserID()){
+                    return View(saleItem);
+                }
+                else{
+                    return View("NoAccess");
+                }  
             }
-
-            return View(saleItem);
+            else{
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
+            }
+            
         }
 
         // GET: SaleItems/Create
+        [HttpGet]
         public IActionResult Create()
         {
             if (User.Identity.IsAuthenticated)
@@ -65,12 +103,9 @@ namespace BookBarn.Controllers
             }
         }
 
-        // POST: SaleItems/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SaleItemId,Price,Quality,Isbn,Image")] SaleItem saleItem, IFormFile files)
+        public async Task<IActionResult> Create([Bind("SaleItemId,Price,IsSold,Quality,Isbn,Image,UserKey,Title,Subtitle,Authors,Publisher,PublishedData,Description,Isbn10Or13,ImageLinks")] SaleItem saleItem, IFormFile files)
         {
             if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
@@ -85,6 +120,7 @@ namespace BookBarn.Controllers
                 if (Isbn.IsValidIsbn(saleItem.Isbn))
                 {
                     saleItem.IsSold = false;
+                    saleItem.UserKey = UserID();
                     _context.Add(saleItem);
                     await _context.SaveChangesAsync();
                 }
@@ -98,22 +134,29 @@ namespace BookBarn.Controllers
         }
 
         // GET: SaleItems/Edit/5
+        [HttpGet]
+        //[Authorize (Roles = "User")]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
+                if (id == null)
+                {
+                Response.StatusCode = 404;
+                return View("NotFound");
+                }
 
-            var saleItem = await _context.SaleItem.SingleOrDefaultAsync(m => m.SaleItemId == id);
-            if (saleItem == null)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
-
-            return View(saleItem);
+                var saleItem = await _context.SaleItem.SingleOrDefaultAsync(m => m.SaleItemId == id);
+                if (saleItem == null)
+                {
+                Response.StatusCode = 404;
+                return View("NotFound");
+                }
+                if(saleItem.UserKey==UserID()){
+                    return View(saleItem);
+                }
+                else{
+                    return View("NoAccess");
+                }  
+            
         }
 
         // POST: SaleItems/Edit/5
@@ -121,7 +164,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SaleItemId,Price,Quality,Isbn")] SaleItem saleItem)
+        public async Task<IActionResult> Edit(int id, [Bind("SaleItemId,Price,IsSold,Quality,Isbn,Image,UserKey,Title,Subtitle,Authors,Publisher,PublishedData,Description,Isbn10Or13,ImageLinks")] SaleItem saleItem)
         {
             if (id != saleItem.SaleItemId)
             {
@@ -133,6 +176,7 @@ namespace BookBarn.Controllers
             {
                 try
                 {
+                    saleItem.UserKey = UserID();
                     _context.Update(saleItem);
                     await _context.SaveChangesAsync();
                 }
@@ -156,21 +200,30 @@ namespace BookBarn.Controllers
         // GET: SaleItems/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
+             if(User.Identity.IsAuthenticated)
+             {
+                 if (id == null)
+                {
+                Response.StatusCode = 404;
+                return View("NotFound");
+                }
 
-            var saleItem = await _context.SaleItem
-                .SingleOrDefaultAsync(m => m.SaleItemId == id);
-            if (saleItem == null)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
+                var saleItem = await _context.SaleItem
+                    .SingleOrDefaultAsync(m => m.SaleItemId == id);
+                if (saleItem == null)
+                {
+                Response.StatusCode = 404;
+                return View("NotFound");
+                }
 
-            return View(saleItem);
+                return View(saleItem);
+            }
+            else
+            {
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
+            }
+            
         }
 
         // POST: SaleItems/Delete/5
@@ -184,6 +237,32 @@ namespace BookBarn.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+
+        public async Task<IActionResult> SearchDetails(int? id)
+        {
+            if (id == null)
+            {
+                Response.StatusCode = 404;
+                return View("NotFound");
+            }
+            var saleItem = await _context.SaleItem
+                .SingleOrDefaultAsync(m => m.SaleItemId == id);
+            if (saleItem == null)
+            {
+                Response.StatusCode = 404;
+                return View("NotFound");
+            }
+
+            string sellerEmail = _Acontext.Users.FirstOrDefault(c => c.Id== saleItem.UserKey).Email;
+            ViewData["sellerEmail"]= sellerEmail;
+            return View(saleItem); 
+        }
+
+
+
+
+
         private bool SaleItemExists(int id)
         {
             return _context.SaleItem.Any(e => e.SaleItemId == id);
@@ -195,16 +274,23 @@ namespace BookBarn.Controllers
             SearchViewModel searchVm;
 
             var resultSet = from si in _context.SaleItem
-                            join b in _context.Book on si.Isbn equals b.Isbn
                             select new SearchResultViewModel
                             {
-                                Title = b.Title,
-                                Author = b.Author,
+                                Title = si.Title,
+                                Subtitle = si.Subtitle,
+                                Author = si.Authors,
                                 Quality = si.Quality.ToString(),
                                 Price = si.Price,
-                                ISBN = b.Isbn,
+                                ISBN = si.Isbn,
                                 SaleItemID = si.SaleItemId,
-                                Image = si.Image
+                                Image = si.Image,
+                                IsSold = si.IsSold,
+                                UserKey = si.UserKey,
+                                Publisher = si.Publisher,
+                                PublishedDate = si.PublishedData,
+                                Description = si.Description,
+                                Isbn10Or13 = si.Isbn10Or13,
+                                ImageLinks = si.ImageLinks
                             };
             //Filter type
             if (!string.IsNullOrWhiteSpace(searchString) && !string.IsNullOrEmpty(searchType))
@@ -219,7 +305,7 @@ namespace BookBarn.Controllers
                 }
                 else if (searchType.Equals("isbn"))
                 {
-                    resultSet = resultSet.Where(sr => sr.ISBN.Contains(searchString));
+                    resultSet = resultSet.Where(sr => (sr.ISBN.Contains(searchString) ||sr.Isbn10Or13.Contains(searchString)));
                 }
                 else
                 {
@@ -293,6 +379,64 @@ namespace BookBarn.Controllers
         {
             ViewData["RequestId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
             return View();
+        }
+
+         public string EmailInfo()
+        {
+            string userEmail = _Acontext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Email;                         
+            return userEmail;
+        }
+
+        public string NameInfo()
+        {
+            return _Acontext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).UserName;
+        }
+
+        [HttpGet]
+        public IActionResult Email(string id)
+        {
+            ViewData["userEmail"] = EmailInfo();
+
+            //string sellerEmail = _Acontext.Users.FirstOrDefault(c => c.Id== id).Email;
+            ViewData["sellerEmail"] = id;
+
+            return View("Email_Input");
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public IActionResult Email(string customerEmail, string customerRequest, string customerPhoneNumber, string sellerEmail)
+        {
+            
+            string customerName = "Customer Name: " + NameInfo();
+            //string customerDetail = "CustomerName: " + customerName;
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("BookBarn", "info@bookbarncanada.com"));
+            message.To.Add(new MailboxAddress("mark", sellerEmail));//this should be changed to seller email
+            message.Subject = "Customer Requests";
+            var builder = new BodyBuilder();
+            builder.TextBody = @"Dear seller, you have received an email request from your customer";
+            if(customerPhoneNumber ==null){
+                customerPhoneNumber = "not provided";
+            }
+            builder.HtmlBody = "<em>"+customerName+"<br>Customer Email: "+customerEmail+ "<br>Customer Phone Number: "+ customerPhoneNumber + "</em><br><br>Customer concern is: <br>"+customerRequest;
+
+            message.Body = builder.ToMessageBody();
+            //message.Body = new TextPart("plain")
+            //{
+            //    Text = "CustomerName: " + customerName +
+            //        customerRequest
+            //};
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, false);
+                client.Authenticate("info@bookbarncanada.com", "InfoBookBarn");
+                client.Send(message);
+
+                client.Disconnect(true);
+            }
+
+            return View("Email_Result");
         }
     }
 }
