@@ -4,25 +4,44 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2 style="margin-top:50px">Edit</h2>
+<h2 style="margin-top:60px">Edit</h2>
 
 <h4>SaleItem</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <form asp-action="Edit">
+        <div class="col-md-3">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="SaleItemId" />
+            <div class="form-group">
+                <label asp-for="Isbn" class="control-label">ISBN</label>
+                <input asp-for="Isbn" class="form-control"/>
+                <span asp-validation-for="Isbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                    <label asp-for="Isbn10Or13" class="control-label">Optional ISBN number</label>
+                    <input asp-for="Isbn10Or13" class="form-control" id="Isbn10Or13"/>
+                    <span asp-validation-for="Isbn10Or13" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Quality" class="control-label"></label>
-                <input asp-for="Quality" class="form-control" />
-                <span asp-validation-for="Quality" class="text-danger"></span>
+                <div>
+                    <select asp-for="Quality" >
+                        <option value="NEW">New</option>
+                        <option value="USED_LIKE_NEW">Used - Like new</option>
+                        <option value="USED_OLD">Used - Old</option>
+                        <option value="USED_VERY_OLD">Used - Very old/Poor</option>
+                    </select>
+                </div>
             </div>
+
             <div class="form-group">
                 <div class="checkbox">
                     <label>
@@ -31,15 +50,61 @@
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="Isbn" class="control-label"></label>
-                <input asp-for="Isbn" class="form-control" />
-                <span asp-validation-for="Isbn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
-        </form>
-    </div>
+            
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" id="Title"/>
+                <span asp-validation-for="Title" class="text-danger" ></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Subtitle" class="control-label"></label>
+                <input asp-for="Subtitle" class="form-control" id="Subtitle"/>
+                <span asp-validation-for="Subtitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Authors" class="control-label"></label>
+                <input asp-for="Authors" class="form-control" id="Authors"/>
+                <span asp-validation-for="Authors" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="ImageLinks" class="control-label">Image Link</label>
+                <input asp-for="ImageLinks" class="form-control" id="ImageLinks"/>
+                <span asp-validation-for="ImageLinks" class="text-danger"></span>
+                <div id="ImageDiv">
+                    <img src="@Html.DisplayFor(model => model.ImageLinks))" id="RealImage">
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Publisher" class="control-label"></label>
+                <input asp-for="Publisher" class="form-control" id="Publisher"/>
+                <span asp-validation-for="Publisher" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublishedData" class="control-label">Published Date</label>
+                <input asp-for="PublishedData" class="form-control" id="PublishedData"/>
+                <span asp-validation-for="PublishedData" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" id="Description"/>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            
+            
+            <div class="form-group" style="display: none">
+                <label asp-for="ImageLinks" class="control-label"></label>
+                <input asp-for="ImageLinks" class="form-control" id="ImageLinks"/>
+                <span asp-validation-for="ImageLinks" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
 </div>
 
 <div>

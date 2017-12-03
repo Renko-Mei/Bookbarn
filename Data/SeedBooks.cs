@@ -28,13 +28,13 @@ namespace BookBarn.Data
                         },
                         new Book
                         {
-                            Isbn = "978-3-319-66966-3",
+                            Isbn = "9783319669663",
                             Title= "Introduction to Compiler Design",
                             Author = "Torben Ægidius Mogensen"
                         },
                         new Book
                         {
-                            Isbn = "978-1-94122-212-6",
+                            Isbn = "9781941222126",
                             Title = "Metaprogramming Ruby 2: Program Like the Ruby Pros",
                             Author = "Paolo Perrotta"
                         }

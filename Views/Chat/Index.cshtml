@@ -3,39 +3,204 @@
     ViewData["Title"] = "Chat";
 }
 <style>
-    body {margin:0px; padding:0px;}
+
+    span.emotion { width: 42px; height: 20px; padding-left: 20px; cursor: pointer }
+    span.emotion:hover { background-position: 2px -28px }
+    .qqFace { margin-top: 4px; background: #fff; padding: 2px; border: 1px #dfe6f6 solid; }
+    .qqFace table td { padding: 0px; }
+    .qqFace table td img { cursor: pointer; border: 1px #fff solid; }
+    .qqFace table td img:hover { border: 1px #0066cc solid; }
     .msg {
         position: absolute;
         top: 0;
         bottom: 30px;
-        border: 1px solid green;
+        height: 400px;
+        border: 1px solid black;
         margin-bottom: auto;
         display:block;
-        overflow: scroll;
         width:100%;
         white-space:nowrap;
     }
+
+
+
+
+    .col-md-9{
+        height: 500px;
+    }
+    .col-md-3{
+        height: 500px;
+    }
+    .input{
+        margin-top: 400px;
+        margin-right: 0px;
+        width: 100%;
+    }
+    .text{
+        max-width:unset;
+        width:460px;
+        padding: 10px;
+        margin-left: 0px;
+        
+    }
+    .emotion{
+        
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+    .system{
+        margin-left: 5px;
+        font: italic;
+        padding-top: 8px;
+        color: red;
+    }
+    .chatText{
+        padding-top: 4px;
+    }
+    .userName{
+        margin-left: 5px;
+        font-weight: bold;
+        color: rgb(9, 120, 218);
+    }
+    .history{
+        font-weight: bold;
+    }
+
+    #msgs{
+        bottom:0; 
+        height: 400px;
+        overflow-y: scroll;
+    }
+
+
+    
 </style>
-<div class="msg" style="margin-top:60px">
-    <div style="position:absolute; bottom:0;" id="msgs"></div>
+
+<h2 style="margin-top:60px">Chat Room</h2>
+<hr>
+<div class="row">
+     <div class="col-md-3">
+         <p id="test"></p>
+         <p>Currently Online: </p>
+         <div id="availableUser"></div>
+     </div>
+     <div class="col-md-9">
+        <div class="msg" >
+             <div id="msgs"></div>
+        </div>
+        <div class="input"> 
+            <table>
+                <tr>
+                    <td >
+                        <input type="text" class="text" id="MessageField" name="MessageField" placeholder="type message and press enter" />   
+                    </td>
+                    <td>
+                        <span class="emotion">emoji</span>
+                    </td>
+                </tr>
+            </table>     
+        </div>    
+     </div>
 </div>
 
-<div style="position:absolute;height:20px;bottom:10px;left:0; display:block;width:100%">
-    <input type="text" style="max-width:unset;width:100%;max-width:100%" id="MessageField" placeholder="type message and press enter" />
-</div>
+
+
+
+
+
+
+
+
+
+
 
 @section Scripts {
-    <script>
-    $(function () {
-        var userName = "@ViewData["UserName"]";
-        var historicalMessage = @Html.Raw(@ViewBag.historicalMessage)
-        for (var i = 0; i < historicalMessage.length; i++) {
-            $('#msgs').append(historicalMessage[i] + '<br />');
+    <script  src="~/js/jquery.min.js"></script>
+    <script type="text/javascript" src="~/js/jquery.qqFace.js"></script>
+    <script> 
+        window.onload=function()
+        { 
+            if(document.readyState=="complete")
+            {
+                document.getElementById("MessageField").focus(); 
+            }
         }
-       // var protocol = location.protocol === "https:" ? "wss:" : "ws:";
-        var wsUri = `ws://${window.location.host}`;
+
+        $('.emotion').qqFace({
+            id : 'facebox', 
+            assign: 'MessageField', 
+            path:'arclist/'	
+        });
+
+        var userName = "@ViewData["UserName"]";
+        var historicalMessage = @Html.Raw(@ViewBag.historicalMessage);
+        var historicalBar = "--------------------------------History---------------------------------";
+        var onlineName=[];
+        var uniqueArr=[];
+        //var test;
+
+        if (historicalMessage.length != 0){
+            for (var i = 0; i < historicalMessage.length; i++) {
+                var temp = historicalMessage[i];
+                var isOnline = temp.search(": Welcome");
+                var isOnline_Second = temp.search("SYSTEM");
+                var isOffline = temp.search("left the chatroom. Now remains");
+                var tempE =0;
+                var tempName='';
+                
+               
+                if(isOnline != -1 && isOnline_Second != -1){
+                    tempE = temp.search("!");
+                    tempName = temp.substring(18, tempE);
+                    onlineName.push(tempName);
+                }
+                 if(isOffline != -1){
+                    tempE = isOffline-1;
+                    tempName = temp.substring(10, tempE);
+                    var a = onlineName.indexOf(tempName);
+                    //test=tempName;
+                    onlineName.splice(a, 1);
+                }
+
+                if(historicalMessage[i].indexOf("SYSTEM") != -1){
+                    $('#msgs').append("<div class='system'>" + replace_em(historicalMessage[i]) + "</div>");
+                    
+                }
+                else{
+                    var tempQ = historicalMessage[i].indexOf(":");
+                    var tmdA = tempQ+1;
+                    var tempNameA = historicalMessage[i].substring(0,tmdA);
+
+                    var tempW = tempQ +1;
+                    var contextB = historicalMessage[i].substring(tempW);
+                    $('#msgs').append("<div class='chatText'><span class='userName'>" + tempNameA +"</span><span>" +replace_em(contextB) + "</span></div>");
+                    
+                }
+
+                //$('#msgs').append("<div>" + replace_em(historicalMessage[i]) + "</div>");
+            };
+            $('#msgs').append("<div class='history'>" + historicalBar + "</div>");
+           
+             //document.getElementById("test").innerHTML = test;
+            if(onlineName.length !=0){
+                uniqueArr = onlineName.filter(function(elem, index, self){
+                    return index ===self.indexOf(elem);
+                })
+                for(var j=0; j<uniqueArr.length; j++){
+                    $('#availableUser').append(replace_em(uniqueArr[j]) +'<br />');
+                }  
+            }  
+        }
+
+
+        var wsUri = `ws://${window.location.host}/ws`;
         var socket = new WebSocket(wsUri);
+
+        
+
         socket.onopen = e => {
+            var welcomeMessage = `[SYSTEM]: Welcome ${userName}!`
+            socket.send(welcomeMessage);
             console.log("socket opened", e);
         };
 
@@ -45,7 +210,57 @@
 
         socket.onmessage = function (e) {
             console.log(e);
-            $('#msgs').append(e.data + '<br />');
+            var checkWelcome = e.data.search(": Welcome");
+            var checkWelcome_second = e.data.search("SYSTEM");
+            var checkLeave = e.data.search("left the chatroom. Now remains");
+            var end =0;
+            var userName = '';
+            var checkDuplicate;
+            if(checkWelcome != -1 && checkWelcome_second !=-1){
+                end = e.data.search("!");
+                userName = e.data.substring(18, end);
+                checkDuplicate = uniqueArr.indexOf(userName);
+                if(checkDuplicate == -1){
+                    uniqueArr.push(userName);
+                }
+                $('#availableUser').empty();
+                for(var j=0; j<uniqueArr.length; j++){
+                    $('#availableUser').append(replace_em(uniqueArr[j]) +'<br />');
+                }  
+            }
+            else if(checkLeave != -1){
+                end = checkLeave -1;
+                userName = e.data.substring(10, end);
+                var b = uniqueArr.indexOf(userName);
+                uniqueArr.splice(b, 1);
+                $('#availableUser').empty();
+                for(var j=0; j<uniqueArr.length; j++){
+                    $('#availableUser').append(replace_em(uniqueArr[j]) +'<br />');
+                    
+                }  
+            }
+            
+            if(e.data.indexOf("SYSTEM") != -1){
+                $('#msgs').append("<div class='system'>" + replace_em(e.data) + "</div>");
+                 $('#msgs').scrollTop($('#msgs')[0].scrollHeight);
+                
+                
+                
+            }
+            else{
+                var tempP = e.data.indexOf(":");
+                var tmd = tempP+1;
+                var tempName = e.data.substring(0,tmd);
+
+                var tempS = tempP +1;
+                var context = e.data.substring(tempS);
+                $('#msgs').append("<div class='chatText'><span class='userName'>" + tempName +"</span><span>" +replace_em(context) + "</span></div>");
+                 $('#msgs').scrollTop($('#msgs')[0].scrollHeight);
+                 document.getElementById("test").innerHTML = $('#msgs')[0].scrollHeight;
+  
+                
+            }
+            
         };
 
         socket.onerror = function (e) {
@@ -53,16 +268,31 @@
         };
 
         $('#MessageField').keypress(function (e) {
+
             if (e.which != 13) {
                 return;
             }
 
             e.preventDefault();
-
-            var message = userName + ": " + $('#MessageField').val();
+            var str = $('#MessageField').val();
+            var message = `${userName}: ${str}`;
             socket.send(message);
             $('#MessageField').val('');
+            document.getElementById("MessageField").focus();
         });
-    });
+
+        function replace_em(str){
+            str = str.replace(/\</g,'&lt;');
+            str = str.replace(/\>/g,'&gt;');
+            str = str.replace(/\n/g,'<br/>');
+            str = str.replace(/\[em_([0-9]*)\]/g,'<img src="arclist/$1.gif" border="0" />');
+            return str;
+        }
+
+        function dbClose(){
+            socket.close();
+        }
+
+
     </script>
 }
