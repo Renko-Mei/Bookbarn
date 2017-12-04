@@ -40,9 +40,6 @@ namespace BookBarn.Controllers
                         where a.UserKey == UserID() 
                         select a;
            
-           
-
-           
                 if(viewList.Count() !=0)
                 {
                     ViewData["LegalName"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).LegalName;
@@ -64,18 +61,19 @@ namespace BookBarn.Controllers
                     ViewData["Phone number"] = "";
                 }
                 ViewData["bookNum"]= _shoppingCart.GetShoppingCartItems().Count();
+            
                 return View();
            
             
         }
 
         [HttpPost]
-        public IActionResult Checkout(Address address)
+        public async Task <IActionResult> Checkout(Address address)
         {
             var items = _shoppingCart.GetShoppingCartItems();
             _shoppingCart.ShoppingCartItems = items;
 
-            if(_shoppingCart.ShoppingCartItems.Count() == 0)
+            if(_shoppingCart.ShoppingCartItems.Count == 0)
             {
                 ModelState.AddModelError("", "Your cart is empty, please add some books first");
             }
@@ -113,8 +111,33 @@ namespace BookBarn.Controllers
                     }
                     _context.Order.Add(newOrder);
                 }
-                _context.Address.Add(address);
-                _context.SaveChanges();
+
+                var temp = await _context.Address.ToListAsync();
+
+                var viewList = from a in temp 
+                        where a.UserKey == UserID() 
+                        select a;
+
+                if(viewList.Count() !=0){
+                    var addressId = viewList.FirstOrDefault(c => c.UserKey == UserID()).AddressId;
+                    var modelAddress = await _context.Address.SingleOrDefaultAsync(m => m.AddressId == addressId);
+                    modelAddress.LegalName = address.LegalName;
+                    modelAddress.StreetAddress = address.StreetAddress;
+                    modelAddress.City = address.City;
+                    modelAddress.Province = address.Province;
+                    modelAddress.Country = address.Country;
+                    modelAddress.PostalCode = address.PostalCode;
+                    modelAddress.PhoneNumber = address.PhoneNumber;
+                    modelAddress.UserKey = UserID();
+                     _context.Update(modelAddress);
+                    await _context.SaveChangesAsync();
+                }
+                else{
+                    address.UserKey = UserID();
+                    _context.Add(address);
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction("CheckoutComplete");
             }
             return View();
