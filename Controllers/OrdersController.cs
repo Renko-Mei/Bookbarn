@@ -7,155 +7,107 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookBarn.Models;
 using BookBarn.Data;
+using BookBarn.Models.CheckoutViewModel;
 
 namespace BookBarn.Controllers
 {
     public class OrdersController : Controller
     {
         private readonly InitialModelsContext _context;
-
-        public OrdersController(InitialModelsContext context)
+        private readonly ShoppingCart _shoppingCart;
+        private readonly AuthenticationContext _aContext;
+        //private Order _order;
+        public OrdersController(InitialModelsContext context, ShoppingCart shoppingCart, AuthenticationContext aContext)
         {
+            _aContext = aContext;
             _context = context;
+            _shoppingCart = shoppingCart;
+            //_order = order;
         }
 
-        // GET: Orders
-        public async Task<IActionResult> Index()
+        public string UserID()
         {
-            return View(await _context.Order.ToListAsync());
+            return _aContext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Id;
         }
 
-        // GET: Orders/Details/5
-        public async Task<IActionResult> Details(int? id)
+
+        public async Task<IActionResult> Checkout()
         {
-            if (id == null)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
 
-            var order = await _context.Order
-                .SingleOrDefaultAsync(m => m.OrderId == id);
-            if (order == null)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
+            var temp = await _context.Address.ToListAsync();
+            var viewList = from a in temp 
+                        where a.UserKey == UserID() 
+                        select a;
+            ViewData["LegalName"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).LegalName;
+            ViewData["StreetAddress"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).StreetAddress;
+            ViewData["City"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).City;
+            ViewData["Province"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).Province;
+            ViewData["Country"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).Country;
+            ViewData["PostalCode"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).PostalCode;
+            ViewData["Phone number"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).PhoneNumber;
 
-            return View(order);
-        }
 
-        // GET: Orders/Create
-        public IActionResult Create()
-        {
+
+
+
             return View();
         }
 
-        // POST: Orders/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderId,SalePrice,OrderDate,ShippedDate,IsSold,BuyerId,SellerId")] Order order)
+        public IActionResult Checkout(Address address)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(order);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(order);
-        }
+            var items = _shoppingCart.GetShoppingCartItems();
+            _shoppingCart.ShoppingCartItems = items;
 
-        // GET: Orders/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
+            if(_shoppingCart.ShoppingCartItems.Count == 0)
             {
-              Response.StatusCode = 404;
-              return View("NotFound");
+                ModelState.AddModelError("", "Your cart is empty, please add some books first");
             }
+            if(ModelState.IsValid)
+            {   
+                var name = _aContext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Id;
+                // The address model has to save the above name
+                address.UserKey = name;
 
-            var order = await _context.Order.SingleOrDefaultAsync(m => m.OrderId == id);
-            if (order == null)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
-            return View(order);
-        }
-
-        // POST: Orders/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderId,SalePrice,OrderDate,ShippedDate,IsSold,BuyerId,SellerId")] Order order)
-        {
-            if (id != order.OrderId)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                var shoppingCartItems =  _shoppingCart.ShoppingCartItems;
+                 // For each seller in the shopping cart, create new order 
+                var sellers = shoppingCartItems.GroupBy(x => x.SaleItem.UserKey);
+                foreach(var seller in sellers)
                 {
-                    _context.Update(order);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrderExists(order.OrderId))
+                    string sellerId = seller.Key;
+                    
+                    var newOrder = new Order()
                     {
-                      Response.StatusCode = 404;
-                      return View("NotFound");
-                    }
-                    else
+                        OrderDate = DateTime.Now,
+                        IsSold = true,
+                        BuyerId = name,
+                        SellerId = sellerId,
+                        SaleItems = new List<SaleItem>(),
+                        SalePrice = 0
+                    };
+
+                    foreach(var saleItems in seller)
                     {
-                        throw;
+                        var newSaleItem = saleItems.SaleItem;
+                        if(newSaleItem != null)
+                        {   
+                            newOrder.SalePrice += newSaleItem.Price;
+                            newOrder.SaleItems.Add(newSaleItem);
+                        }
                     }
+                    _context.Order.Add(newOrder);
                 }
-                return RedirectToAction(nameof(Index));
+                _context.Address.Add(address);
+                _context.SaveChanges();
+                return RedirectToAction("CheckoutComplete");
             }
-            return View(order);
+            return View();
         }
 
-        // GET: Orders/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult CheckoutComplete()
         {
-            if (id == null)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
-
-            var order = await _context.Order
-                .SingleOrDefaultAsync(m => m.OrderId == id);
-            if (order == null)
-            {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
-
-            return View(order);
-        }
-
-        // POST: Orders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var order = await _context.Order.SingleOrDefaultAsync(m => m.OrderId == id);
-            _context.Order.Remove(order);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool OrderExists(int id)
-        {
-            return _context.Order.Any(e => e.OrderId == id);
+            ViewBag.CheckoutComplete = "Thank you for ordering from BookBarn!";
+            return View();
         }
     }
 }
