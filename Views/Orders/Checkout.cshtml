@@ -1,7 +1,18 @@
 @model BookBarn.Models.Address
+<style>
+    #notify{
+        display: none;
+        color: red;
+        text-align: center;
+    }
+    #back{
+        float: right;
+    }
+
+</style>
+
 <div class="row orderForm ">
     <h3 class="text-center" style="margin-top:80px">Please enter/edit your address information</h3>
-
     <form asp-action="Checkout" method="post" class="form-horizontal" role="form">
         <div class="form-group">
             <label asp-for="LegalName" class="col-md-2 control-label"></label>
@@ -62,10 +73,23 @@
         
         <div class="form-group">
             <div class="btn-group col-md-offset-2 col-md-8">
-                <input class="btn btn-success" type="submit" value="Complete order" />
+                <input class="btn btn-success" type="submit" value="Complete order" id="complete"/>
                 @*<input class="btn btn-default" type="submit" value="Return " />*@
+                <p id="notify">Please add some books to your shopping cart before complete the order</p>
             </div>
         </div>
-
     </form>
+    <div class="col-md-3">
+        <a class="btn btn-primary active" id="back" href="/ShoppingCarts">Back</a>
+    </div>
+    <div class="col-md-7">
+        <p id="notify">Please add some books to your shopping cart before complete the order</p>
+    </div>
 </div>
+<script>
+    if("@ViewData["bookNum"]" ==0){
+        document.getElementById("complete").disabled=true;
+        document.getElementById("notify").style.display = "block";
+    }
+    
+</script>

@@ -16,6 +16,7 @@ namespace BookBarn.Controllers
         private readonly InitialModelsContext _context;
         private readonly ShoppingCart _shoppingCart;
         private readonly AuthenticationContext _aContext;
+
         //private Order _order;
         public OrdersController(InitialModelsContext context, ShoppingCart shoppingCart, AuthenticationContext aContext)
         {
@@ -38,33 +39,34 @@ namespace BookBarn.Controllers
             var viewList = from a in temp 
                         where a.UserKey == UserID() 
                         select a;
-            if(viewList.Count() !=0)
-            {
-                ViewData["LegalName"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).LegalName;
-                ViewData["StreetAddress"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).StreetAddress;
-                ViewData["City"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).City;
-                ViewData["Province"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).Province;
-                ViewData["Country"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).Country;
-                ViewData["PostalCode"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).PostalCode;
-                ViewData["Phone number"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).PhoneNumber;
-            }
-            else
-            {
-                ViewData["LegalName"] = "";
-                ViewData["StreetAddress"] = "";
-                ViewData["City"] = "";
-                ViewData["Province"] = "";
-                ViewData["Country"] = "";
-                ViewData["PostalCode"] = "";
-                ViewData["Phone number"] = "";
-            }
+           
            
 
-
-
-
-
-            return View();
+           
+                if(viewList.Count() !=0)
+                {
+                    ViewData["LegalName"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).LegalName;
+                    ViewData["StreetAddress"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).StreetAddress;
+                    ViewData["City"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).City;
+                    ViewData["Province"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).Province;
+                    ViewData["Country"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).Country;
+                    ViewData["PostalCode"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).PostalCode;
+                    ViewData["Phone number"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).PhoneNumber;
+                }
+                else
+                {
+                    ViewData["LegalName"] = "";
+                    ViewData["StreetAddress"] = "";
+                    ViewData["City"] = "";
+                    ViewData["Province"] = "";
+                    ViewData["Country"] = "";
+                    ViewData["PostalCode"] = "";
+                    ViewData["Phone number"] = "";
+                }
+                ViewData["bookNum"]= _shoppingCart.GetShoppingCartItems().Count();
+                return View();
+           
+            
         }
 
         [HttpPost]
@@ -73,7 +75,7 @@ namespace BookBarn.Controllers
             var items = _shoppingCart.GetShoppingCartItems();
             _shoppingCart.ShoppingCartItems = items;
 
-            if(_shoppingCart.ShoppingCartItems.Count == 0)
+            if(_shoppingCart.ShoppingCartItems.Count() == 0)
             {
                 ModelState.AddModelError("", "Your cart is empty, please add some books first");
             }
