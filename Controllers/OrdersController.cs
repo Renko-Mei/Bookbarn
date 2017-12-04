@@ -83,12 +83,17 @@ namespace BookBarn.Controllers
                 // The address model has to save the above name
                 address.UserKey = name;
 
+                //
+                var tempSale = await _context.SaleItem.ToListAsync();
+               
+
                 var shoppingCartItems =  _shoppingCart.ShoppingCartItems;
                  // For each seller in the shopping cart, create new order 
                 var sellers = shoppingCartItems.GroupBy(x => x.SaleItem.UserKey);
                 foreach(var seller in sellers)
                 {
                     string sellerId = seller.Key;
+                    
                     
                     var newOrder = new Order()
                     {
@@ -102,6 +107,9 @@ namespace BookBarn.Controllers
 
                     foreach(var saleItems in seller)
                     {
+                        saleItems.SaleItem.IsSold = true;
+                        tempSale.FirstOrDefault(d =>d.SaleItemId == saleItems.SaleItem.SaleItemId).IsSold =true;
+
                         var newSaleItem = saleItems.SaleItem;
                         if(newSaleItem != null)
                         {   
@@ -112,6 +120,15 @@ namespace BookBarn.Controllers
                     _context.Order.Add(newOrder);
                 }
 
+
+
+                //
+                //var MarkShoppingCartItems =  _shoppingCart.ShoppingCartItems.
+
+
+
+
+                //address
                 var temp = await _context.Address.ToListAsync();
 
                 var viewList = from a in temp 
@@ -138,6 +155,12 @@ namespace BookBarn.Controllers
                     await _context.SaveChangesAsync();
                 }
 
+                //issolde 
+                
+
+
+
+
                 return RedirectToAction("CheckoutComplete");
             }
             return View();
@@ -145,6 +168,7 @@ namespace BookBarn.Controllers
 
         public IActionResult CheckoutComplete()
         {
+
             ViewBag.CheckoutComplete = "Thank you for ordering from BookBarn!";
             return View();
         }

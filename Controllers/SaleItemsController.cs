@@ -151,7 +151,14 @@ namespace BookBarn.Controllers
                 return View("NotFound");
                 }
                 if(saleItem.UserKey==UserID()){
-                    return View(saleItem);
+                    if(saleItem.IsSold==true){
+                        return View("CannotEdit");
+                    }
+                    else{
+                        return View(saleItem);
+                    }
+
+                    
                 }
                 else{
                     return View("NoAccess");
@@ -215,8 +222,13 @@ namespace BookBarn.Controllers
                     Response.StatusCode = 404;
                     return View("NotFound");
                 }
-
-                return View(saleItem);
+                if(saleItem.IsSold==true){
+                    return View("CannotDelete");
+                }
+                else{
+                    return View(saleItem);
+                }
+                
             }
             else
             {
@@ -260,21 +272,26 @@ namespace BookBarn.Controllers
             return View(saleItem); 
         }
 
-
-
-
-
         private bool SaleItemExists(int id)
         {
             return _context.SaleItem.Any(e => e.SaleItemId == id);
         }
+
+
 
         [AllowAnonymous]
         public async Task<IActionResult> Search(string searchType, string searchString, string sortType, string title, string author, string isbn, string quality, float minPrice, float maxPrice)
         {
             SearchViewModel searchVm;
 
-            var resultSet = from si in _context.SaleItem
+            var allSaleItem = _context.SaleItem;
+            // var viewList = from a in 
+            //             where a.UserKey == UserID()
+            //             select a;
+            var availableSaleItem = from b in allSaleItem where b.IsSold ==false select b;
+            //(i =>i.IsSold ==false);
+
+            var resultSet = from si in availableSaleItem
                             select new SearchResultViewModel
                             {
                                 Title = si.Title,
