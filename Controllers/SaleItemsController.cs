@@ -256,6 +256,7 @@ namespace BookBarn.Controllers
 
             string sellerEmail = _Acontext.Users.FirstOrDefault(c => c.Id== saleItem.UserKey).Email;
             ViewData["sellerEmail"]= sellerEmail;
+            ViewData["saleID"] = id;
             return View(saleItem); 
         }
 
