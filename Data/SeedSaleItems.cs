@@ -22,30 +22,42 @@ namespace BookBarn.Data
                     (
                        new SaleItem
                        {
-                           Isbn = "0495012408",
+                           Isbn = "1617292575",
                            Quality = SaleItem.BookQuality.NEW,
                            Price = 10.6f,
-                           Authors ="JK Rowling",
-                           Title = "Harry P and Philosopher Stone",
-                           UserKey = "abc"
+                           Authors ="Mike Cantelon",
+                           Title = "Node.js in Action",
+                           UserKey = "abcfgsdfgs",
+                           ImageLinks = "http://books.google.com/books/content?id=YzfuvQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+                           Publisher = "Manning Publications",
+                           PublishedData = "2017-01-31",
+                           Description = "test test test"
                        },
                        new SaleItem
                        {
-                           Isbn = "9783319669663",
-                           Quality = SaleItem.BookQuality.USED_LIKE_NEW,
-                           Price = 5.25f,
-                           Authors ="JK Rowling",
-                           Title = "Harry P and Chamber of Secret",
-                           UserKey = "efg"
-                       },
-                       new SaleItem
-                       {
-                           Isbn = "9781941222126",
+                           Isbn = "1491901942",
                            Quality = SaleItem.BookQuality.USED_OLD,
-                           Price = 6.66f,
-                           Authors ="JK Rowling",
-                           Title = "Harry P and Prisoners of Azkaban",
-                           UserKey = "abc"
+                           Price = 10.6f,
+                           Authors ="Shyam Seshadri",
+                           Title = "AngularJS: Up and Running",
+                           UserKey = "abcfgsdfgs8erfdafgaafsd",
+                           ImageLinks = "http://books.google.com/books/content?id=2BqloAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+                           Publisher = "Oreilly & Associates Incorporated",
+                           PublishedData = "2014-09-26",
+                           Description = "A step-by-step guide to the AngularJS meta-framework covers from the basics to advanced concepts, including directives and controllers, form validation and stats, working with filters, unit testing, and guidelines and best practices."
+                       },
+                       new SaleItem
+                       {
+                           Isbn = "1593275846",
+                           Quality = SaleItem.BookQuality.USED_VERY_OLD,
+                           Price = 50.6f,
+                           Authors ="Marijn Haverbeke",
+                           Title = "Eloquent JavaScript, 2nd Ed.",
+                           UserKey = "abcfgsdfgs8erfdafgaa67563fdhjdg",
+                           ImageLinks = "http://books.google.com/books/content?id=mDzDBQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+                           Publisher = "No Starch Press",
+                           PublishedData = "2014-12-14",
+                           Description = "dsfgs sdfgkljk gkjsdfl kldfgkdfhla"
                        }
                     );
                     context.SaveChanges();

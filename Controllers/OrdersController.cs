@@ -38,13 +38,27 @@ namespace BookBarn.Controllers
             var viewList = from a in temp 
                         where a.UserKey == UserID() 
                         select a;
-            ViewData["LegalName"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).LegalName;
-            ViewData["StreetAddress"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).StreetAddress;
-            ViewData["City"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).City;
-            ViewData["Province"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).Province;
-            ViewData["Country"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).Country;
-            ViewData["PostalCode"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).PostalCode;
-            ViewData["Phone number"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).PhoneNumber;
+            if(viewList.Count() !=0)
+            {
+                ViewData["LegalName"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).LegalName;
+                ViewData["StreetAddress"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).StreetAddress;
+                ViewData["City"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).City;
+                ViewData["Province"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).Province;
+                ViewData["Country"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).Country;
+                ViewData["PostalCode"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).PostalCode;
+                ViewData["Phone number"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).PhoneNumber;
+            }
+            else
+            {
+                ViewData["LegalName"] = "";
+                ViewData["StreetAddress"] = "";
+                ViewData["City"] = "";
+                ViewData["Province"] = "";
+                ViewData["Country"] = "";
+                ViewData["PostalCode"] = "";
+                ViewData["Phone number"] = "";
+            }
+           
 
 
 
