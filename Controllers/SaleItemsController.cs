@@ -430,7 +430,7 @@ namespace BookBarn.Controllers
             //string customerDetail = "CustomerName: " + customerName;
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("BookBarn", "info@bookbarncanada.com"));
-            message.To.Add(new MailboxAddress("mark", sellerEmail));//this should be changed to seller email
+            message.To.Add(new MailboxAddress("seller", sellerEmail));//this should be changed to seller email
             message.Subject = "Customer Requests";
             var builder = new BodyBuilder();
             builder.TextBody = @"Dear seller, you have received an email request from your customer";

@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using BookBarn.Models;
 using BookBarn.Data;
 using BookBarn.Models.CheckoutViewModel;
+using MailKit.Net.Smtp;
+using MimeKit;
 
 namespace BookBarn.Controllers
 {
@@ -104,9 +106,10 @@ namespace BookBarn.Controllers
                         SaleItems = new List<SaleItem>(),
                         SalePrice = 0
                     };
-
+                    var soldItemId ="";
                     foreach(var saleItems in seller)
                     {
+                        soldItemId =" "+saleItems.SaleItem.SaleItemId.ToString()+", ";
                         saleItems.SaleItem.IsSold = true;
                         tempSale.FirstOrDefault(d =>d.SaleItemId == saleItems.SaleItem.SaleItemId).IsSold =true;
 
@@ -118,12 +121,38 @@ namespace BookBarn.Controllers
                         }
                     }
                     _context.Order.Add(newOrder);
+
+                    var customerEmail =  _aContext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Email;
+                    var customerName = _aContext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).UserName;
+                    var sellerEmail =  _aContext.Users.FirstOrDefault(s => s.Id == sellerId).Email;
+                    var customerLegalName = address.LegalName;
+                    var customerAddress = address.StreetAddress + ", " + address.City + ", " + address.Province +", "+address.Country +", "+ address.PostalCode;
+                    var customerPhoneNumber = address.PhoneNumber;
+                    var message = new MimeMessage();
+                    message.From.Add(new MailboxAddress("BookBarn", "info@bookbarncanada.com"));
+                    message.To.Add(new MailboxAddress("seller", sellerEmail));
+                    message.Subject = "Customer Orders";
+                    var builder = new BodyBuilder();
+                    builder.TextBody = @"Dear seller, you have a new order";
+                    if(customerPhoneNumber ==null){
+                        customerPhoneNumber = "not provided";
+                    }
+                    builder.HtmlBody = "<em>Customer Legal Name"+customerLegalName+"<br>Customer Email: "+customerEmail+ "<br>Customer Address:"+customerAddress+"<br>Customer Phone Number: "+ customerPhoneNumber + "</em><br><br>ItemId that customer bought: <br>"+soldItemId+"<br>";
+                    message.Body = builder.ToMessageBody();
+                    using (var client = new SmtpClient())
+                    {
+                        client.Connect("smtp.gmail.com", 587, false);
+                        client.Authenticate("info@bookbarncanada.com", "InfoBookBarn");
+                        client.Send(message);
+
+                        client.Disconnect(true);
+                    }
+                    
+
+
+
+
                 }
-
-
-
-                //
-                //var MarkShoppingCartItems =  _shoppingCart.ShoppingCartItems.
 
 
 
@@ -155,7 +184,6 @@ namespace BookBarn.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                //issolde 
                 
 
 
