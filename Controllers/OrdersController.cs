@@ -36,7 +36,10 @@ namespace BookBarn.Controllers
 
         public async Task<IActionResult> Checkout()
         {
-
+            if(!User.Identity.IsAuthenticated){
+                Response.StatusCode = 401;
+              return View("NotLoggedIn");
+            }
             var temp = await _context.Address.ToListAsync();
             var viewList = from a in temp 
                         where a.UserKey == UserID() 
