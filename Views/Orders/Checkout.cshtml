@@ -1,12 +1,12 @@
 @model BookBarn.Models.Address
 <div class="row orderForm ">
-    <h3 class="text-center">Please fill out your delivery information for your book.</h3>
+    <h3 class="text-center" style="margin-top:80px">Please enter/edit your address information</h3>
 
     <form asp-action="Checkout" method="post" class="form-horizontal" role="form">
         <div class="form-group">
             <label asp-for="LegalName" class="col-md-2 control-label"></label>
             <div class="col-md-5">
-                <input asp-for="LegalName" class="form-control" />
+                <input asp-for="LegalName" class="form-control" value=" @ViewData["LegalName"]"/>
                 <span asp-validation-for="LegalName" class="text-danger"></span>
             </div>
         </div>
@@ -14,7 +14,7 @@
         <div class="form-group">
             <label asp-for="StreetAddress" class="col-md-2 control-label"></label>
             <div class="col-md-5">
-                <input asp-for="StreetAddress" class="form-control" />
+                <input asp-for="StreetAddress" class="form-control" value="@ViewData["StreetAddress"]"/>
                 <span asp-validation-for="StreetAddress" class="text-danger"></span>
             </div>
         </div>
@@ -22,7 +22,7 @@
         <div class="form-group">
             <label asp-for="City" class="col-md-2 control-label"></label>
             <div class="col-md-5">
-                <input asp-for="City" class="form-control" />
+                <input asp-for="City" class="form-control" value="@ViewData["City"]"/>
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
         </div>
@@ -30,7 +30,7 @@
         <div class="form-group">
             <label asp-for="Province" class="col-md-2 control-label"></label>
             <div class="col-md-5">
-                <input asp-for="Province" class="form-control" />
+                <input asp-for="Province" class="form-control" value="@ViewData["Province"]"/>
                 <span asp-validation-for="Province" class="text-danger"></span>
             </div>
         </div>
@@ -38,7 +38,7 @@
         <div class="form-group">
             <label asp-for="Country" class="col-md-2 control-label"></label>
             <div class="col-md-5">
-                <input asp-for="Country" class="form-control" />
+                <input asp-for="Country" class="form-control" value="@ViewData["Country"]"/>
                 <span asp-validation-for="Country" class="text-danger"></span>
             </div>
         </div>
@@ -46,7 +46,7 @@
         <div class="form-group">
             <label asp-for="PostalCode" class="col-md-2 control-label"></label>
             <div class="col-md-5">
-                <input asp-for="PostalCode" class="form-control" />
+                <input asp-for="PostalCode" class="form-control" value="@ViewData["PostalCode"]"/>
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
         </div>
@@ -55,7 +55,7 @@
         <div class="form-group">
             <label asp-for="PhoneNumber" class="col-md-2 control-label"></label>
             <div class="col-md-5">
-                <input asp-for="PhoneNumber" class="form-control" />
+                <input asp-for="PhoneNumber" class="form-control" value="@ViewData["Phone number"]"/>
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
         </div>

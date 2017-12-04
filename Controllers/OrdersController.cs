@@ -25,8 +25,31 @@ namespace BookBarn.Controllers
             //_order = order;
         }
 
-        public IActionResult Checkout()
+        public string UserID()
         {
+            return _aContext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Id;
+        }
+
+
+        public async Task<IActionResult> Checkout()
+        {
+
+            var temp = await _context.Address.ToListAsync();
+            var viewList = from a in temp 
+                        where a.UserKey == UserID() 
+                        select a;
+            ViewData["LegalName"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).LegalName;
+            ViewData["StreetAddress"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).StreetAddress;
+            ViewData["City"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).City;
+            ViewData["Province"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).Province;
+            ViewData["Country"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).Country;
+            ViewData["PostalCode"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).PostalCode;
+            ViewData["Phone number"] = viewList.FirstOrDefault(c => c.UserKey == UserID()).PhoneNumber;
+
+
+
+
+
             return View();
         }
 
