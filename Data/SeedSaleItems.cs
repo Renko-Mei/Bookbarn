@@ -8,8 +8,17 @@ using BookBarn.Models;
 
 namespace BookBarn.Data
 {
-    public static class SeedSaleItems
+    public class SeedSaleItems
     {
+
+        private static readonly AuthenticationContext _Acontext;
+        // public SeedSaleItems(AuthenticationContext Acontext){
+        //     _Acontext = Acontext;
+        // }
+        // public string adminKey(){
+        //     return _Acontext.Users.FirstOrDefault(c => c.UserName == "SuperAdmin").Id;
+        // }
+
         public static void Seed(IServiceProvider serviceProvider)
         {
             using (var context = new InitialModelsContext(
@@ -18,6 +27,7 @@ namespace BookBarn.Data
                 // Seed database if database is empty
                 if (!context.SaleItem.Any())
                 {
+                    //var test = _Acontext.Users.FirstOrDefault(c => c.UserName == "SuperAdmin").Id;
                     context.SaleItem.AddRange
                     (
                        new SaleItem
@@ -27,7 +37,7 @@ namespace BookBarn.Data
                            Price = 10.6f,
                            Authors ="Mike Cantelon",
                            Title = "Node.js in Action",
-                           UserKey = "abcfgsdfgs",
+                           UserKey = "abc",
                            ImageLinks = "http://books.google.com/books/content?id=YzfuvQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
                            Publisher = "Manning Publications",
                            PublishedData = "2017-01-31",
@@ -40,7 +50,7 @@ namespace BookBarn.Data
                            Price = 10.6f,
                            Authors ="Shyam Seshadri",
                            Title = "AngularJS: Up and Running",
-                           UserKey = "abcfgsdfgs8erfdafgaafsd",
+                           UserKey = "abc",
                            ImageLinks = "http://books.google.com/books/content?id=2BqloAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
                            Publisher = "Oreilly & Associates Incorporated",
                            PublishedData = "2014-09-26",
@@ -53,7 +63,7 @@ namespace BookBarn.Data
                            Price = 50.6f,
                            Authors ="Marijn Haverbeke",
                            Title = "Eloquent JavaScript, 2nd Ed.",
-                           UserKey = "abcfgsdfgs8erfdafgaa67563fdhjdg",
+                           UserKey = "abc",
                            ImageLinks = "http://books.google.com/books/content?id=mDzDBQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
                            Publisher = "No Starch Press",
                            PublishedData = "2014-12-14",

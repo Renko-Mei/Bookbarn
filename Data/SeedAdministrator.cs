@@ -17,7 +17,7 @@ namespace BookBarn.Data
 
             // User Info
             string userName = "SuperAdmin";
-            string email = "superadmin@gmail.com";
+            string email = "superadmin@test.com";
             string password = "Piranha$94";
             string role = "SuperAdministrator";
 
@@ -36,6 +36,7 @@ namespace BookBarn.Data
                     Email = email,
                     EmailConfirmed = true
                 };
+                
 
                 IdentityResult result = await userManager.CreateAsync(user, password);
 

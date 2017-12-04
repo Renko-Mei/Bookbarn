@@ -266,8 +266,13 @@ namespace BookBarn.Controllers
                 return View("NotFound");
             }
 
-            string sellerEmail = _Acontext.Users.FirstOrDefault(c => c.Id== saleItem.UserKey).Email;
-            ViewData["sellerEmail"]= sellerEmail;
+            if(saleItem.UserKey != "abc"){
+                string sellerEmail = _Acontext.Users.FirstOrDefault(c => c.Id== saleItem.UserKey).Email;
+                ViewData["sellerEmail"]= sellerEmail;
+            }else{
+                ViewData["sellerEmail"]="emailForSuperAdmin@test.ca";
+            }
+           
             ViewData["saleID"] = id;
             return View(saleItem); 
         }
