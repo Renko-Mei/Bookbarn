@@ -214,8 +214,21 @@ namespace BookBarn.Controllers
             {
                 model.AddressId = context.Address.FirstOrDefault(c => c.UserKey == UserID()).AddressId;
                 model.UserKey = UserID();
-                context.Update(model);
+                var address = await context.Address.SingleOrDefaultAsync(m => m.AddressId == model.AddressId);
+                //address.AddressId = model.AddressId;
+                address.LegalName = model.LegalName;
+                address.StreetAddress = model.StreetAddress;
+                address.City = model.City;
+                address.Province = model.Province;
+                address.Country = model.Country;
+                address.PostalCode = model.PostalCode;
+                address.PhoneNumber = model.PhoneNumber;
+                address.UserKey = model.UserKey;
+
+                context.Update(address);
+                
                 await context.SaveChangesAsync();
+                
             }
             catch (DbUpdateConcurrencyException)
             {
