@@ -90,6 +90,7 @@ namespace BookBarn.Controllers
                
 
                 var shoppingCartItems =  _shoppingCart.ShoppingCartItems;
+
                  // For each seller in the shopping cart, create new order 
                 var sellers = shoppingCartItems.GroupBy(x => x.SaleItem.UserKey);
                 foreach(var seller in sellers)
@@ -121,7 +122,7 @@ namespace BookBarn.Controllers
                         }
                     }
                     _context.Order.Add(newOrder);
-
+                    //send email to sellers
                     var customerEmail =  _aContext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Email;
                     var customerName = _aContext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).UserName;
                     var sellerEmail =  _aContext.Users.FirstOrDefault(s => s.Id == sellerId).Email;
@@ -147,14 +148,20 @@ namespace BookBarn.Controllers
 
                         client.Disconnect(true);
                     }
-                    
-
-
-
-
                 }
+                
 
-
+                //remove from shopping cart
+                foreach(var seller in sellers){
+                    foreach(var saleItems in seller){
+                        var selectedItem = _context.SaleItem.FirstOrDefault(p => p.SaleItemId == saleItems.SaleItem.SaleItemId);
+                        if(selectedItem!=null)
+                        {
+                            _shoppingCart.RemoveFromCart(selectedItem);
+                        }   
+                    }
+                    
+                }
 
 
                 //address
