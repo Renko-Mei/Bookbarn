@@ -79,9 +79,9 @@ execute 'Update db for other models' do
   cwd '/home/ubuntu/project'
 end
 
-execute 'use production env for dotnet' do
-  command 'export ASPNETCORE_ENVIRONMENT=Production'
-end
+# execute 'use production env for dotnet' do
+#   command 'export ASPNETCORE_ENVIRONMENT=Production'
+# end
 
 # TODO uncomment this -- autoruns dotnet
 execute 'start dotnet' do
