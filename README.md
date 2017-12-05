@@ -1,13 +1,23 @@
 # Introduction
 BookBarn is a web service to connect buyers and sellers of used books. We have currently implemented the functionality listed below.
 
-# Login Hint
+# Hint
+## LogIn
     We provide a superAdmin here just in case you cannot register:
         UserName: `SuperAdmin`
         email: `superadmin@test.com`
         password: `Piranha$94`
     Howerver, we don't recommand you do that as the email address is a fake one, if you want to try our email system, we highly recommand you register a new
     account with your real email address.
+## Seed Data
+    We don't provide seedData here due to the UserId problem. Asp.net Core automatically generates unique UserId for each user account and the fake seedData 
+    will face too many conflict.
+## ISBN number example:
+    Here we provided you some real ISBN numbers you may want to use them for testing:
+    1. `1617292575`
+    2. `1491916753`
+    3. `1491901942`
+    4. `1430264489`
 
 
 # Functions
@@ -102,7 +112,7 @@ An ACK signal indicates payment succeeded.
  - Open up a command line window.
  - Route to `./src` folder.
  - Run `Vagrant up` and wait until the VM is ready to serve.
-   It may take up to 5 mins to start the dotnet server after the `vagrant up` or `vagrant provision` command completes!!
+   It may take up to 20 mins to start the dotnet server after the `vagrant up` or `vagrant provision` command completes!!
 
 ## Run in Vagrant with auto run disabled
  - You can disable autorun by commenting out the section in the Chef `default.rb`
