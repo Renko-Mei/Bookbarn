@@ -50,6 +50,10 @@ execute 'get dotnet deps' do
   cwd '/home/ubuntu/project'
 end
 
+execute 'use production mode for dotnet' do
+  command 'export ASPNETCORE_ENVIRONMENT=Production'
+end
+
 execute 'get node' do
   command 'apt-get install -y nodejs'
 end
@@ -59,15 +63,15 @@ execute 'get node deps' do
   cwd '/home/ubuntu/project'
 end
 
-execute 'User model migration' do
-  command 'dotnet ef migrations add UserModel -c AuthenticationContext'
-  cwd '/home/ubuntu/project'
-end
-
-execute 'Other model migration' do
-  command 'dotnet ef migrations add DefaultModels -c InitialModelsContext'
-  cwd '/home/ubuntu/project'
-end
+# execute 'User model migration' do
+#   command 'dotnet ef migrations add UserModel -c AuthenticationContext'
+#   cwd '/home/ubuntu/project'
+# end
+#
+# execute 'Other model migration' do
+#   command 'dotnet ef migrations add DefaultModels -c InitialModelsContext'
+#   cwd '/home/ubuntu/project'
+# end
 
 execute 'Update db for user model' do
   command 'dotnet ef database update -c AuthenticationContext'
