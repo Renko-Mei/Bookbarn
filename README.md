@@ -20,6 +20,7 @@ BookBarn is a web service to connect buyers and sellers of used books. We have c
         4. `1430264489`
 ##  vagrant up
         It may take `15-20 minutes` to run the vagrant and may another another `3 mintues` to wait the `localhost:5000/` reload
+        The project is running production mode in the dotnet server
 
 
 # Functions
