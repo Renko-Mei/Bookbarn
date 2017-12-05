@@ -71,6 +71,10 @@
             background-color: transparent;
         }
 
+            .ptext .border a {
+              color: white;
+            }
+
 .plogo {
     position: absolute;
     top: 17%;
