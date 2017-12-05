@@ -33,14 +33,14 @@ namespace BookBarn.Models
     {
       var shoppingCartItem =
         _context.ShoppingCartItems.SingleOrDefault(
-          s => s.SaleItem.SaleItemId == item.SaleItemId &&  s.ShoppingCartId == ShoppingCartId
+          s => s.SaleItem.SaleItemId == item.SaleItemId &&  s.ShoppingCartTemp == ShoppingCartId
         );
         
         if (shoppingCartItem == null )
         {
           shoppingCartItem = new ShoppingCartItem
           {
-            ShoppingCartId = ShoppingCartId,
+            ShoppingCartTemp = ShoppingCartId,
             SaleItem = item,
             Amount = 1
           };
@@ -57,7 +57,7 @@ namespace BookBarn.Models
     {
       var shoppingCartItem = 
         _context.ShoppingCartItems.SingleOrDefault(
-          s => s.SaleItem.SaleItemId == item.SaleItemId && s.ShoppingCartId == ShoppingCartId
+          s => s.SaleItem.SaleItemId == item.SaleItemId && s.ShoppingCartTemp == ShoppingCartId
         );
       var localAmount = 0;
       if(shoppingCartItem != null)
@@ -78,7 +78,7 @@ namespace BookBarn.Models
 
     public List<ShoppingCartItem> GetShoppingCartItems()
     {
-      return ShoppingCartItems ?? (ShoppingCartItems = _context.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId)
+      return ShoppingCartItems ?? (ShoppingCartItems = _context.ShoppingCartItems.Where(c => c.ShoppingCartTemp == ShoppingCartId)
                                   .Include(x => x.SaleItem)
                                   .ToList());
       
@@ -86,7 +86,7 @@ namespace BookBarn.Models
 
     public void ClearCart()
     {
-      var cartItems = _context.ShoppingCartItems.Where(cart => cart.ShoppingCartId == ShoppingCartId);
+      var cartItems = _context.ShoppingCartItems.Where(cart => cart.ShoppingCartTemp == ShoppingCartId);
 
       _context.ShoppingCartItems.RemoveRange(cartItems);
       _context.SaveChanges();
@@ -94,7 +94,7 @@ namespace BookBarn.Models
 
     public decimal GetShoppingCartTotal()
     {
-      var total = _context.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId).Select( c => c.SaleItem.Price * c.Amount).Sum();
+      var total = _context.ShoppingCartItems.Where(c => c.ShoppingCartTemp == ShoppingCartId).Select( c => c.SaleItem.Price * c.Amount).Sum();
 
       return (decimal)total;
     }

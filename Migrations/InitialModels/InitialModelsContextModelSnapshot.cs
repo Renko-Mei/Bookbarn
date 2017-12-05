@@ -149,16 +149,6 @@ namespace BookBarn.Migrations.InitialModels
                     b.ToTable("School");
                 });
 
-            modelBuilder.Entity("BookBarn.Models.ShoppingCart", b =>
-                {
-                    b.Property<string>("ShoppingCartId")
-                        .ValueGeneratedOnAdd();
-
-                    b.HasKey("ShoppingCartId");
-
-                    b.ToTable("ShoppingCart");
-                });
-
             modelBuilder.Entity("BookBarn.Models.ShoppingCartItem", b =>
                 {
                     b.Property<int>("ShoppingCartItemId")
@@ -168,13 +158,11 @@ namespace BookBarn.Migrations.InitialModels
 
                     b.Property<int?>("SaleItemId");
 
-                    b.Property<string>("ShoppingCartId");
+                    b.Property<string>("ShoppingCartTemp");
 
                     b.HasKey("ShoppingCartItemId");
 
                     b.HasIndex("SaleItemId");
-
-                    b.HasIndex("ShoppingCartId");
 
                     b.ToTable("ShoppingCartItems");
                 });
@@ -191,10 +179,6 @@ namespace BookBarn.Migrations.InitialModels
                     b.HasOne("BookBarn.Models.SaleItem", "SaleItem")
                         .WithMany()
                         .HasForeignKey("SaleItemId");
-
-                    b.HasOne("BookBarn.Models.ShoppingCart")
-                        .WithMany("ShoppingCartItems")
-                        .HasForeignKey("ShoppingCartId");
                 });
 #pragma warning restore 612, 618
         }
