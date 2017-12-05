@@ -64,8 +64,8 @@ namespace BookBarn.Controllers
             {
                 if (id == null)
                 {
-                Response.StatusCode = 404;
-                return View("NotFound");
+                    Response.StatusCode = 404;
+                    return View("NotFound");
                 }
                 var saleItem = await _context.SaleItem
                     .SingleOrDefaultAsync(m => m.SaleItemId == id);
@@ -151,7 +151,14 @@ namespace BookBarn.Controllers
                 return View("NotFound");
                 }
                 if(saleItem.UserKey==UserID()){
-                    return View(saleItem);
+                    if(saleItem.IsSold==true){
+                        return View("CannotEdit");
+                    }
+                    else{
+                        return View(saleItem);
+                    }
+
+                    
                 }
                 else{
                     return View("NoAccess");
@@ -202,21 +209,26 @@ namespace BookBarn.Controllers
         {
              if(User.Identity.IsAuthenticated)
              {
-                 if (id == null)
+                if (id == null)
                 {
-                Response.StatusCode = 404;
-                return View("NotFound");
+                    Response.StatusCode = 404;
+                    return View("NotFound");
                 }
 
                 var saleItem = await _context.SaleItem
                     .SingleOrDefaultAsync(m => m.SaleItemId == id);
                 if (saleItem == null)
                 {
-                Response.StatusCode = 404;
-                return View("NotFound");
+                    Response.StatusCode = 404;
+                    return View("NotFound");
                 }
-
-                return View(saleItem);
+                if(saleItem.IsSold==true){
+                    return View("CannotDelete");
+                }
+                else{
+                    return View(saleItem);
+                }
+                
             }
             else
             {
@@ -254,26 +266,37 @@ namespace BookBarn.Controllers
                 return View("NotFound");
             }
 
-            string sellerEmail = _Acontext.Users.FirstOrDefault(c => c.Id== saleItem.UserKey).Email;
-            ViewData["sellerEmail"]= sellerEmail;
+            if(saleItem.UserKey != "abc"){
+                string sellerEmail = _Acontext.Users.FirstOrDefault(c => c.Id== saleItem.UserKey).Email;
+                ViewData["sellerEmail"]= sellerEmail;
+            }else{
+                ViewData["sellerEmail"]="emailForSuperAdmin@test.ca";
+            }
+           
+            ViewData["saleID"] = id;
             return View(saleItem); 
         }
-
-
-
-
 
         private bool SaleItemExists(int id)
         {
             return _context.SaleItem.Any(e => e.SaleItemId == id);
         }
 
+
+
         [AllowAnonymous]
         public async Task<IActionResult> Search(string searchType, string searchString, string sortType, string title, string author, string isbn, string quality, float minPrice, float maxPrice)
         {
             SearchViewModel searchVm;
 
-            var resultSet = from si in _context.SaleItem
+            var allSaleItem = _context.SaleItem;
+            // var viewList = from a in 
+            //             where a.UserKey == UserID()
+            //             select a;
+            var availableSaleItem = from b in allSaleItem where b.IsSold ==false select b;
+            //(i =>i.IsSold ==false);
+
+            var resultSet = from si in availableSaleItem
                             select new SearchResultViewModel
                             {
                                 Title = si.Title,
@@ -412,7 +435,7 @@ namespace BookBarn.Controllers
             //string customerDetail = "CustomerName: " + customerName;
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("BookBarn", "info@bookbarncanada.com"));
-            message.To.Add(new MailboxAddress("mark", sellerEmail));//this should be changed to seller email
+            message.To.Add(new MailboxAddress("seller", sellerEmail));//this should be changed to seller email
             message.Subject = "Customer Requests";
             var builder = new BodyBuilder();
             builder.TextBody = @"Dear seller, you have received an email request from your customer";

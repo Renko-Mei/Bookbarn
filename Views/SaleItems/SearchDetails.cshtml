@@ -6,6 +6,19 @@
 }
 
 <link rel="stylesheet" href="~/css/SaleItem.css" />
+<style>
+    .outer
+    {
+        width:100%;
+        text-align: center;
+        
+    }
+    .inner
+    {
+       display: inline-block; 
+       margin-left: 20px;
+    }
+</style>
 
 <h2 style="margin-top:50px">Details</h2>
 
@@ -98,14 +111,18 @@
 		</dd>
     </dl>
 </div>
-<div>
-    <a>Add to cart</a>
-</div>
+<div class = "outer">
+    <div class="inner">
+        <a asp-action="AddToShoppingCart" asp-controller="ShoppingCarts" asp-route-saleItemid="@ViewData["saleID"]">Add to cart</a>
+    </div>
+    <div class="inner">
         <a asp-action="Email" asp-route-id="@ViewData["sellerEmail"]" >Email Seller</a>
-
-<div>
-    <a asp-action="Search">Back to Search</a>
+    </div>
+    <div class="inner">
+        <a asp-action="Search">Back to Search</a>
+    </div>
 </div>
+
 
 
 

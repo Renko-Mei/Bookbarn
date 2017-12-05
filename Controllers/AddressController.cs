@@ -13,56 +13,112 @@ namespace BookBarn.Controllers
     public class AddressController : Controller
     {
         private readonly InitialModelsContext _context;
+        private readonly AuthenticationContext _Acontext;
 
-        public AddressController(InitialModelsContext context)
+        public AddressController(InitialModelsContext context, AuthenticationContext Acontext)
         {
             _context = context;
+            _Acontext = Acontext;
+        }
+
+        public string UserID()
+        {
+            return _Acontext.Users.FirstOrDefault(c => c.UserName == User.Identity.Name).Id;
         }
 
         // GET: Address
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Address.ToListAsync());
+            var temp = await _context.Address.ToListAsync();
+
+            var viewList = from a in temp 
+                        where a.UserKey == UserID() 
+                        select a;
+
+            if (User.Identity.IsAuthenticated)
+            {
+              return View(viewList);
+            }
+            else
+            {
+              Response.StatusCode = 401;
+              return View("NotLoggedIn");
+            }
         }
 
         // GET: Address/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (User.Identity.IsAuthenticated)
             {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
+                if (id == null)
+                {
+                    Response.StatusCode = 404;
+                    return View("NotFound");
+                }
 
-            var address = await _context.Address
-                .SingleOrDefaultAsync(m => m.AddressId == id);
-            if (address == null)
+                var address = await _context.Address
+                    .SingleOrDefaultAsync(m => m.AddressId == id);
+                if (address == null)
+                {
+                    Response.StatusCode = 404;
+                    return View("NotFound");
+                }
+                if(address.UserKey==UserID()){
+                    return View(address);
+                }
+                else{
+                    return View("NoAccess");
+                } 
+            }
+            else
             {
-              Response.StatusCode = 404;
-              return View("NotFound");
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
             }
-
-            return View(address);
         }
+
+
+
+
 
         // GET: Address/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                var temp = await _context.Address.ToListAsync();
+
+                var viewList = from a in temp 
+                        where a.UserKey == UserID() 
+                        select a;
+                if(viewList.Count() ==1){
+                    return View("AddressLimit");
+                }
+                else{
+                    return View();
+                }
+
+                
+            }
+            else
+            {
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
+            }
         }
 
-        // POST: Address/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AddressId,Unit,StreetNumber,StreetName,PostalCode")] Address address)
+        public async Task<IActionResult> Create([Bind("AddressId,LegalName,StreetAddress,City,Province,Country,PostalCode,PhoneNumber,UserKey")] Address address)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && User.Identity.IsAuthenticated)
             {
+                address.UserKey = UserID();
                 _context.Add(address);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View("AddressCreateSuccess");
             }
             return View(address);
         }
@@ -82,7 +138,15 @@ namespace BookBarn.Controllers
               Response.StatusCode = 404;
               return View("NotFound");
             }
-            return View(address);
+            if(address.UserKey==UserID())
+            {
+                return View(address);
+            }
+            else
+            {
+                return View("NoAccess");
+            }
+            
         }
 
         // POST: Address/Edit/5
@@ -90,7 +154,7 @@ namespace BookBarn.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AddressId,Unit,StreetNumber,StreetName,PostalCode")] Address address)
+        public async Task<IActionResult> Edit(int id, [Bind("AddressId,LegalName,StreetAddress,City,Province,Country,PostalCode,PhoneNumber,UserKey")] Address address)
         {
             if (id != address.AddressId)
             {
@@ -102,6 +166,7 @@ namespace BookBarn.Controllers
             {
                 try
                 {
+                    address.UserKey = UserID();
                     _context.Update(address);
                     await _context.SaveChangesAsync();
                 }
@@ -125,21 +190,30 @@ namespace BookBarn.Controllers
         // GET: Address/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if(User.Identity.IsAuthenticated)
             {
-              Response.StatusCode = 404;
-              return View("NotFound");
-            }
+                if (id == null)
+                {
+                    Response.StatusCode = 404;
+                    return View("NotFound");
+                }
 
-            var address = await _context.Address
-                .SingleOrDefaultAsync(m => m.AddressId == id);
-            if (address == null)
+                var address = await _context.Address
+                    .SingleOrDefaultAsync(m => m.AddressId == id);
+                if (address == null)
+                {
+                    Response.StatusCode = 404;
+                    return View("NotFound");
+                }
+
+                return View(address);
+            }
+            else
             {
-              Response.StatusCode = 404;
-              return View("NotFound");
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
             }
-
-            return View(address);
+            
         }
 
         // POST: Address/Delete/5
