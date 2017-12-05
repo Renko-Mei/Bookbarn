@@ -6,7 +6,8 @@ BookBarn is a web service to connect buyers and sellers of used books. We have c
         UserName: `SuperAdmin`
         email: `superadmin@test.com`
         password: `Piranha$94`
-    Howerver, we don't recommand you do that as the email address is a fake one, if you want to try our email system, we highly recommand you register a new account with your real email address.
+    Howerver, we don't recommand you do that as the email address is a fake one, if you want to try our email system, we highly recommand you register a new
+    account with your real email address.
 
 
 # Functions
