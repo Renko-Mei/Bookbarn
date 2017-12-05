@@ -11,7 +11,7 @@ BookBarn is a web service to connect buyers and sellers of used books. We have c
 
 # Functions
 
-###User Authentication & login
+### User Authentication & login
 1. We set up `email verification system` when people `register in`. User will receive email varidication to confirm their identity. This means that you must use your` REAL EMAIL ADDRESS` to register!
 2. Also set up email verification when users `forget their password`. They have to go their registered email account and check the email sent from `"info@bookbarncanada.com"`
 3. After register, when user type the wrong userName or password, they will only be notified as `"invalid login attemp"` instead of specifically telling user whether their password or userName isw'wrong. This is because of the security concern as we don't know who is attemping to login to your account, this increases the difficulty when other people try to login into your account.
@@ -19,7 +19,7 @@ BookBarn is a web service to connect buyers and sellers of used books. We have c
 5. The `username` is letter only and no space nor digit allowed.
 6. Both `userName` and `email address` are unique.
 
-###AccountInfo
+### AccountInfo
 After user login, your name will appear in the navbar. Click your name to see the dropdown and select the Account information you need.
 Customers can use AccountInfo to 
 1. change their profile, 
@@ -28,7 +28,7 @@ Customers can use AccountInfo to
 4. see their order history and 
 5. sales history
 
-###SaleItems
+### SaleItems
 Click the `sell button` in the navbar to sell your books.
 1. provide a `REAL ISBN` number and click the `check ISBN` button on the right side.With the help of googlebook API, all the book information will be loaded automatically.
 2. Although the API already provided a cover page for your book, you can also choose to upload an customized picture.
@@ -46,7 +46,7 @@ Click on the `search button` in the navbar or use the search function in the ind
     * The `sort` function can only be used before you click the search button.
 4. There's also a simplified search bar in the index page without sort function.
 
-###SalesItem/SearchDetails
+### SalesItem/SearchDetails
 Cutomsers can see the details of the book information to decide if it is excatly the book that they wanted.
 1. From this page, they can also contact the seller, the seller email and your email will be automatically inserted. All you need is to type in your concern.
 2. The customer information including customer email, name and phone number will embedded into the email and sent to seller.
