@@ -4,13 +4,13 @@
     ViewData["Title"] = "Create";
 }
 
-<h2 style="margin-top:60px">Add details</h2>
+<h2 class="add-margin">Add details</h2>
 
 <hr />
 <div class="row">
     <form method="post" enctype="multipart/form-data" form asp-action="Create">
         <div class="col-md-4">
-       
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <table>
@@ -20,16 +20,16 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>    
+                        <td>
                             <input asp-for="Isbn" class="form-control" id="ISBN"/>
                         </td>
-                        <td style="padding: 15px"></td>
+                        <td style="padding: 0 30px 0 30px"></td>
                         <td>
-                            <button type="button" class="btn btn-default" id="checkISBN">Check ISBN</button>
+                            <button type="button" class="btn btn-default" id="checkISBN">Get details</button>
                         </td>
                     </tr>
                 </table>
-                <span asp-validation-for="Isbn" class="text-danger" id="IsbnAlert"></span>  
+                <span asp-validation-for="Isbn" class="text-danger" id="IsbnAlert"></span>
             </div>
 
             <div class="form-group">
@@ -40,7 +40,7 @@
 
             <div class="form-group">
                 <label asp-for="Quality" class="control-label"></label>
-                <div>
+                <div class="styled-select">
                     <select asp-for="Quality" >
                         <option value="NEW">New</option>
                         <option value="USED_LIKE_NEW">Used - Like new</option>
@@ -53,17 +53,14 @@
              <div style="display: none" id="ImageDiv">
                 <img src='' id="RealImage">
             </div>
+
 			<div class="form-group" style="display: none" id="selfUpload">
-				<label asp-for="Image" class="control-label">Want to add another real Image?</label>
+				<label asp-for="Image" class="control-label">Add another image</label>
 				<input type="file" name="files" />
 			</div>
-           
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" id="Button" disabled/>
-            </div>
-        
-        </div>
+    </div>
+
         <div class="col-md-4" style="display: none" id="2">
             <div class="form-group">
                     <label asp-for="Title" class="control-label"></label>
@@ -98,7 +95,7 @@
                     <input asp-for="Description" class="form-control" id="Description"/>
                     <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group" style="display: none">
                     <label asp-for="Isbn10Or13" class="control-label"></label>
                     <input asp-for="Isbn10Or13" class="form-control" id="Isbn10Or13"/>
@@ -110,11 +107,16 @@
                     <span asp-validation-for="ImageLinks" class="text-danger"></span>
             </div>
         </div>
+
+        <div class="form-group">
+            <input style="margin-top: 10px;" type="submit" value="Create" class="btn btn-success btn-lg width-100p" id="Button" disabled/>
+        </div>
+
     </form>
 </div>
 
-<div>
-    <a asp-action="Index">Check All Your Sale Items</a>
+<div class="add-margin">
+    <a class="btn btn-default btn-lg width-100p" asp-action="Index">Check All Your Sale Items</a>
 </div>
 
 @section Scripts {
@@ -195,12 +197,12 @@
                         if(ImageLink !=''){
                             document.getElementById('RealImage').src = ImageLink;
                             document.getElementById('ImageDiv').style.display = 'block';
-                        }  
+                        }
                     }
                     else{
                         document.getElementById("IsbnAlert").innerHTML = "Seems like we cannot recognize this ISBN number, please try another one or type in book information manually"
                     }
-                    
+
                 },
                 type: 'GET'
             });

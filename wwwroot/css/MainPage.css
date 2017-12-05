@@ -8,7 +8,8 @@
     fixed = parallax
     scroll = normal
   */
-    background-attachment: fixed;
+  /* turn off parallax for now because it's breaking in FF - u*/
+    background-attachment: scroll;
     filter: brightness(50%);
 }
 
@@ -20,7 +21,7 @@
 
 .pimg1 {
     background-image: url('../images/image1.jpg');
-    min-height: 600px;
+    min-height: 500px;
 }
 
 .pimg2 {
@@ -35,7 +36,7 @@
 
 .section {
     text-align: center;
-    padding: 50px 80px;
+    padding: 20px 30px;
 }
 
 .section-light {
@@ -70,9 +71,13 @@
             background-color: transparent;
         }
 
+            .ptext .border a {
+              color: white;
+            }
+
 .plogo {
     position: absolute;
-    top: 20%;
+    top: 17%;
     width: 100%;
     text-align: center;
 }
