@@ -1,0 +1,15 @@
+[Unit]
+Description=Running BookBarn on Ubuntu
+
+[Service]
+WorkingDirectory=/home/ubuntu/project
+ExecStart=/usr/bin/dotnet bin/Debug/netcoreapp2.0/publish/BookBarn.dll
+Restart=always
+RestartSec=10  # Restart service after 10 seconds if dotnet service crashes
+SyslogIdentifier=dotnet-bookbarn
+User=ubuntu
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target

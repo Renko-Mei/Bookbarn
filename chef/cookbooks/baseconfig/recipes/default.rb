@@ -84,10 +84,10 @@ execute 'Update db for other models' do
 end
 
 # TODO uncomment this -- autoruns dotnet
-execute 'start dotnet' do
-  command 'nohup dotnet run > /dev/null 2>&1 &'
-  cwd '/home/ubuntu/project'
-end
+# execute 'start dotnet' do
+#   command 'nohup dotnet run > /dev/null 2>&1 &'
+#   cwd '/home/ubuntu/project'
+# end
 
 execute 'start nginx' do
   command 'service nginx start'
@@ -99,4 +99,16 @@ end
 
 execute 'nginx_reload' do
   command 'nginx -s reload'
+end
+
+cookbook_file 'kestrel-bookbarn.service' do
+  path '/etc/systemd/system/kestrel-bookbarn.service'
+end
+
+execute 'allow nginx to use kestrel' do
+  command 'systemctl enable kestrel-bookbarn.service'
+end
+
+execute 'start dotnet' do
+  command 'systemctl start kestrel-bookbarn.service'
 end
