@@ -27,8 +27,8 @@ namespace BookBarn
                 try
                 {
                     SeedAdministrator.Seed(services).Wait();
-                    SeedBooks.Seed(services);
-                    SeedSaleItems.Seed(services);
+                    // SeedBooks.Seed(services);
+                    //SeedSaleItems.Seed(services);
                     
                     var context = services.GetRequiredService<InitialModelsContext>();
                 }
