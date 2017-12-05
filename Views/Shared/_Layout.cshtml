@@ -13,10 +13,9 @@
         <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css">
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css">
     </environment>
     @if (IsSectionDefined("AddToHead"))
     {
@@ -33,7 +32,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">BookBarn</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">
+                  <img src='../images/logo-small.png'>
+                </a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -54,12 +55,14 @@
             </div>
         </div>
     </nav>
+      @*TODO remove container looks ugly *@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
+        @* TODO remove footer for now *@
+        @* <footer>
             <p>&copy; 2017 - BookBarn</p>
-        </footer>
+        </footer> *@
     </div>
 
     <environment include="Development">

@@ -4,54 +4,44 @@
     ViewData["Title"] = "Index";
 }
 
-<h2 style="margin-top:50px">Sell</h2>
+<h2 class='add-margin'>Books I'm selling</h2>
+<a class="btn btn-success btn-lg" asp-action="Create">Add New</a>
 
-<h4> <a asp-action="Create">Create sale item</a> <h4>
-<table class="table">
-    <thead>
-        <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.SaleItemId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Price)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Quality)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IsSold)
-                </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-             <td>
-                @Html.DisplayFor(modelItem => item.SaleItemId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quality)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsSold)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.SaleItemId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SaleItemId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SaleItemId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class='add-margin'>
+  <table class="table">
+      <thead>
+          <tr>
+                  <th>
+                      @Html.DisplayNameFor(model => model.Price)
+                  </th>
+                  <th>
+                      @Html.DisplayNameFor(model => model.Quality)
+                  </th>
+                  <th>
+                      @Html.DisplayNameFor(model => model.Title)
+                  </th>
+              <th></th>
+          </tr>
+      </thead>
+      <tbody>
+  @foreach (var item in Model) {
+          <tr>
+              <td>
+                  @Html.DisplayFor(modelItem => item.Price)
+              </td>
+              <td>
+                  @Html.DisplayFor(modelItem => item.Quality)
+              </td>
+              <td>
+                  @Html.DisplayFor(modelItem => item.Title)
+              </td>
+              <td>
+                  <a asp-action="Edit" asp-route-id="@item.SaleItemId">Edit</a> |
+                  <a asp-action="Details" asp-route-id="@item.SaleItemId">Details</a> |
+                  <a asp-action="Delete" asp-route-id="@item.SaleItemId">Delete</a>
+              </td>
+          </tr>
+  }
+      </tbody>
+  </table>
+</div>

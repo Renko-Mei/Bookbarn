@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" href="~/css/SaleItem.css" />
 
-<h2 style="margin-top:50px">Details</h2>
+<h2 class="add-margin">Details</h2>
 
 <div>
     <h4>SaleItem</h4>
@@ -53,7 +53,7 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Description)
-        </dd>     
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Price)
         </dt>
@@ -65,12 +65,6 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Quality)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IsSold)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IsSold)
         </dd>
         <dt id="IsbnName_1">
         </dt>
@@ -91,8 +85,8 @@
 
 
 		<dt>
-			@Html.DisplayNameFor(model => model.Image)	
-		</dt>	
+			@Html.DisplayNameFor(model => model.Image)
+		</dt>
 		<dd>
 			<div class="image">
 				@if (Model.Image != null && Model.Image.Length > 0)
@@ -126,5 +120,5 @@
     else{
         document.getElementById("IsbnName_1").innerHTML="ISBN";
     }
-    
+
 </script>
