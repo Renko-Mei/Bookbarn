@@ -26,15 +26,21 @@ namespace BookBarn.Controllers
         // // GET: ShoppingCarts
         public async Task<IActionResult> Index()
         {
-            var items = _shoppingCart.GetShoppingCartItems();
-            _shoppingCart.ShoppingCartItems = items;
-            var shoppingCartView = new ShoppingCartViewModel
-            {
-                ShoppingCart = _shoppingCart,
-                ShoppingCartTotal = _shoppingCart.GetShoppingCartTotal()
-            };
-            return View(shoppingCartView);
-            //return View(await _context.ShoppingCart.ToListAsync());
+            if (User.Identity.IsAuthenticated){
+                 var items = _shoppingCart.GetShoppingCartItems();
+                _shoppingCart.ShoppingCartItems = items;
+                var shoppingCartView = new ShoppingCartViewModel
+                {
+                    ShoppingCart = _shoppingCart,
+                    ShoppingCartTotal = _shoppingCart.GetShoppingCartTotal()
+                };
+                return View(shoppingCartView);
+                //return View(await _context.ShoppingCart.ToListAsync());
+            }else{
+                Response.StatusCode = 401;
+                return View("NotLoggedIn");
+            }   
+           
         }
   
         public RedirectToActionResult AddToShoppingCart(int saleItemId)

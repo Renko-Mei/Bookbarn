@@ -2,14 +2,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BookBarn.Models.AccountInfoViewModels
 {
-    public class AddressViewModel
+    public class ChangeAddressViewModel
     {
+        public int AddressId { get; set; }
+
         [Required]
         [Display(Name = "Legal Name")]
         public string LegalName {get; set;}
 
         [Required]
-        public string Address { get; set; }
+        public string StreetAddress { get; set; }
 
         [Required]
         public string City { get; set; }
@@ -29,6 +31,6 @@ namespace BookBarn.Models.AccountInfoViewModels
         [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; }
 
-        public string StatusMessage { get; set; }
+        public string UserKey { get; set; }
     }
 }

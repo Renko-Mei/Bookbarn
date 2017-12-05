@@ -8,8 +8,17 @@ using BookBarn.Models;
 
 namespace BookBarn.Data
 {
-    public static class SeedSaleItems
+    public class SeedSaleItems
     {
+
+        private static readonly AuthenticationContext _Acontext;
+        // public SeedSaleItems(AuthenticationContext Acontext){
+        //     _Acontext = Acontext;
+        // }
+        // public string adminKey(){
+        //     return _Acontext.Users.FirstOrDefault(c => c.UserName == "SuperAdmin").Id;
+        // }
+
         public static void Seed(IServiceProvider serviceProvider)
         {
             using (var context = new InitialModelsContext(
@@ -18,31 +27,47 @@ namespace BookBarn.Data
                 // Seed database if database is empty
                 if (!context.SaleItem.Any())
                 {
+                    //var test = _Acontext.Users.FirstOrDefault(c => c.UserName == "SuperAdmin").Id;
                     context.SaleItem.AddRange
                     (
                        new SaleItem
                        {
-                           Isbn = "0495012408",
+                           Isbn = "1617292575",
                            Quality = SaleItem.BookQuality.NEW,
                            Price = 10.6f,
-                           Authors ="asdasfafgs",
-                           Title = "seed1"
+                           Authors ="Mike Cantelon",
+                           Title = "Node.js in Action",
+                           UserKey = "abc",
+                           ImageLinks = "http://books.google.com/books/content?id=YzfuvQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+                           Publisher = "Manning Publications",
+                           PublishedData = "2017-01-31",
+                           Description = "test test test"
                        },
                        new SaleItem
                        {
-                           Isbn = "9783319669663",
-                           Quality = SaleItem.BookQuality.USED_LIKE_NEW,
-                           Price = 5.25f,
-                           Authors = "shdgh",
-                           Title = "seed2"
-                       },
-                       new SaleItem
-                       {
-                           Isbn = "9781941222126",
+                           Isbn = "1491901942",
                            Quality = SaleItem.BookQuality.USED_OLD,
-                           Price = 6.66f,
-                           Authors = "sfgsdhwrt",
-                           Title = "seed3"
+                           Price = 10.6f,
+                           Authors ="Shyam Seshadri",
+                           Title = "AngularJS: Up and Running",
+                           UserKey = "abc",
+                           ImageLinks = "http://books.google.com/books/content?id=2BqloAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+                           Publisher = "Oreilly & Associates Incorporated",
+                           PublishedData = "2014-09-26",
+                           Description = "A step-by-step guide to the AngularJS meta-framework covers from the basics to advanced concepts, including directives and controllers, form validation and stats, working with filters, unit testing, and guidelines and best practices."
+                       },
+                       new SaleItem
+                       {
+                           Isbn = "1593275846",
+                           Quality = SaleItem.BookQuality.USED_VERY_OLD,
+                           Price = 50.6f,
+                           Authors ="Marijn Haverbeke",
+                           Title = "Eloquent JavaScript, 2nd Ed.",
+                           UserKey = "abc",
+                           ImageLinks = "http://books.google.com/books/content?id=mDzDBQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+                           Publisher = "No Starch Press",
+                           PublishedData = "2014-12-14",
+                           Description = "dsfgs sdfgkljk gkjsdfl kldfgkdfhla"
                        }
                     );
                     context.SaveChanges();

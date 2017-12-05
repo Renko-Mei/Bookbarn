@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using BookBarn.Data;
 
 namespace BookBarn.Models
 {
@@ -17,5 +18,3 @@ namespace BookBarn.Models
     public String SellerId { get; set; }
   }
 }
-
-//dotnet aspnet-codegenerator controller -name OrdersController -m Order -dc InitialModelsContext --relativeFolderPath Controllers --useDefaultLayout --referenceScriptLibraries
