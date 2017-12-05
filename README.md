@@ -69,10 +69,10 @@ If User cannot find the book from our webapp, they can talk in the group-chat as
         2. https://radu-matei.com/blog/real-time-aspnet-core/
     The gif image that used as emoji was from a jquery library called: qqFace -->https://github.com/kyo4311/jquery.qqface 
 
-## ShoppingCart
+## ShoppingCart http://localhost:5000/ShoppingCarts
 1. User can add the items that they wanted to their shopping cart after login
 
-## Checkout
+## Checkout  http://localhost:5000/Orders/Checkout
 Once user decide to checkout, they will be asked to enter into their address information. 
 2. If they already saved their address previously, their address information will be automatically there and no need to type in again.
 3. Even though customers have already saved their address, they can change their address there and the address changes will be updated in the database automatically.
