@@ -39,32 +39,35 @@
 			<input asp-for="maxPrice" class="form-control"  value="9999.99"/>
 			<span asp-validation-for="maxPrice" class="text-danger"></span>
 		</div>
-		
+
 		<div>
-			Quality:
-			<select asp-for="quality">
-				<option value="">Any</option>
-				<option value="NEW">New</option>
-				<option value="USED_LIKE_NEW">Used - Like new</option>
-				<option value="USED_OLD">Used - Old</option>
-				<option value="USED_VERY_OLD">Used - Very old/Poor</option>
-			</select>
+			<em> Quality: </em>
+      <div class ="styled-select dropdown">
+  			<select class="btn btn-secondary dropdown-toggle" asp-for="quality">
+  				<option value="">Any</option>
+  				<option value="NEW">New</option>
+  				<option value="USED_LIKE_NEW">Used - Like new</option>
+  				<option value="USED_OLD">Used - Old</option>
+  				<option value="USED_VERY_OLD">Used - Very old/Poor</option>
+  			</select>
+      </div>
 		</div>
 
 		<div>
-			Sort by:
-			<select asp-for="SortType" asp-items="Model.SortTypes">
-				<option value="title">Title: A-Z</option>
-				<option value="authorFirst">Author - First Name: A-Z</option>
-				<option value="authorLast">Author - Last Name: A-Z</option>
-				<option value="price">Price: Lowest first</option>
-			</select>
+			<em> Sort by: </em>
+      <div class ="styled-select dropdown">
+  			<select class="btn btn-secondary dropdown-toggle" asp-for="SortType" asp-items="Model.SortTypes">
+  				<option value="title">Title: A-Z</option>
+  				<option value="authorFirst">Author - First Name: A-Z</option>
+  				<option value="authorLast">Author - Last Name: A-Z</option>
+  				<option value="price">Price: Lowest first</option>
+  			</select>
+      </div>
 		</div>
+
 		<div>
-			<input type="submit" value="Search" />
+			<input style="margin-top: 10px;" class="btn btn-success btn-lg width-100p" type="submit" value="Search" />
 		</div>
+
 </form>
 </div>
-
-
-    
