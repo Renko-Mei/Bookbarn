@@ -2,7 +2,7 @@
 BookBarn is a web service to connect buyers and sellers of used books. We have currently implemented the functionality listed below.
 
 # Hint
-##  LogIn
+##      LogIn
         We provide a superAdmin here just in case you cannot register:
             UserName: `SuperAdmin`
             email: `superadmin@test.com`
