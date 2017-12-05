@@ -3,25 +3,26 @@ BookBarn is a web service to connect buyers and sellers of used books. We have c
 
 # Hint
 
-###      LogIn
-        We provide a superAdmin here just in case you cannot register:
-            UserName: `SuperAdmin`
-            email: `superadmin@test.com`
-            password: `Piranha$94`
-        Howerver, we don't recommand you do that as the email address is a fake one, if you want to try our email system, we highly recommand you register a new
-        account with your real email address.
+### LogIn
+We provide a superAdmin here just in case you cannot register:
+1. UserName: `SuperAdmin`
+2. email: `superadmin@test.com`
+3. password: `Piranha$94`
+Howerver, we don't recommand you do that as the email address is a fake one, if you want to try our email system, we highly recommand you register a new account with your real email address.
+
 ###  Seed Data
-        We don't provide seedData here due to the UserId problem. Asp.net Core automatically generates unique UserId for each user account and the fake seedData 
-        will face too many conflict.
+We don't provide seedData here due to the UserId problem. Asp.net Core automatically generates unique UserId for each user account and the fake seedData will face too many conflict.
+
 ###  ISBN number example:
-        Here we provided you some real ISBN numbers you may want to use them for testing:
-        1. `1617292575`
-        2. `1491916753`
-        3. `1491901942`
-        4. `1430264489`
+Here we provided you some real ISBN numbers you may want to use them for testing:
+1. `1617292575`
+2. `1491916753`
+3. `1491901942`
+4. `1430264489`
+
 ###  vagrant up
-        It may take `15-20 minutes` to run the vagrant and may another another `3 mintues` to wait the `localhost:5000/` reload
-        The project is running production mode in the dotnet server
+1. It may take `15-20 minutes` to run the vagrant and may another another `3 mintues` to wait the `localhost:5000/` reload
+2. The project is running production mode in the dotnet server
 
 
 # Functions
