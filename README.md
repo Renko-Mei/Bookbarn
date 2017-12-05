@@ -1,7 +1,10 @@
 # Introduction
 BookBarn is a web service to connect buyers and sellers of used books. We have currently implemented the functionality listed below.
 
+
 # Hint
+
+### Find the project on localhost:5000
 
 ### LogIn
 We provide a superAdmin here just in case you cannot register:
@@ -103,6 +106,24 @@ We use paypal as payment method. User information will be collected and send as 
 
 An ACK signal indicates payment succeeded.
 
+# What is not working
+Before starting the project, we hoped that people can search the course book by typing course title in the search box. However, we failed to do so as the API provided by school does not provide all course informations. The API that we planned to use is SFU library API, it can only supply the ISBN number for the text books that are currently in the library.
+We have thought an alternative way. As school book store provides a book list for all courses at the beginning of each semester. We can do it manually instead of using APIs. However, we didn't do that for this project as it would take too much time.
+
+# Technology Stack
+ - ASP.NET Core 2.0 MVC
+ - PostgreSQL
+ - jQuery
+ - Bootstrap
+ - Chart.js
+ - Webpack
+ - Babel
+ - Vagrant
+ - WebSocket
+ - MailKit
+ - GoogleBookAPI
+
+
 # How to run
 ## To interact with the web application
  - Build and run the web application, the instruction is stated in the below section.
@@ -111,6 +132,8 @@ An ACK signal indicates payment succeeded.
 ## Run locally
  - Open up a command line window.
  - Route to `./src` folder.
+ -  `dotnet restore`
+ -  `npm install`
  - Run `dotnet run --project BookBarn.csproj`.
 
 ## Run in Vagrant with auto run enabled (default)
@@ -127,22 +150,8 @@ An ACK signal indicates payment succeeded.
  - After Vagrant successfully provisioned the VM, run `vagrant ssh` to bring up the Linux shell of the VM.
  - Run `cd project` followed by `dotnet run --project BookBarn.csproj`.
 
-## To restart the server with your code changes:
-1. `vagrant halt`
-2. `vagrant up`
 
-# Technology Stack
- - ASP.NET Core 2.0 MVC
- - PostgreSQL
- - jQuery
- - Bootstrap
- - Chart.js
- - Webpack
- - Babel
- - Vagrant
- - WebSocket
- - MailKit
- - GoogleBookAPI
+
 
 # Workflow
 
