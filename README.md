@@ -53,7 +53,6 @@ Cutomsers can see the details of the book information to decide if it is excatly
 1. From this page, they can also contact the seller, the seller email and your email will be automatically inserted. All you need is to type in your concern.
 2. The customer information including customer email, name and phone number will embedded into the email and sent to seller.
 
-
 ## Group_Chat
 If User cannot find the book from our webapp, they can talk in the group-chat ask if anyone has the specific book. Click on the `Chat` button on the `navigation bar` to enter into the chatroom.
 1. User has to login to use the chatRoom
@@ -83,6 +82,11 @@ Once user decide to checkout, they will be asked to enter into their address inf
     3. seller's sale histroy with visual chart will also be updated
     4. seller will receive an email with the buyer information and purchased item information.
     5. purchased item will be deleted from the search result and other people won't find it anymore
+
+## Paypal
+We use paypal as payment method. User information will be collected and send as a paypal post request to paypal sandbox.
+
+An ACK signal indicates payment succeeded.
 
 # How to run
 ## To interact with the web application
